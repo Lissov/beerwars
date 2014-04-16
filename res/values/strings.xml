@@ -17,4 +17,8 @@
     <string name="city_regenwald">Regenwald</string>
     <string name="city_hochstadt">Hochstadt</string>
 	
+    <string name="cityinfo_population">Population:</string>
+    <string name="cityinfo_connections">Transportation costs (per 1000 bottles):</string>
+    <string name="cityinfo_close">Close</string>
+
 </resources>

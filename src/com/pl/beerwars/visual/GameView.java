@@ -12,6 +12,7 @@ import android.widget.*;
 public class GameView extends View
 {
 	private Context _context;
+	private IViewShower viewShower;
 	
 	private Game _game;
 	
@@ -19,11 +20,12 @@ public class GameView extends View
 	private Paint pntBackground = new Paint();
 	private CityPainter cityPainter;
 	
-	public GameView(Context context){	
+	public GameView(Context context, IViewShower shower){	
 		super(context);
 		this._context = context;
 		
 		_game = GameHolder.getGame();
+		viewShower = shower;	
 		
 		preparePaints();
 	}
@@ -44,9 +46,6 @@ public class GameView extends View
 	{
 		translator.setup(this.getMeasuredWidth(), this.getMeasuredHeight(), 
 			Constants.Sizes.BaseScale, _context.getResources());
-		Toast.makeText(_context, this.getMeasuredWidth() + ":" + this.getMeasuredHeight(), Toast.LENGTH_LONG).show();
-		//float w = this.getMeasuredWidth();
-		//float h = this.getMeasuredHeight();
 		
 		canvas.drawRect(
 			translator.getX(0), translator.getY(0), 
@@ -75,7 +74,7 @@ public class GameView extends View
 	}
 
 	private void showCityInfo(City city){
-		Toast.makeText(_context, city.id, Toast.LENGTH_SHORT).show();
+		viewShower.showView(new CityInfoView(_context, viewShower, translator, _game, city.id));
 	}
 	
 	private City getTouchedCity(float x, float y){

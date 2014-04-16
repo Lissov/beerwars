@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+	android:weightSum="10"
+	android:background="@color/cityinfo_background">
+    
+	<LinearLayout
+		android:layout_weight="8"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_marginLeft="30dp"
+		android:orientation="vertical">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/textBig" 
+			android:textColor="@color/cityinfo_text"
+			android:id="@+id/cityinfo_txtName"
+			android:text="City name"/>
+		
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="20dp"
+			android:textSize="@dimen/textNormal"
+			android:textColor="@color/cityinfo_text" 
+			android:id="@+id/cityinfo_txtPopulation"
+			android:text="CPopulation:"/>
+		
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="20dp"
+			android:textSize="@dimen/textNormal"
+			android:textColor="@color/cityinfo_text" 
+			android:text="@string/cityinfo_connections"/>
+		
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="200dp"
+			android:layout_marginLeft="20dp"
+			android:id="@+id/cityinfo_llTransports" />
+		
+	</LinearLayout>
+	<LinearLayout
+		android:layout_weight="2"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:orientation="horizontal"
+		android:gravity="right"
+		android:weightSum="2">
+		<Button
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="fill_parent"
+			android:text="@string/cityinfo_close"/>
+	</LinearLayout>
+	
+</LinearLayout>
