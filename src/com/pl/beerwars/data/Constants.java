@@ -1,0 +1,30 @@
+package com.pl.beerwars.data;
+
+public class Constants
+{
+	public static class CityIds{
+		public final static String Trinkburg = "trinkburg";
+		public final static String Feldkirchen = "feldkirchen";
+		public final static String Weissau = "weissau";
+		public final static String Luisfeld = "luisfeld";
+		public final static String Maishafen = "maishafen";
+		public final static String SanMartin = "sanmartin";
+		public final static String Steinfurt = "steinfurt";
+		public final static String Freiburg = "freiburg";
+		public final static String Prems = "prems";
+		public final static String Regenwald = "regenwald";
+		public final static String Hochstadt = "hochstadt";
+	}
+	
+	public static class SitySizes{
+		public final static int Small = -1;
+		public final static int Medium = 100000;
+		public final static int Big = 500000;
+		public final static int Mega = 1000000;
+	}
+	
+	public static class Sizes{
+		public final static float BaseScale = 20f;
+		public final static float TouchRadiusSquare = 900; // in pixels
+	}
+}

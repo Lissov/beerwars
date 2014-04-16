@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="mapBackground">#88BBFF</color>
+
+	<color name="cityBackground">#FF1010</color>
+	<color name="cityBorder">#101010</color>
+	<color name="cityName">#505050</color>
+</resources>		

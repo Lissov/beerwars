@@ -4,6 +4,7 @@ import android.app.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
+import android.content.*;
 
 public class MainActivity extends Activity
 {
@@ -14,4 +15,8 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
+	
+	public void btnStartClick(View view){
+		startActivity(new Intent(this, GameActivity.class), null);
+	}
 }

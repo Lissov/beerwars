@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, MainActivity!</string>
-    <string name="app_name">Beerwars</string>
+    <string name="app_name">Beer Trade Wars</string>
 
+    <string name="main_btn_start">Start game</string>
+
+    <string name="city_trinkburg">Trinkburg</string>
+    <string name="city_feldkirchen">Feldkirchen</string>
+    <string name="city_weissau">Weissau</string>
+    <string name="city_luisfeld">Luisfeld</string>
+    <string name="city_maishafen">Maishafen</string>
+    <string name="city_sanmartin">San Martin</string>
+    <string name="city_steinfurt">Steinfurt</string>
+    <string name="city_freiburg">Freiburg</string>
+    <string name="city_prems">Prems</string>
+    <string name="city_regenwald">Regenwald</string>
+    <string name="city_hochstadt">Hochstadt</string>
+	
 </resources>
