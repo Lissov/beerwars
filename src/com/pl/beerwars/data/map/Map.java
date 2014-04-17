@@ -50,7 +50,7 @@ public class Map
 					int toI = getCityIndex(toId);
 					float newD = currentD + r.length;
 					
-					if (distances[i][toI] >= 0 && distances[i][toI] <= newD)
+					if (distances[i][toI] >= 0 && distances[i][toI] < newD)
 						continue;
 						
 					distances[i][toI] = newD;
