@@ -3,7 +3,6 @@ package com.pl.beerwars;
 import android.app.*;
 import android.os.*;
 import android.view.*;
-import android.widget.*;
 import android.content.*;
 
 public class MainActivity extends Activity
@@ -17,6 +16,6 @@ public class MainActivity extends Activity
     }
 	
 	public void btnStartClick(View view){
-		startActivity(new Intent(this, GameActivity.class), null);
+		startActivity(new Intent(this, GameActivity.class));
 	}
 }

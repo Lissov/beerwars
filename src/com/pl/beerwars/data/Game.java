@@ -1,5 +1,4 @@
 package com.pl.beerwars.data;
-import com.pl.beerwars.data.map.*;
 import com.pl.beerwars.data.facade.*;
 import java.util.*;
 import com.pl.beerwars.data.transport.*;
@@ -8,7 +7,7 @@ public class Game
 {
 	public com.pl.beerwars.data.map.Map map;
 	
-	private HashMap<Integer,GameFacade> facades = new HashMap<Integer,GameFacade>();
+	private HashMap<Integer, GameFacade> facades = new HashMap<Integer, GameFacade>();
 	public GameFacade getViewForPlayer(int playerNum){
 		return facades.get(playerNum);
 	}

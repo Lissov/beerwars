@@ -1,6 +1,5 @@
 package com.pl.beerwars.data;
 import com.pl.beerwars.data.map.*;
-import android.provider.*;
 
 public class GameHolder
 {

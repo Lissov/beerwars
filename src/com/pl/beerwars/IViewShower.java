@@ -1,5 +1,4 @@
 package com.pl.beerwars;
-import android.view.*;
 import com.pl.beerwars.visual.*;
 
 public interface IViewShower

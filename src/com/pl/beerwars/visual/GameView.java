@@ -7,7 +7,6 @@ import android.content.res.*;
 import com.pl.beerwars.visual.painter.*;
 import com.pl.beerwars.data.*;
 import com.pl.beerwars.data.map.*;
-import android.widget.*;
 
 public class GameView extends View implements IOverlayView
 {
@@ -31,8 +30,6 @@ public class GameView extends View implements IOverlayView
 	}
 	
 	private void preparePaints(){
-		Resources r = _context.getResources();
-		
 		translator = new Translator();
 		cityPainter = new CityPainter(translator, _context);
 

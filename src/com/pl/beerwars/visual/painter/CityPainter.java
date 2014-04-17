@@ -5,7 +5,6 @@ import com.pl.beerwars.*;
 import com.pl.beerwars.visual.*;
 import com.pl.beerwars.data.map.*;
 import com.pl.beerwars.data.*;
-import android.content.res.*;
 
 public class CityPainter extends BasePainter
 {

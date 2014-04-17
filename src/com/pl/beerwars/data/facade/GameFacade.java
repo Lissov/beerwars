@@ -1,6 +1,4 @@
 package com.pl.beerwars.data.facade;
-import java.util.*;
-import com.pl.beerwars.data.transport.*;
 
 public class GameFacade
 {

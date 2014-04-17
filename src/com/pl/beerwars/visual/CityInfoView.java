@@ -4,7 +4,6 @@ import android.view.*;
 import android.content.*;
 import com.pl.beerwars.data.*;
 import android.widget.*;
-import com.pl.beerwars.data.map.*;
 import android.content.res.*;
 import com.pl.beerwars.data.facade.*;
 import com.pl.beerwars.data.transport.*;
