@@ -1,7 +1,9 @@
 package com.pl.beerwars;
 import android.view.*;
+import com.pl.beerwars.visual.*;
 
 public interface IViewShower
 {
-	public void showView(View view);
+	public void showView(IOverlayView view);
+	public void closeLastView(Object parameter);
 }

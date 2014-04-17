@@ -6,6 +6,8 @@
 	<color name="cityBorder">#101010</color>
 	<color name="cityName">#505050</color>
 
+	<color name="overlay_border">#105010</color>
+
 	<color name="cityinfo_background">#FFFF88</color>
 	<color name="cityinfo_text">#000000</color>
 </resources>		

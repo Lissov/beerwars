@@ -52,4 +52,11 @@ public class Translator
 
 		return "unknown";
 	}
+	
+	public int getMapResId(int mapId){
+		if (mapId == Constants.Maps.Basic)
+			return R.drawable.map_basic;
+			
+		return -1;
+	}
 }

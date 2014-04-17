@@ -1,5 +1,6 @@
 package com.pl.beerwars.data;
 import com.pl.beerwars.data.map.*;
+import android.provider.*;
 
 public class GameHolder
 {
@@ -15,10 +16,13 @@ public class GameHolder
 	private static void constructGame(){
 		_game = new Game();
 		_game.map = get2IslandsMap();
+		_game.start();
 	}
 	
 	private static Map get2IslandsMap(){
 		Map map = new Map();
+		
+		map.mapId = Constants.Maps.Basic;
 
 		map.cities = new City[11];
 
@@ -29,10 +33,11 @@ public class GameHolder
 		map.cities[4] = new City(Constants.CityIds.Maishafen, new Location(0.3f, 0.67f), 240000);
 		map.cities[5] = new City(Constants.CityIds.Steinfurt, new Location(0.5f, 0.1f), 520000);
 		map.cities[6] = new City(Constants.CityIds.SanMartin, new Location(0.45f, 0.8f), 750000);
-		map.cities[7] = new City(Constants.CityIds.Prems, new Location(0.65f, 0.645f), 250000);
+		map.cities[7] = new City(Constants.CityIds.Prems, new Location(0.645f, 0.6f), 250000);
 		map.cities[8] = new City(Constants.CityIds.Freiburg, new Location(0.8f, 0.4f), 790000);
 		map.cities[9] = new City(Constants.CityIds.Regenwald, new Location(0.9f, 0.62f), 330000);
 		map.cities[10] = new City(Constants.CityIds.Hochstadt, new Location(0.9f, 0.8f), 260000);
+		// total population 5 025 000
 
 		map.roads = new Road[13];
 		map.roads[0] = new Road(Constants.CityIds.Trinkburg, Constants.CityIds.Weissau, 2.5f);
@@ -46,9 +51,9 @@ public class GameHolder
 		map.roads[8] = new Road(Constants.CityIds.Prems, Constants.CityIds.Freiburg, 4);
 		map.roads[9] = new Road(Constants.CityIds.Freiburg, Constants.CityIds.Regenwald, 4);
 		map.roads[10] = new Road(Constants.CityIds.Regenwald, Constants.CityIds.Hochstadt, 4);
-		
-		map.roads[11] = new Road(Constants.CityIds.Maishafen, Constants.CityIds.SanMartin, 7);
-		map.roads[12] = new Road(Constants.CityIds.Prems, Constants.CityIds.SanMartin, 10);
+		map.roads[11] = new Road(Constants.CityIds.Maishafen, Constants.CityIds.SanMartin, 11);
+		map.roads[12] = new Road(Constants.CityIds.Prems, Constants.CityIds.SanMartin, 15);
+		map.calculateDistances();
 		
 		return map;
 	}

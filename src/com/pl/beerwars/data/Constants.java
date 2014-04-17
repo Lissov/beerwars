@@ -2,6 +2,14 @@ package com.pl.beerwars.data;
 
 public class Constants
 {
+	public static class Maps{
+		public final static int Basic = 1;
+	}
+	
+	public static class Players{
+		public final static int MainHuman = 1;
+	}
+	
 	public static class CityIds{
 		public final static String Trinkburg = "trinkburg";
 		public final static String Feldkirchen = "feldkirchen";
@@ -16,6 +24,8 @@ public class Constants
 		public final static String Hochstadt = "hochstadt";
 	}
 	
+	public static final int ValueUnknown = -10;
+
 	public static class SitySizes{
 		public final static int Small = -1;
 		public final static int Medium = 100000;
@@ -26,5 +36,12 @@ public class Constants
 	public static class Sizes{
 		public final static float BaseScale = 20f;
 		public final static float TouchRadiusSquare = 900; // in pixels
+	}
+	
+	public static class Economics{
+		public final static int transportPerKm = 20;
+		public final static int transportReload = 50;
+		
+		public final static String Currency = "$";
 	}
 }
