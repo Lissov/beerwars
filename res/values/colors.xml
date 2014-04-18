@@ -10,4 +10,10 @@
 
 	<color name="cityinfo_background">#FFFF88</color>
 	<color name="cityinfo_text">#000000</color>
+	
+	<color name="game_playerDataText">#333300</color>
+
+	<color name="game_panelBorder">#404040</color>
+	<color name="game_panelField">#B2FF66</color>
+
 </resources>		

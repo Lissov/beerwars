@@ -1,30 +1,47 @@
 package com.pl.beerwars.data;
+import com.pl.beerwars.data.Constants.FactorySizes;
+import com.pl.beerwars.data.Constants.StorageSizes;
+import com.pl.beerwars.data.beer.BeerSort;
 import com.pl.beerwars.data.facade.*;
 import java.util.*;
+
+import com.pl.beerwars.data.map.City;
+import com.pl.beerwars.data.playerdata.CityObjects;
+import com.pl.beerwars.data.playerdata.PlayerData;
 import com.pl.beerwars.data.transport.*;
 
 public class Game
 {
 	public com.pl.beerwars.data.map.Map map;
+	private Random rnd = new Random();
 	
-	private HashMap<Integer, GameFacade> facades = new HashMap<Integer, GameFacade>();
-	public GameFacade getViewForPlayer(int playerNum){
-		return facades.get(playerNum);
+	public PlayerData getViewForPlayer(int playerNum){
+		return players.get(playerNum);
 	}
 	
+	public HashMap<Integer, PlayerData> players = new HashMap<Integer, PlayerData>();
+	
+	public void start(String humanName, String humanCity, int playersCount){
+		buildPlayers(humanName, humanCity, playersCount);
+		buildFacades();
+	}
+
 	private void buildFacades(){
 
-		GameFacade gv = new GameFacade();
+		for (PlayerData player : players.values())
+ {
+			GameFacade gv = new GameFacade();
 
-		gv.cities = new CityFacade[map.cities.length];
-		for (int i = 0; i < map.cities.length; i++){
-			gv.cities[i] = new CityFacade(map.cities[i]);
-			gv.cities[i].estConsumption = Constants.ValueUnknown;
-			
-			gv.cities[i].transportPrices = getTrPrices(gv.cities[i].getId());
+			gv.cities = new CityFacade[map.cities.length];
+			for (int i = 0; i < map.cities.length; i++) {
+				gv.cities[i] = new CityFacade(map.cities[i]);
+				gv.cities[i].estConsumption = Constants.ValueUnknown;
+
+				gv.cities[i].transportPrices = getTrPrices(gv.cities[i].getId());
+			}
+
+			player.game = gv;
 		}
-
-		facades.put(Constants.Players.MainHuman, gv);
 	}
 	
 	private TransportPrice[] getTrPrices(String fromCity){
@@ -47,7 +64,43 @@ public class Game
 		return result;
 	}
 	
-	public void start(){
-		buildFacades();
+	private void buildPlayers(String humanName, String humanCity, int playersCount){
+		players.put(Constants.Players.MainHuman, buildPlayer(humanName, Constants.IntellectId.Human, humanCity));
+		LinkedList<String> owned = new LinkedList<String>();
+		owned.add(humanCity);
+		String[] names = new String[] { "Hanek'n", "Fraizer", "Praterer", "Klown" };
+		for (int i=1; i<playersCount; i++){
+			int id = Constants.Players.MainHuman + i;
+			
+			int cn = rnd.nextInt(map.cities.length);
+			while (owned.contains(map.cities[cn].id))
+				cn = rnd.nextInt(map.cities.length);
+			
+			players.put(id, buildPlayer(names[i-1], Constants.IntellectId.AI, map.cities[cn].id));  
+		}
+	}
+	
+	private PlayerData buildPlayer(String name, int intellectId, String cityId){
+		PlayerData player = new PlayerData(intellectId, name);
+		
+		player.money = Constants.Economics.startMoney;
+		player.name = name;
+		player.intellect_id = intellectId;
+		
+		player.cityObjects = new CityObjects[map.cities.length];
+		for (int i=0; i<map.cities.length; i++){
+			City c = map.cities[i];
+			player.cityObjects[i] = c.id == cityId
+					? new CityObjects(c, StorageSizes.small, FactorySizes.small)
+					: new CityObjects(c, StorageSizes.none, FactorySizes.none);
+					
+			float dev = (float)rnd.nextGaussian() * Constants.startBeerParameters.deviation;
+			BeerSort sort = new BeerSort(name + " START", 
+					Constants.startBeerParameters.selfprice * (1f + dev),
+					Constants.startBeerParameters.quality * (1f + dev));
+			player.ownedSorts.add(sort);
+		}
+		
+		return player;
 	}
 }

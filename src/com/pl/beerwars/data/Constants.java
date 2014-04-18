@@ -10,6 +10,11 @@ public class Constants
 		public final static int MainHuman = 1;
 	}
 	
+	public static class IntellectId {
+		public final static int Human = 1;		
+		public final static int AI = 10;		
+	}
+	
 	public static class CityIds{
 		public final static String Trinkburg = "trinkburg";
 		public final static String Feldkirchen = "feldkirchen";
@@ -39,9 +44,31 @@ public class Constants
 	}
 	
 	public static class Economics{
+		public final static String Currency = "$";
+
 		public final static int transportPerKm = 20;
 		public final static int transportReload = 50;
 		
-		public final static String Currency = "$";
+		public final static int startMoney = 1000;
+	}
+	
+	public static class FactorySizes{
+		public final static int none = 0;		
+		public final static int small = 1;		
+		public final static int medium = 2;		
+		public final static int big = 3;		
+	}
+	
+	public static class StorageSizes{
+		public final static int none = 0;		
+		public final static int small = 1;		
+		public final static int medium = 2;		
+		public final static int big = 3;		
+	}
+	
+	public static class startBeerParameters{
+		public final static float selfprice = 0.7f;
+		public final static float quality = 0.5f;		
+		public final static float deviation = 0.4f;		
 	}
 }

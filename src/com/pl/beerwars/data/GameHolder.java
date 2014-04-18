@@ -15,7 +15,7 @@ public class GameHolder
 	private static void constructGame(){
 		_game = new Game();
 		_game.map = get2IslandsMap();
-		_game.start();
+		_game.start("PLAYER", "freiburg", 3);
 	}
 	
 	private static Map get2IslandsMap(){

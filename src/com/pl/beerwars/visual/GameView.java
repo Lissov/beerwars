@@ -1,5 +1,6 @@
 package com.pl.beerwars.visual;
 import com.pl.beerwars.*;
+
 import android.view.*;
 import android.content.*;
 import android.graphics.*;
@@ -7,6 +8,7 @@ import android.content.res.*;
 import com.pl.beerwars.visual.painter.*;
 import com.pl.beerwars.data.*;
 import com.pl.beerwars.data.map.*;
+import com.pl.beerwars.data.playerdata.PlayerData;
 
 public class GameView extends View implements IOverlayView
 {
@@ -18,6 +20,7 @@ public class GameView extends View implements IOverlayView
 	private Translator translator;
 	private Paint pntMap = new Paint();
 	private CityPainter cityPainter;
+	private MenuPainter menuPainter;
 	
 	public GameView(Context context, IViewShower shower){	
 		super(context);
@@ -30,12 +33,15 @@ public class GameView extends View implements IOverlayView
 	}
 	
 	private void preparePaints(){
+		//Resources res = _context.getResources();
+		
 		translator = new Translator();
 		cityPainter = new CityPainter(translator, _context);
+		menuPainter = new MenuPainter(translator, _context);
 
 		pntMap.setAntiAlias(true);
 		pntMap.setFilterBitmap(true);
-		pntMap.setDither(true);		
+		pntMap.setDither(true);
 	}
 
 	@Override
@@ -55,6 +61,14 @@ public class GameView extends View implements IOverlayView
 		for (City city : _game.map.cities){
 			cityPainter.draw(canvas, city);
 		}
+		
+		drawControls(canvas);
+	}
+	
+	private void drawControls(Canvas canvas)
+	{
+		PlayerData data = _game.getViewForPlayer(Constants.Players.MainHuman);
+		menuPainter.draw(canvas, data);
 	}
 
 	int map_w = -1;

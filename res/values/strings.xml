@@ -25,4 +25,5 @@
     <string name="cityinfo_connections">Transportation costs (per 1000 bottles):</string>
     <string name="cityinfo_close">Close</string>
 
+    <string name="beersort_standard">Standard</string>
 </resources>

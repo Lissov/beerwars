@@ -6,6 +6,7 @@ import com.pl.beerwars.data.*;
 import android.widget.*;
 import android.content.res.*;
 import com.pl.beerwars.data.facade.*;
+import com.pl.beerwars.data.playerdata.PlayerData;
 import com.pl.beerwars.data.transport.*;
 import android.util.*;
 
@@ -13,21 +14,21 @@ public class CityInfoView extends OverlayFrame
 {
 	private IViewShower _shower;
 	private Translator _translator;
-	private GameFacade _game;
+	private PlayerData _data;
 	private String _cityId;
 
-	public CityInfoView(Context context, IViewShower shower, Translator translator, GameFacade game, String cityId)
+	public CityInfoView(Context context, IViewShower shower, Translator translator, PlayerData data, String cityId)
 	{
 		super(context);
 		_shower = shower;
 		_translator = translator;
-		_game = game;
+		_data = data;
 		_cityId = cityId;
 		
 		View.inflate(context, R.layout.cityinfo, this);
 		
 		Resources res = context.getResources();
-		CityFacade city = _game.getCity(_cityId);
+		CityFacade city = _data.game.getCity(_cityId);
 		
 		TextView tvName = (TextView)findViewById(R.id.cityinfo_txtName);
 		tvName.setText(translator.getCityName(_cityId));
