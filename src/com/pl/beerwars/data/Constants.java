@@ -39,7 +39,6 @@ public class Constants
 	}
 	
 	public static class Sizes{
-		public final static float BaseScale = 20f;
 		public final static float TouchRadiusSquare = 900; // in pixels
 	}
 	
@@ -70,5 +69,10 @@ public class Constants
 		public final static float selfprice = 0.7f;
 		public final static float quality = 0.5f;		
 		public final static float deviation = 0.4f;		
+	}
+	
+	public enum ScreenButton {
+		None,
+		Player, NextTurn
 	}
 }

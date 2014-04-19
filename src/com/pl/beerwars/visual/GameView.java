@@ -48,14 +48,14 @@ public class GameView extends View implements IOverlayView
 	protected void onDraw(Canvas canvas)
 	{
 		translator.setup(this.getMeasuredWidth(), this.getMeasuredHeight(), 
-			Constants.Sizes.BaseScale, _context.getResources());
+				_context.getResources().getDimension(R.dimen.baseScale), _context.getResources());
 		
 		float xmin = translator.getX(0f);
 		float xmax = translator.getX(1f);
 		float ymin = translator.getY(0f);
 		float ymax = translator.getY(1f);
 
-		Bitmap map = getMap(xmax - xmin, ymax - ymin, translator.getMapResId(_game.map.mapId));
+		Bitmap map = BitmapManager.getBitmap(_context, translator.getMapResId(_game.map.mapId), (int)(xmax - xmin), (int)(ymax - ymin));
 		canvas.drawBitmap(map, xmin, ymin, pntMap);
 		
 		for (City city : _game.map.cities){
@@ -71,25 +71,6 @@ public class GameView extends View implements IOverlayView
 		menuPainter.draw(canvas, data);
 	}
 
-	int map_w = -1;
-	int map_h = -1;
-	int map_resId = -1;
-	Bitmap map_cache;
-	private Bitmap getMap(float w, float h, int resId){
-		int rw = (int)w;
-		int rh = (int)h;
-		
-		if (rw != map_w || rh != map_h || resId != map_resId) {
-			Resources res = _context.getResources();
-			Bitmap bmp = BitmapFactory.decodeResource(res, resId);
-			map_cache = Bitmap.createScaledBitmap(bmp, rw, rh, true);
-			map_w = rw;
-			map_h = rh;
-			map_resId = resId;
-		}
-		return map_cache;
-	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
@@ -97,12 +78,18 @@ public class GameView extends View implements IOverlayView
 			return true;
 			
 		if (event.getAction() == MotionEvent.ACTION_DOWN){
+			ButtonData buttonTouched = menuPainter.getTouchedButton(event.getX(), event.getY());
+			if (buttonTouched != null){
+				buttonTouched.isDown = !buttonTouched.isDown;
+				...
+			}
+			
 			City touched = getTouchedCity(event.getX(), event.getY());
 			if (touched != null)
 			{
 				showCityInfo(touched);
 				return true;
-			}
+			}			
 		}
 		return super.onTouchEvent(event);
 	}

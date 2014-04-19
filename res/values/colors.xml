@@ -4,16 +4,19 @@
 
 	<color name="cityBackground">#FF1010</color>
 	<color name="cityBorder">#101010</color>
-	<color name="cityName">#505050</color>
+	<color name="cityName">#303030</color>
 
 	<color name="overlay_border">#105010</color>
 
 	<color name="cityinfo_background">#FFFF88</color>
 	<color name="cityinfo_text">#000000</color>
 	
-	<color name="game_playerDataText">#333300</color>
+	<color name="game_playerDataText">#555500</color>
 
-	<color name="game_panelBorder">#404040</color>
-	<color name="game_panelField">#B2FF66</color>
-
+	<color name="game_panelBorder">#003319</color>
+	<color name="game_panelField">#4C9900</color>
+	<color name="game_panelButton">#009900</color>
+	<color name="game_panelButtonDown">#005500</color>
+	<color name="game_panelButtonBorder">#003300</color>
+	
 </resources>		

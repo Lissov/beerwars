@@ -1,4 +1,5 @@
 package com.pl.beerwars.data;
+import android.annotation.SuppressLint;
 import com.pl.beerwars.data.Constants.FactorySizes;
 import com.pl.beerwars.data.Constants.StorageSizes;
 import com.pl.beerwars.data.beer.BeerSort;
@@ -12,6 +13,8 @@ import com.pl.beerwars.data.transport.*;
 
 public class Game
 {
+	public Date date;
+	
 	public com.pl.beerwars.data.map.Map map;
 	private Random rnd = new Random();
 	
@@ -19,19 +22,21 @@ public class Game
 		return players.get(playerNum);
 	}
 	
+	@SuppressLint("UseSparseArrays")
 	public HashMap<Integer, PlayerData> players = new HashMap<Integer, PlayerData>();
 	
 	public void start(String humanName, String humanCity, int playersCount){
+		date = new Date(2014, 01, 06);
 		buildPlayers(humanName, humanCity, playersCount);
 		buildFacades();
+		updateFacades();
 	}
 
 	private void buildFacades(){
-
 		for (PlayerData player : players.values())
- {
+		{
 			GameFacade gv = new GameFacade();
-
+			
 			gv.cities = new CityFacade[map.cities.length];
 			for (int i = 0; i < map.cities.length; i++) {
 				gv.cities[i] = new CityFacade(map.cities[i]);
@@ -41,6 +46,13 @@ public class Game
 			}
 
 			player.game = gv;
+		}
+	}
+	
+	private void updateFacades(){
+		for (PlayerData player : players.values())
+		{
+			player.game.date = date;
 		}
 	}
 	
