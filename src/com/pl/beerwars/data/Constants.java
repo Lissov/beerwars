@@ -49,22 +49,50 @@ public class Constants
 		public final static int transportReload = 50;
 		
 		public final static int startMoney = 1000;
+		
+		public final static int unitSize = 1000;
+		
+		public final static int unitIdleCost = 10;
 	}
 	
-	public static class FactorySizes{
-		public final static int none = 0;		
-		public final static int small = 1;		
-		public final static int medium = 2;		
-		public final static int big = 3;		
+	public static enum StorageSize{
+		None, Small, Medium, Big		
+	}
+
+	public static enum FactorySize{
+		None, Small, Medium, Big
+	}
+
+	public static int FactorySupportCost(FactorySize size){
+		switch (size){
+			case Small: return 200;
+			case Medium: return 1000;
+			case Big: return 30000;
+			case None:
+			default: return 0;
+		}
 	}
 	
-	public static class StorageSizes{
-		public final static int none = 0;		
-		public final static int small = 1;		
-		public final static int medium = 2;		
-		public final static int big = 3;		
+	public static int StorageVolume(StorageSize size){
+		switch (size){
+			case Small: return 20000;
+			case Medium: return 200000;
+			case Big: return 2000000;
+			case None:
+			default: return 0;
+		}
 	}
 	
+	public static int StorageCost(StorageSize size){
+		switch (size){
+			case Small: return 500;
+			case Medium: return 3000;
+			case Big: return 20000;
+			case None:
+			default: return 0;
+		}
+	}
+
 	public static class startBeerParameters{
 		public final static float selfprice = 0.7f;
 		public final static float quality = 0.5f;		

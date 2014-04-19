@@ -1,7 +1,8 @@
 package com.pl.beerwars.data;
+import com.pl.beerwars.*;
 import android.annotation.SuppressLint;
-import com.pl.beerwars.data.Constants.FactorySizes;
-import com.pl.beerwars.data.Constants.StorageSizes;
+import com.pl.beerwars.data.Constants.FactorySize;
+import com.pl.beerwars.data.Constants.StorageSize;
 import com.pl.beerwars.data.beer.BeerSort;
 import com.pl.beerwars.data.facade.*;
 import java.util.*;
@@ -10,13 +11,14 @@ import com.pl.beerwars.data.map.City;
 import com.pl.beerwars.data.playerdata.CityObjects;
 import com.pl.beerwars.data.playerdata.PlayerData;
 import com.pl.beerwars.data.transport.*;
+import com.pl.beerwars.data.playerdata.*;
 
 public class Game
 {
 	public Date date;
 	
 	public com.pl.beerwars.data.map.Map map;
-	private Random rnd = new Random();
+	//private Random rnd = new Random();
 	
 	public PlayerData getViewForPlayer(int playerNum){
 		return players.get(playerNum);
@@ -25,9 +27,7 @@ public class Game
 	@SuppressLint("UseSparseArrays")
 	public HashMap<Integer, PlayerData> players = new HashMap<Integer, PlayerData>();
 	
-	public void start(String humanName, String humanCity, int playersCount){
-		date = new Date(2014, 01, 06);
-		buildPlayers(humanName, humanCity, playersCount);
+	public void start(){
 		buildFacades();
 		updateFacades();
 	}
@@ -76,43 +76,66 @@ public class Game
 		return result;
 	}
 	
-	private void buildPlayers(String humanName, String humanCity, int playersCount){
-		players.put(Constants.Players.MainHuman, buildPlayer(humanName, Constants.IntellectId.Human, humanCity));
-		LinkedList<String> owned = new LinkedList<String>();
-		owned.add(humanCity);
-		String[] names = new String[] { "Hanek'n", "Fraizer", "Praterer", "Klown" };
-		for (int i=1; i<playersCount; i++){
-			int id = Constants.Players.MainHuman + i;
+	public void makeTurn(TurnMessageCallback callback){
+		try
+		{
 			
-			int cn = rnd.nextInt(map.cities.length);
-			while (owned.contains(map.cities[cn].id))
-				cn = rnd.nextInt(map.cities.length);
+			callback.display(R.string.game_nt_consumptionCalculations, null);
+			Thread.sleep(1000);
+			callback.display(R.string.game_nt_transportCalculations, null);
+			Thread.sleep(1000);
+			callback.display(R.string.game_nt_productionCalculations, null);
+			processProduction(callback);
 			
-			players.put(id, buildPlayer(names[i-1], Constants.IntellectId.AI, map.cities[cn].id));  
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			c.add(Calendar.DAY_OF_YEAR, 7);
+			date = c.getTime();
+		}
+		catch (InterruptedException ex){}
+		finally{
+			callback.complete();
 		}
 	}
 	
-	private PlayerData buildPlayer(String name, int intellectId, String cityId){
-		PlayerData player = new PlayerData(intellectId, name);
-		
-		player.money = Constants.Economics.startMoney;
-		player.name = name;
-		player.intellect_id = intellectId;
-		
-		player.cityObjects = new CityObjects[map.cities.length];
-		for (int i=0; i<map.cities.length; i++){
-			City c = map.cities[i];
-			player.cityObjects[i] = c.id == cityId
-					? new CityObjects(c, StorageSizes.small, FactorySizes.small)
-					: new CityObjects(c, StorageSizes.none, FactorySizes.none);
-					
-			float dev = (float)rnd.nextGaussian() * Constants.startBeerParameters.deviation;
-			BeerSort sort = new BeerSort(name + " START", 
-					Constants.startBeerParameters.selfprice * (1f + dev),
-					Constants.startBeerParameters.quality * (1f + dev));
-			player.ownedSorts.add(sort);
+	private void processNTpreconditions(TurnMessageCallback callback){
+		for (PlayerData p : players.values()){
+			p.bankrupt = false;
+			if (p.money < 0){
+				p.bankrupt = true;
+				callback.display(R.string.game_nt_bankrupt, new String[] { p.name });
+			}
 		}
-		
-		return player;
+	}
+	private void processProduction(TurnMessageCallback callback){
+		for (PlayerData p : players.values()){
+			if (p.bankrupt) continue;
+			
+			for (CityObjects co : p.cityObjects){
+				ProductionResult prod = co.generateProduction();
+				if (p.intellect_id == Constants.IntellectId.Human)
+					reportProduction(callback, co.cityRef, prod);
+				p.money -= prod.price;
+			}
+		}
+	}
+	
+	private void reportProduction(TurnMessageCallback callback, City c, ProductionResult p){
+		callback.displayCity(R.string.game_nt_producedCity, c.id );
+		for (BeerSort sort : p.produced.keySet())
+		{
+			callback.display(R.string.game_nt_producedSort,
+							 new String[] { "" + p.produced.get(sort), sort.name });
+			if (p.dropped.containsKey(sort)){
+				callback.display(R.string.game_nt_producedLost,
+								 new String[] { "" + p.dropped.get(sort), sort.name });
+			}
+		}
+	}
+	
+	public interface TurnMessageCallback{
+		void displayCity(int resId, String cityId);
+		void display(int resId, String[] parameters);
+		void complete();
 	}
 }

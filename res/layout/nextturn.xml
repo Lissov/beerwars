@@ -4,7 +4,7 @@
     android:orientation="vertical"
 	android:weightSum="10"
 	android:background="@drawable/border">
-    
+
 	<LinearLayout
 		android:layout_weight="8"
 		android:layout_width="fill_parent"
@@ -16,42 +16,17 @@
 			android:layout_height="wrap_content"
 			android:textSize="@dimen/textBig" 
 			android:textColor="@color/overlay_text"
-			android:id="@+id/cityinfo_txtName"
-			android:gravity="center"
-			android:text="City name"/>
-		
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="20dp"
-			android:textSize="@dimen/textNormal"
-			android:textColor="@color/overlay_text" 
-			android:id="@+id/cityinfo_txtPopulation"
-			android:text="CPopulation:"/>
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="5dp"
-			android:textSize="@dimen/textNormal"
-			android:textColor="@color/overlay_text" 
-			android:id="@+id/cityinfo_txtConsumption"
-			android:text="CConsumption:"/>
-		
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="20dp"
-			android:textSize="@dimen/textNormal"
-			android:textColor="@color/overlay_text" 
-			android:text="@string/cityinfo_connections"/>
-		
+			android:text="@string/nextturn_title"
+			android:gravity="center"/>
+
 		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="200dp"
 			android:layout_marginLeft="20dp"
+			android:layout_marginTop="30dp"
 			android:orientation="vertical"
-			android:id="@+id/cityinfo_llTransports" />
-		
+			android:id="@+id/nextturn_llLog" />
+
 	</LinearLayout>
 	<LinearLayout
 		android:layout_weight="2"
@@ -66,7 +41,7 @@
 			android:layout_weight="1"
 			android:layout_height="fill_parent"
 			android:text="@string/cityinfo_close"
-			android:id="@+id/cityinfo_btnClose"/>
+			android:id="@+id/nextturn_btnClose"/>
 	</LinearLayout>
-	
+
 </LinearLayout>

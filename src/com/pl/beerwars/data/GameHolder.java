@@ -1,25 +1,80 @@
 package com.pl.beerwars.data;
 import com.pl.beerwars.data.map.*;
+import com.pl.beerwars.data.Constants.*;
+import com.pl.beerwars.data.playerdata.*;
+import java.util.*;
+import com.pl.beerwars.data.beer.*;
 
 public class GameHolder
 {
 	private static Game _game = null;
+	private static Random rnd = new Random();
 	
 	public static Game getGame(){
 		if (_game == null)
 			constructGame();
 			
-			return _game;
+		return _game;
 	}
 	
 	private static void constructGame(){
 		_game = new Game();
 		_game.map = get2IslandsMap();
-		_game.start("PLAYER", "freiburg", 3);
+		_game.players = buildPlayers(_game.map, "PLAYER", "freiburg", 3);
+		_game.date = new java.util.Date(2014, 01, 06);
+		_game.start();
 	}
 	
-	private static Map get2IslandsMap(){
-		Map map = new Map();
+	private static HashMap<Integer, PlayerData> buildPlayers(
+		com.pl.beerwars.data.map.Map map,
+		String humanName, String humanCity, int playersCount)
+	{
+		HashMap<Integer, PlayerData> players = new HashMap<Integer, PlayerData>();
+		players.put(Constants.Players.MainHuman, buildPlayer(map, humanName, Constants.IntellectId.Human, humanCity));
+		java.util.LinkedList<String> owned = new java.util.LinkedList<String>();
+		owned.add(humanCity);
+		String[] names = new String[] { "Hanek'n", "Fraizer", "Praterer", "Klown" };
+		for (int i=1; i<playersCount; i++){
+			int id = Constants.Players.MainHuman + i;
+
+			int cn = rnd.nextInt(map.cities.length);
+			while (owned.contains(map.cities[cn].id))
+				cn = rnd.nextInt(map.cities.length);
+
+			players.put(id, buildPlayer(map, names[i-1], Constants.IntellectId.AI, map.cities[cn].id));  
+		}
+		return players;
+	}
+
+	private static PlayerData buildPlayer(
+		com.pl.beerwars.data.map.Map map,
+		String name, int intellectId, String cityId)
+	{
+		PlayerData player = new PlayerData(intellectId, name);
+
+		player.money = Constants.Economics.startMoney;
+		player.name = name;
+		player.intellect_id = intellectId;
+
+		player.cityObjects = new CityObjects[map.cities.length];
+		for (int i=0; i<map.cities.length; i++){
+			City c = map.cities[i];
+			player.cityObjects[i] = c.id == cityId
+				? new CityObjects(c, StorageSize.Small, FactorySize.Small)
+				: new CityObjects(c, StorageSize.None, FactorySize.None);
+
+			float dev = (float)rnd.nextGaussian() * Constants.startBeerParameters.deviation;
+			BeerSort sort = new BeerSort(name + " START", 
+										 Constants.startBeerParameters.selfprice * (1f + dev),
+										 Constants.startBeerParameters.quality * (1f + dev));
+			player.ownedSorts.add(sort);
+		}
+
+		return player;
+	}
+	
+	private static com.pl.beerwars.data.map.Map get2IslandsMap(){
+		com.pl.beerwars.data.map.Map map = new com.pl.beerwars.data.map.Map();
 		
 		map.mapId = Constants.Maps.Basic;
 

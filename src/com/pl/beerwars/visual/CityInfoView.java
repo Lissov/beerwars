@@ -45,7 +45,7 @@ public class CityInfoView extends OverlayFrame
 		LinearLayout llTransport = (LinearLayout)findViewById(R.id.cityinfo_llTransports);
 		for (TransportPrice price : city.transportPrices){
 			TextView tv = new TextView(_context);
-			tv.setTextColor(res.getColor(R.color.cityinfo_text));
+			tv.setTextColor(res.getColor(R.color.overlay_text));
 			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
 			tv.setText(translator.getCityName(price.cityTo) + "   " + price.price1000 + Constants.Economics.Currency);
 			llTransport.addView(tv);

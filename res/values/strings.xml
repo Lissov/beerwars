@@ -25,5 +25,17 @@
     <string name="cityinfo_connections">Transportation costs (per 1000 bottles):</string>
     <string name="cityinfo_close">Close</string>
 
+    <string name="nextturn_title">Moving to next week</string>
+    <string name="nextturn_close">Close</string>
+
     <string name="beersort_standard">Standard</string>
+	
+	<string name="game_nt_consumptionCalculations">Calculating consumption...</string>
+	<string name="game_nt_transportCalculations">Calculating transport...</string>
+	<string name="game_nt_productionCalculations">Calculating production...</string>
+	<string name="game_nt_complete">Turn COMPLETE!</string>
+	<string name="game_nt_bankrupt">Player $0%s has no money. Production and logistics are terminated!</string>
+	<string name="game_nt_producedCity">City %0$s produced: %1$s liters of %2$s.</string>
+	<string name="game_nt_producedSort">%0$s liters of %1$s produced.</string>	
+	<string name="game_nt_producedLost">Storage full: %0$s liters of %1$s lost!</string>	
 </resources>

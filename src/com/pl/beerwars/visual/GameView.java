@@ -58,8 +58,9 @@ public class GameView extends View implements IOverlayView
 		Bitmap map = BitmapManager.getBitmap(_context, translator.getMapResId(_game.map.mapId), (int)(xmax - xmin), (int)(ymax - ymin));
 		canvas.drawBitmap(map, xmin, ymin, pntMap);
 		
-		for (City city : _game.map.cities){
-			cityPainter.draw(canvas, city);
+		PlayerData data = _game.getViewForPlayer(Constants.Players.MainHuman);
+		for (int i = 0; i < _game.map.cities.length; i++){
+			cityPainter.draw(canvas, _game.map.cities[i], data.cityObjects[i]);
 		}
 		
 		drawControls(canvas);
@@ -80,8 +81,10 @@ public class GameView extends View implements IOverlayView
 		if (event.getAction() == MotionEvent.ACTION_DOWN){
 			ButtonData buttonTouched = menuPainter.getTouchedButton(event.getX(), event.getY());
 			if (buttonTouched != null){
-				buttonTouched.isDown = !buttonTouched.isDown;
-				...
+//				buttonTouched.isDown = !buttonTouched.isDown;
+				if (buttonTouched.id == Constants.ScreenButton.NextTurn){
+					nextTurn(buttonTouched);
+				}
 			}
 			
 			City touched = getTouchedCity(event.getX(), event.getY());
@@ -92,6 +95,12 @@ public class GameView extends View implements IOverlayView
 			}			
 		}
 		return super.onTouchEvent(event);
+	}
+	
+	private void nextTurn(ButtonData button){
+		button.isDown = true;
+		this.invalidate();
+		viewShower.showView(new NextTurnView(_context, viewShower, translator, _game, button));		
 	}
 
 	private void showCityInfo(City city){
@@ -117,10 +126,12 @@ public class GameView extends View implements IOverlayView
 
 	public void deactivate(){
 		isActive = false;
+		this.invalidate();
 	}
 
 	public void activate(){
 		isActive = true;
+		this.invalidate();
 	}
 	
 	//TODO: remove

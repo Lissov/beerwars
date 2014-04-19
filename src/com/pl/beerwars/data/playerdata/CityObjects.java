@@ -1,17 +1,67 @@
 package com.pl.beerwars.data.playerdata;
-
+import com.pl.beerwars.data.*;
+import com.pl.beerwars.data.Constants.*;
 import com.pl.beerwars.data.map.City;
+import com.pl.beerwars.data.beer.*;
+import java.util.*;
 
 public class CityObjects {
 	
 	public City cityRef;
 
-	public int storageSize;
-	public int factorySize;
+	public StorageSize storageSize;
+	public FactorySize factorySize;
 	
-	public CityObjects(City cityRef, int storageSize, int factorySize) {
+	public HashMap<BeerSort, Integer> storage;
+	public HashMap<BeerSort, FactoryProduction> factory;
+	
+	public CityObjects(City cityRef, StorageSize storageSize, FactorySize factorySize) {
 		this.cityRef = cityRef;
 		this.storageSize = storageSize;
 		this.factorySize = factorySize;
+		
+		this.storage = new HashMap<BeerSort, Integer>();
+		this.factory = new HashMap<BeerSort, FactoryProduction>();
+	}
+	
+	public int getTotalStorage(){
+		int s = 0;
+		for (int stored : storage.values()){
+			s += stored;
+		}
+		return s;
+	}
+	
+	public int getStorageMax(){
+		return Constants.StorageVolume(storageSize);
+	}
+	
+	public ProductionResult generateProduction(){
+		int stor = getTotalStorage();
+		int maxS = getStorageMax();
+		float price = 0;
+		ProductionResult result = new ProductionResult();
+		for (BeerSort sort : factory.keySet()){
+			int produced = factory.get(sort).workingUnits * Constants.Economics.unitSize;
+			price += factory.get(sort).totalUnits * Constants.Economics.unitIdleCost;
+			result.produced.put(sort, produced);
+			if (stor + produced > maxS){
+				result.dropped.put(sort, produced - (maxS - stor));
+				produced = maxS - stor;
+			}
+			if (storage.containsKey(sort))
+				storage.put(sort, storage.get(sort) + produced);
+			else
+				storage.put(sort, produced);
+			stor += produced;
+		}
+		price += Constants.FactorySupportCost(factorySize);
+		result.price = price;
+		return result;
+	}
+	
+	public class FactoryProduction{
+		public int totalUnits;
+		public int workingUnits;
 	}
 }

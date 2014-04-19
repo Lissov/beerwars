@@ -20,6 +20,8 @@ public class PlayerData {
 	public List<TransportOrder> oneTimeOrders;
 	
 	public GameFacade game;
+	
+	public boolean bankrupt;
 
 	
 	public PlayerData(int intellect_id, String name) {
