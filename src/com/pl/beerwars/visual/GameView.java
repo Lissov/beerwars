@@ -30,6 +30,8 @@ public class GameView extends View implements IOverlayView
 		viewShower = shower;	
 		
 		preparePaints();
+		
+		invalidate();
 	}
 	
 	private void preparePaints(){
@@ -81,7 +83,6 @@ public class GameView extends View implements IOverlayView
 		if (event.getAction() == MotionEvent.ACTION_DOWN){
 			ButtonData buttonTouched = menuPainter.getTouchedButton(event.getX(), event.getY());
 			if (buttonTouched != null){
-//				buttonTouched.isDown = !buttonTouched.isDown;
 				if (buttonTouched.id == Constants.ScreenButton.NextTurn){
 					nextTurn(buttonTouched);
 				}

@@ -2,7 +2,10 @@ package com.pl.beerwars.data;
 import com.pl.beerwars.data.map.*;
 import com.pl.beerwars.data.Constants.*;
 import com.pl.beerwars.data.playerdata.*;
+import com.pl.beerwars.data.playerdata.CityObjects.FactoryProduction;
+
 import java.util.*;
+
 import com.pl.beerwars.data.beer.*;
 
 public class GameHolder
@@ -21,7 +24,11 @@ public class GameHolder
 		_game = new Game();
 		_game.map = get2IslandsMap();
 		_game.players = buildPlayers(_game.map, "PLAYER", "freiburg", 3);
-		_game.date = new java.util.Date(2014, 01, 06);
+		
+		Calendar c = Calendar.getInstance(); 
+		c.set(2014, 00, 06);
+		_game.date = c.getTime();
+		
 		_game.start();
 	}
 	
@@ -56,18 +63,25 @@ public class GameHolder
 		player.name = name;
 		player.intellect_id = intellectId;
 
+		float dev = (float)rnd.nextGaussian() * Constants.startBeerParameters.deviation;
+		BeerSort sort = new BeerSort(name + " START", 
+									 Constants.startBeerParameters.selfprice * (1f + dev),
+									 Constants.startBeerParameters.quality * (1f + dev));
+		player.ownedSorts.add(sort);
+
 		player.cityObjects = new CityObjects[map.cities.length];
 		for (int i=0; i<map.cities.length; i++){
 			City c = map.cities[i];
-			player.cityObjects[i] = c.id == cityId
-				? new CityObjects(c, StorageSize.Small, FactorySize.Small)
-				: new CityObjects(c, StorageSize.None, FactorySize.None);
-
-			float dev = (float)rnd.nextGaussian() * Constants.startBeerParameters.deviation;
-			BeerSort sort = new BeerSort(name + " START", 
-										 Constants.startBeerParameters.selfprice * (1f + dev),
-										 Constants.startBeerParameters.quality * (1f + dev));
-			player.ownedSorts.add(sort);
+			
+			if (c.id == cityId){
+				player.cityObjects[i] = new CityObjects(c, StorageSize.Small, FactorySize.Small); 	
+				FactoryProduction fp = player.cityObjects[i].new FactoryProduction();
+				fp.totalUnits = Constants.Economics.startUnits;
+				fp.workingUnits = Constants.Economics.startUnits;
+				player.cityObjects[i].factory.put(sort, fp);
+			}
+			else
+				player.cityObjects[i] = new CityObjects(c, StorageSize.None, FactorySize.None);
 		}
 
 		return player;

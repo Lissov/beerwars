@@ -45,7 +45,7 @@ public class CityPainter extends BasePainter
 		canvas.drawText(name, 
 			x - w/2, y + translator.scale * 2.5f,
 			pntCityName);
-		
+
 		float xn = paintStorage(canvas, x, y, cobj.storageSize);
 		xn = paintFactory(canvas, x + xn, y, cobj.factorySize);
 	}

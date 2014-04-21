@@ -49,6 +49,7 @@ public class Constants
 		public final static int transportReload = 50;
 		
 		public final static int startMoney = 1000;
+		public final static int startUnits = 5;
 		
 		public final static int unitSize = 1000;
 		

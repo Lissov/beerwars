@@ -79,7 +79,7 @@ public class Game
 	public void makeTurn(TurnMessageCallback callback){
 		try
 		{
-			
+			processNTpreconditions(callback);
 			callback.display(R.string.game_nt_consumptionCalculations, null);
 			Thread.sleep(1000);
 			callback.display(R.string.game_nt_transportCalculations, null);
@@ -115,12 +115,15 @@ public class Game
 				ProductionResult prod = co.generateProduction();
 				if (p.intellect_id == Constants.IntellectId.Human)
 					reportProduction(callback, co.cityRef, prod);
-				p.money -= prod.price;
+				p.money -= co.calculateCityCosts(prod);
 			}
 		}
 	}
 	
 	private void reportProduction(TurnMessageCallback callback, City c, ProductionResult p){
+		if (p.produced.size() == 0)
+			return;
+		
 		callback.displayCity(R.string.game_nt_producedCity, c.id );
 		for (BeerSort sort : p.produced.keySet())
 		{
@@ -135,7 +138,7 @@ public class Game
 	
 	public interface TurnMessageCallback{
 		void displayCity(int resId, String cityId);
-		void display(int resId, String[] parameters);
+		void display(int resId, Object[] parameters);
 		void complete();
 	}
 }

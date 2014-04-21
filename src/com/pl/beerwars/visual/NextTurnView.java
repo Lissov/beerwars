@@ -52,7 +52,7 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 	}
 
 	@Override
-	public void display(final int resId, final String[] params)
+	public void display(final int resId, final Object[] params)
 	{
 		((Activity)_context).runOnUiThread(new Runnable(){
 				public void run(){

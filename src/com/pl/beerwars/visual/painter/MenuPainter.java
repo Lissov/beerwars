@@ -1,5 +1,8 @@
 package com.pl.beerwars.visual.painter;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;

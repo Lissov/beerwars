@@ -39,11 +39,9 @@ public class CityObjects {
 	public ProductionResult generateProduction(){
 		int stor = getTotalStorage();
 		int maxS = getStorageMax();
-		float price = 0;
 		ProductionResult result = new ProductionResult();
 		for (BeerSort sort : factory.keySet()){
 			int produced = factory.get(sort).workingUnits * Constants.Economics.unitSize;
-			price += factory.get(sort).totalUnits * Constants.Economics.unitIdleCost;
 			result.produced.put(sort, produced);
 			if (stor + produced > maxS){
 				result.dropped.put(sort, produced - (maxS - stor));
@@ -55,9 +53,20 @@ public class CityObjects {
 				storage.put(sort, produced);
 			stor += produced;
 		}
-		price += Constants.FactorySupportCost(factorySize);
-		result.price = price;
 		return result;
+	}
+	
+	public int calculateCityCosts(ProductionResult production){
+		float price = 0;
+		for (BeerSort sort : production.produced.keySet()){
+			price += production.produced.get(sort) * sort.selfprice;
+		}
+		for (FactoryProduction sortUnits : factory.values()){
+			price += sortUnits.totalUnits * Constants.Economics.unitIdleCost;
+		}
+		price += Constants.FactorySupportCost(factorySize);
+		price += Constants.StorageCost(storageSize);
+		return (int)price;
 	}
 	
 	public class FactoryProduction{
