@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import com.pl.beerwars.data.Constants.FactorySize;
 import com.pl.beerwars.data.Constants.StorageSize;
 import com.pl.beerwars.data.beer.BeerSort;
+import com.pl.beerwars.data.consumption.ConsumptionModel;
 import com.pl.beerwars.data.facade.*;
 import java.util.*;
 
@@ -81,16 +82,21 @@ public class Game
 		{
 			processNTpreconditions(callback);
 			callback.display(R.string.game_nt_consumptionCalculations, null);
-			Thread.sleep(1000);
+			processConsumption(callback);
 			callback.display(R.string.game_nt_transportCalculations, null);
 			Thread.sleep(1000);
 			callback.display(R.string.game_nt_productionCalculations, null);
 			processProduction(callback);
 			
+			callback.display(R.string.game_nt_supportCalculations, null);
+			processSupportCosts();
+			
 			Calendar c = Calendar.getInstance();
 			c.setTime(date);
 			c.add(Calendar.DAY_OF_YEAR, 7);
 			date = c.getTime();
+			
+			updateFacades();
 		}
 		catch (InterruptedException ex){}
 		finally{
@@ -107,6 +113,15 @@ public class Game
 			}
 		}
 	}
+	
+	private void processSupportCosts(){
+		for (PlayerData p : players.values()){
+			for (CityObjects co : p.cityObjects){
+				p.money -= co.calculateCityCosts();
+			}
+		}		
+	}
+	
 	private void processProduction(TurnMessageCallback callback){
 		for (PlayerData p : players.values()){
 			if (p.bankrupt) continue;
@@ -115,10 +130,10 @@ public class Game
 				ProductionResult prod = co.generateProduction();
 				if (p.intellect_id == Constants.IntellectId.Human)
 					reportProduction(callback, co.cityRef, prod);
-				p.money -= co.calculateCityCosts(prod);
+				p.money -= prod.costs;
 			}
 		}
-	}
+	}	
 	
 	private void reportProduction(TurnMessageCallback callback, City c, ProductionResult p){
 		if (p.produced.size() == 0)
@@ -133,6 +148,41 @@ public class Game
 				callback.display(R.string.game_nt_producedLost,
 								 new String[] { "" + p.dropped.get(sort), sort.name });
 			}
+		}
+	}
+	
+	private void processConsumption(TurnMessageCallback callback){
+		ConsumptionModel model = new ConsumptionModel();
+		
+		for (City c : map.cities){
+			HashMap<BeerSort, Integer> consumed = model.calculateConsumption(this, c);
+
+			for (PlayerData p : players.values()){
+				for (CityObjects co : p.cityObjects){
+					HashMap<BeerSort, Integer> cityC = new HashMap<BeerSort, Integer>();
+					for (BeerSort sort : co.factory.keySet()){
+						if (!consumed.containsKey(sort)) continue;
+						int cons = consumed.get(sort);
+						cityC.put(sort, cons);
+						co.storage.put(sort, co.storage.get(sort) - cons);
+						p.money += cons * co.prices.get(sort);
+					}
+					
+					if (p.intellect_id == Constants.IntellectId.Human)
+						reportConsumption(callback, c, cityC);
+				}
+			}
+		}
+	}	
+
+	private void reportConsumption(TurnMessageCallback callback, City c, HashMap<BeerSort, Integer> consumed){
+		if (consumed.size() == 0)
+			return;
+		
+		callback.displayCity(R.string.game_nt_consumedCity, c.id );
+		for (BeerSort sort : consumed.keySet())
+		{
+			callback.display(R.string.game_nt_consumedSort, new String[] { "" + consumed.get(sort), sort.name, "+100%" });
 		}
 	}
 	

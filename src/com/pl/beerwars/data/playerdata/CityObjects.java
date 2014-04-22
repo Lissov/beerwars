@@ -14,6 +14,7 @@ public class CityObjects {
 	
 	public HashMap<BeerSort, Integer> storage;
 	public HashMap<BeerSort, FactoryProduction> factory;
+	public HashMap<BeerSort, Float> prices;
 	
 	public CityObjects(City cityRef, StorageSize storageSize, FactorySize factorySize) {
 		this.cityRef = cityRef;
@@ -22,6 +23,7 @@ public class CityObjects {
 		
 		this.storage = new HashMap<BeerSort, Integer>();
 		this.factory = new HashMap<BeerSort, FactoryProduction>();
+		this.prices = new HashMap<BeerSort, Float>();
 	}
 	
 	public int getTotalStorage(){
@@ -36,12 +38,21 @@ public class CityObjects {
 		return Constants.StorageVolume(storageSize);
 	}
 	
+	public int getUnitsCount(boolean onlyOperating){
+		int s = 0;
+		for (FactoryProduction sortUnits : factory.values()){
+			s += onlyOperating ? sortUnits.workingUnits : sortUnits.totalUnits;
+		}
+		return s;
+	}
+	
 	public ProductionResult generateProduction(){
 		int stor = getTotalStorage();
 		int maxS = getStorageMax();
 		ProductionResult result = new ProductionResult();
 		for (BeerSort sort : factory.keySet()){
 			int produced = factory.get(sort).workingUnits * Constants.Economics.unitSize;
+			result.costs += produced * sort.selfprice;
 			result.produced.put(sort, produced);
 			if (stor + produced > maxS){
 				result.dropped.put(sort, produced - (maxS - stor));
@@ -56,16 +67,13 @@ public class CityObjects {
 		return result;
 	}
 	
-	public int calculateCityCosts(ProductionResult production){
+	public int calculateCityCosts(){
 		float price = 0;
-		for (BeerSort sort : production.produced.keySet()){
-			price += production.produced.get(sort) * sort.selfprice;
-		}
 		for (FactoryProduction sortUnits : factory.values()){
 			price += sortUnits.totalUnits * Constants.Economics.unitIdleCost;
 		}
 		price += Constants.FactorySupportCost(factorySize);
-		price += Constants.StorageCost(storageSize);
+		price += Constants.StorageSupportCost(storageSize);
 		return (int)price;
 	}
 	

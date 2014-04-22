@@ -64,10 +64,15 @@ public class GameHolder
 		player.intellect_id = intellectId;
 
 		float dev = (float)rnd.nextGaussian() * Constants.startBeerParameters.deviation;
-		BeerSort sort = new BeerSort(name + " START", 
-									 Constants.startBeerParameters.selfprice * (1f + dev),
-									 Constants.startBeerParameters.quality * (1f + dev));
+		float sp = BeerUtils.roundPrice(Constants.startBeerParameters.selfprice * (1f + dev));
+		float q = BeerUtils.roundPrice(Constants.startBeerParameters.quality * (1f + dev));
+		BeerSort sort = new BeerSort(name + " START", sp, q);
 		player.ownedSorts.add(sort);
+		float expences = Constants.FactorySupportCost(FactorySize.Small) 
+				+ Constants.StorageSupportCost(StorageSize.Small)
+				+ Constants.Economics.startUnits * Constants.Economics.unitIdleCost
+				+ sp * Constants.Economics.startUnits * Constants.Economics.unitSize;
+		float price = BeerUtils.roundPrice(expences / Constants.Economics.startBeer); 
 
 		player.cityObjects = new CityObjects[map.cities.length];
 		for (int i=0; i<map.cities.length; i++){
@@ -79,9 +84,12 @@ public class GameHolder
 				fp.totalUnits = Constants.Economics.startUnits;
 				fp.workingUnits = Constants.Economics.startUnits;
 				player.cityObjects[i].factory.put(sort, fp);
+				player.cityObjects[i].storage.put(sort, Constants.Economics.startBeer);
 			}
 			else
 				player.cityObjects[i] = new CityObjects(c, StorageSize.None, FactorySize.None);
+			
+			player.cityObjects[i].prices.put(sort, price);
 		}
 
 		return player;

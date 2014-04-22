@@ -48,12 +48,13 @@ public class Constants
 		public final static int transportPerKm = 20;
 		public final static int transportReload = 50;
 		
-		public final static int startMoney = 1000;
-		public final static int startUnits = 5;
-		
 		public final static int unitSize = 1000;
-		
-		public final static int unitIdleCost = 10;
+
+		public final static int startMoney = 1000;
+		public final static int startUnits = 2;
+		public final static int startBeer = startUnits * unitSize;
+				
+		public final static int unitIdleCost = 100;
 	}
 	
 	public static enum StorageSize{
@@ -64,11 +65,21 @@ public class Constants
 		None, Small, Medium, Big
 	}
 
+	public static int FactoryVolume(FactorySize size){
+		switch (size){
+			case Small: return 10;
+			case Medium: return 100;
+			case Big: return 500;
+			case None:
+			default: return 0;
+		}
+	}
+
 	public static int FactorySupportCost(FactorySize size){
 		switch (size){
-			case Small: return 200;
-			case Medium: return 1000;
-			case Big: return 30000;
+			case Small: return 500;
+			case Medium: return 6000;
+			case Big: return 25000;
 			case None:
 			default: return 0;
 		}
@@ -78,17 +89,17 @@ public class Constants
 		switch (size){
 			case Small: return 20000;
 			case Medium: return 200000;
-			case Big: return 2000000;
+			case Big: return 1000000;
 			case None:
 			default: return 0;
 		}
 	}
 	
-	public static int StorageCost(StorageSize size){
+	public static int StorageSupportCost(StorageSize size){
 		switch (size){
 			case Small: return 500;
 			case Medium: return 3000;
-			case Big: return 20000;
+			case Big: return 10000;
 			case None:
 			default: return 0;
 		}

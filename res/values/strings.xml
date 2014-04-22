@@ -31,11 +31,14 @@
     <string name="beersort_standard">Standard</string>
 	
 	<string name="game_nt_consumptionCalculations">Calculating consumption&#8230;</string>
-	<string name="game_nt_transportCalculations">Calculating transport...</string>
-	<string name="game_nt_productionCalculations">Calculating production...</string>
+	<string name="game_nt_transportCalculations">Calculating transport&#8230;</string>
+	<string name="game_nt_productionCalculations">Calculating production&#8230;</string>
+	<string name="game_nt_supportCalculations">Calculating costs of ownership&#8230;</string>	
 	<string name="game_nt_complete">Turn COMPLETE!</string>
-	<string name="game_nt_bankrupt">%0$s has no money. Production and logistics are terminated!</string>
-	<string name="game_nt_producedCity">City %0$s produced:</string>
-	<string name="game_nt_producedSort">%0$s liters of %1$s produced.</string>	
-	<string name="game_nt_producedLost">Storage full: %0$s liters of %1$s lost!</string>	
+	<string name="game_nt_bankrupt">%1$s has no money. Production and logistics are terminated!</string>
+	<string name="game_nt_producedCity">City %1$s produced:</string>
+	<string name="game_nt_producedSort">\t%1$s liters of %2$s produced.</string>	
+	<string name="game_nt_producedLost">\tStorage full: %1$s liters of %2$s lost!</string>	
+	<string name="game_nt_consumedCity">City %1$s sold:</string>
+	<string name="game_nt_consumedSort">\t%1$s bottles of %2$s (%3$s).</string>
 </resources>

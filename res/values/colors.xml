@@ -8,7 +8,9 @@
 
 	<color name="city_storage">#000000</color>
 	<color name="city_factory">#000000</color>
-	
+	<color name="city_usage">#000000</color>
+	<color name="city_usagepotential">#888888</color>
+			
 	<color name="overlay_border">#105010</color>
 
 	<color name="overlay_background">#FFFF88</color>
