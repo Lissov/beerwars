@@ -23,6 +23,10 @@
     <string name="cityinfo_consumption">Estimated consumption:</string>
     <string name="cityinfo_consumption_unknown">Unknown</string>
     <string name="cityinfo_connections">Transportation costs (per 1000 bottles):</string>
+    <string name="cityinfo_prices">Prices (per bottle):</string>
+    <string name="cityinfo_storage">Storage</string>
+    <string name="cityinfo_storage_avail">Usage:</string>
+    <string name="cityinfo_storage_expand">Expand</string>
     <string name="cityinfo_close">Close</string>
 
     <string name="nextturn_title">Moving to next week</string>

@@ -12,7 +12,7 @@
 	<color name="city_usagepotential">#888888</color>
 			
 	<color name="overlay_border">#105010</color>
-
+	<color name="overlay_border_inner">#AAAA66</color>
 	<color name="overlay_background">#FFFF88</color>
 	<color name="overlay_text">#000000</color>
 	

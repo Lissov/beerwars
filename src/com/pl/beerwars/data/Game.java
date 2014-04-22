@@ -36,7 +36,7 @@ public class Game
 	private void buildFacades(){
 		for (PlayerData player : players.values())
 		{
-			GameFacade gv = new GameFacade();
+			GameFacade gv = new GameFacade(this);
 			
 			gv.cities = new CityFacade[map.cities.length];
 			for (int i = 0; i < map.cities.length; i++) {
