@@ -33,7 +33,6 @@ public class GameSetupActivity extends Activity
 		List<String> mapNames = new ArrayList<String>();
 		for (Integer mapId: mapIds){
 			String name = trans.getMapName(mapId);
-			Toast.makeText(this, "map:" + name, Toast.LENGTH_LONG).show();
 			maps.put(name, mapId);
 			mapNames.add(name);
 		}

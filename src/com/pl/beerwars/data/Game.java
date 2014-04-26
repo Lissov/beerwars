@@ -66,7 +66,7 @@ public class Game
 				CityObjects cobj = player.cityObjects[i];
 				for (PlayerData op : players.values()){
 					if (op.id == player.id) continue;
-					PlayerCityFacade pcf = op.game.cities[i].others.get(op.id);
+					PlayerCityFacade pcf = op.game.cities[i].others.get(player.id);
 					pcf.factorySize = cobj.factorySize;
 					pcf.storageSize = cobj.storageSize;
 				}

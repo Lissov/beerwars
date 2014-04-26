@@ -51,6 +51,7 @@ public class CityInfoView extends OverlayFrame
 		tvConsumption.setText(res.getString(R.string.cityinfo_consumption) + "  " + consS);
 
 		//showConnections(city, translator, res);
+		showOthers(city);
 		showPrices();
 		showStorage();
 
