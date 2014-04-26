@@ -15,15 +15,23 @@ public class GameHolder
 	
 	public static Game getGame(){
 		if (_game == null)
-			constructGame();
+			loadLastGame();
 			
 		return _game;
 	}
 	
-	private static void constructGame(){
+	private static void loadLastGame(){
+		
+	}
+	
+	public static void saveGame(String name){
+		//Storage s = new Storage();
+	}
+	
+	public static void constructNewGame(int mapId, String playerName, String playerStartCiry, int opponentCount){
 		_game = new Game();
-		_game.map = get2IslandsMap();
-		_game.players = buildPlayers(_game.map, "PLAYER", "freiburg", 3);
+		_game.map = getMap(mapId);
+		_game.players = buildPlayers(_game.map, playerName, playerStartCiry, opponentCount);
 		
 		Calendar c = Calendar.getInstance(); 
 		c.set(2014, 00, 06);
@@ -37,7 +45,8 @@ public class GameHolder
 		String humanName, String humanCity, int playersCount)
 	{
 		HashMap<Integer, PlayerData> players = new HashMap<Integer, PlayerData>();
-		players.put(Constants.Players.MainHuman, buildPlayer(map, humanName, Constants.IntellectId.Human, humanCity));
+		players.put(Constants.Players.MainHuman, buildPlayer(Constants.Players.MainHuman, map, humanName, Constants.IntellectId.Human, humanCity));
+		int playerId = Constants.Players.MainHuman + 1;
 		java.util.LinkedList<String> owned = new java.util.LinkedList<String>();
 		owned.add(humanCity);
 		String[] names = new String[] { "Hanek'n", "Fraizer", "Praterer", "Klown" };
@@ -48,17 +57,19 @@ public class GameHolder
 			while (owned.contains(map.cities[cn].id))
 				cn = rnd.nextInt(map.cities.length);
 
-			players.put(id, buildPlayer(map, names[i-1], Constants.IntellectId.AI, map.cities[cn].id));  
+			players.put(id, buildPlayer(playerId++, map, names[i-1], Constants.IntellectId.AI, map.cities[cn].id));  
 		}
 		return players;
 	}
 
 	private static PlayerData buildPlayer(
+		int id,
 		com.pl.beerwars.data.map.Map map,
 		String name, int intellectId, String cityId)
 	{
 		PlayerData player = new PlayerData(intellectId, name);
-
+		player.id = id;
+		
 		player.money = Constants.Economics.startMoney;
 		player.name = name;
 		player.intellect_id = intellectId;
@@ -93,6 +104,15 @@ public class GameHolder
 		}
 
 		return player;
+	}
+	
+	public static com.pl.beerwars.data.map.Map getMap(int id){
+		switch (id){
+			case Constants.Maps.Basic:
+				return get2IslandsMap();
+			default:
+				return null;
+		}
 	}
 	
 	private static com.pl.beerwars.data.map.Map get2IslandsMap(){
@@ -132,5 +152,13 @@ public class GameHolder
 		map.calculateDistances();
 		
 		return map;
+	}
+	
+	public static List<Integer> getAvailableMaps(){
+		List<Integer> result = new LinkedList<Integer>();
+		
+		result.add(Constants.Maps.Basic);
+		
+		return result;
 	}
 }

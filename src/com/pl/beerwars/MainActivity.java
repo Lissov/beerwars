@@ -4,6 +4,8 @@ import android.app.*;
 import android.os.*;
 import android.view.*;
 import android.content.*;
+import com.pl.beerwars.data.*;
+import android.widget.*;
 
 public class MainActivity extends Activity
 {
@@ -13,9 +15,15 @@ public class MainActivity extends Activity
 	{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+		
+		((Button)findViewById(R.id.main_btnContinue))
+			.setEnabled(GameHolder.getGame() != null);
     }
 	
-	public void btnStartClick(View view){
+	public void btnStartNewClick(View view){
+		startActivity(new Intent(this, GameSetupActivity.class));
+	}
+	public void btnContinueClick(View view){
 		startActivity(new Intent(this, GameActivity.class));
 	}
 }

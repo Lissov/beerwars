@@ -60,7 +60,7 @@ public class GameView extends View implements IOverlayView
 		Bitmap map = BitmapManager.getBitmap(_context, translator.getMapResId(_game.map.mapId), (int)(xmax - xmin), (int)(ymax - ymin));
 		canvas.drawBitmap(map, xmin, ymin, pntMap);
 		
-		PlayerData data = _game.getViewForPlayer(Constants.Players.MainHuman);
+		PlayerData data = _game.getViewForPlayerId(Constants.Players.MainHuman);
 		for (int i = 0; i < _game.map.cities.length; i++){
 			cityPainter.draw(canvas, _game.map.cities[i], data.cityObjects[i]);
 		}
@@ -70,7 +70,7 @@ public class GameView extends View implements IOverlayView
 	
 	private void drawControls(Canvas canvas)
 	{
-		PlayerData data = _game.getViewForPlayer(Constants.Players.MainHuman);
+		PlayerData data = _game.getViewForPlayerId(Constants.Players.MainHuman);
 		menuPainter.draw(canvas, data);
 	}
 
@@ -106,7 +106,7 @@ public class GameView extends View implements IOverlayView
 
 	private void showCityInfo(City city){
 		viewShower.showView(new CityInfoView(_context, viewShower, translator, 
-			_game.getViewForPlayer(Constants.Players.MainHuman), city.id));
+											 _game.getViewForPlayerId(Constants.Players.MainHuman), city.id));
 	}
 	
 	private City getTouchedCity(float x, float y){

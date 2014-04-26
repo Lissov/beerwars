@@ -7,7 +7,7 @@ public class BeerSort {
 	public int id;
 	public String name;
 	public float selfprice;
-		public float quality;
+	public float quality;
 	
 	public BeerSort(String name, float selfprice, float quality) {
 		this.id = nextSortId++;

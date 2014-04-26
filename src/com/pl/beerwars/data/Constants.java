@@ -1,4 +1,5 @@
 package com.pl.beerwars.data;
+import java.math.*;
 
 public class Constants
 {
@@ -95,6 +96,16 @@ public class Constants
 		}
 	}
 	
+	public static int StorageBuildPrice(StorageSize size){
+		switch (size){
+			case Small: return 5000;
+			case Medium: return 30000;
+			case Big: return 100000;
+			case None:
+			default: return 0;
+		}
+	}
+
 	public static int StorageSupportCost(StorageSize size){
 		switch (size){
 			case Small: return 500;
@@ -102,6 +113,27 @@ public class Constants
 			case Big: return 10000;
 			case None:
 			default: return 0;
+		}
+	}
+
+	public static int StorageBuildingTime(StorageSize size){
+		switch (size){
+			case Small: return 4;
+			case Medium: return 8;
+			case Big: return 12;
+			case None:
+			default: return 0;
+		}
+	}
+
+	public static StorageSize StorageNextSize(StorageSize size){
+		switch (size){
+			case None: return StorageSize.Small;
+			case Small: return StorageSize.Medium;
+			case Medium: return StorageSize.Big;
+			case Big:
+			default:
+				return StorageSize.None;
 		}
 	}
 

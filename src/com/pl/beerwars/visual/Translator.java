@@ -17,16 +17,19 @@ public class Translator
 		this.scale = scale;
 		this.res = resources;
 	}
-	
-	public float getX(float gameX){
+
+	public float getX(float gameX)
+	{
 		return gameX * sizex;
 	}
-	
-	public float getY(float gameY){
+
+	public float getY(float gameY)
+	{
 		return gameY * sizey;
 	}
-	
-	public String getCityName(String cityId){
+
+	public String getCityName(String cityId)
+	{
 		if (cityId == Constants.CityIds.Trinkburg)
 			return res.getString(R.string.city_trinkburg);
 		if (cityId == Constants.CityIds.Feldkirchen)
@@ -52,11 +55,46 @@ public class Translator
 
 		return "unknown";
 	}
-	
-	public int getMapResId(int mapId){
+
+	public int getMapResId(int mapId)
+	{
 		if (mapId == Constants.Maps.Basic)
 			return R.drawable.map_basic;
-			
+
 		return -1;
+	}
+
+	public String getMapName(int mapId)
+	{
+		if (mapId == Constants.Maps.Basic)
+			return res.getString(R.string.map_basic);
+
+		return "unknown";
+	}
+
+	public String getStorageName(Constants.StorageSize size)
+	{
+		switch (size)
+		{
+			case Small: return res.getString(R.string.storage_small);
+			case Medium: return res.getString(R.string.storage_medium);
+			case Big: return res.getString(R.string.storage_big);
+			case None:
+			default:
+				return res.getString(R.string.storage_none);
+		}
+	}
+
+	public String getFactoryName(Constants.FactorySize size)
+	{
+		switch (size)
+		{
+			case Small: return res.getString(R.string.factory_small);
+			case Medium: return res.getString(R.string.factory_medium);
+			case Big: return res.getString(R.string.factory_big);
+			case None:
+			default:
+				return res.getString(R.string.factory_none);
+		}
 	}
 }

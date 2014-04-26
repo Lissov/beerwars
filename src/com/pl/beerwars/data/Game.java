@@ -21,8 +21,8 @@ public class Game
 	public com.pl.beerwars.data.map.Map map;
 	//private Random rnd = new Random();
 	
-	public PlayerData getViewForPlayer(int playerNum){
-		return players.get(playerNum);
+	public PlayerData getViewForPlayerId(int playerId){
+		return players.get(playerId);
 	}
 	
 	@SuppressLint("UseSparseArrays")
@@ -44,6 +44,13 @@ public class Game
 				gv.cities[i].estConsumption = Constants.ValueUnknown;
 
 				gv.cities[i].transportPrices = getTrPrices(gv.cities[i].getId());
+				
+				gv.cities[i].others = new HashMap<Integer, PlayerCityFacade>();
+				for (PlayerData other : players.values())
+				{
+					if (other.id == player.id) continue;
+					gv.cities[i].others.put(other.id, new PlayerCityFacade(other.name));
+				}
 			}
 
 			player.game = gv;
@@ -54,6 +61,16 @@ public class Game
 		for (PlayerData player : players.values())
 		{
 			player.game.date = date;
+			
+			for (int i = 0; i < player.cityObjects.length; i++){
+				CityObjects cobj = player.cityObjects[i];
+				for (PlayerData op : players.values()){
+					if (op.id == player.id) continue;
+					PlayerCityFacade pcf = op.game.cities[i].others.get(op.id);
+					pcf.factorySize = cobj.factorySize;
+					pcf.storageSize = cobj.storageSize;
+				}
+			}
 		}
 	}
 	

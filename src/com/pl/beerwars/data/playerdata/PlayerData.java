@@ -6,6 +6,7 @@ import com.pl.beerwars.data.facade.GameFacade;
 
 public class PlayerData {
 	
+	public int id;
 	public int intellect_id;
 	
 	public String name;

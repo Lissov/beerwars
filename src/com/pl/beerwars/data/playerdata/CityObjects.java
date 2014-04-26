@@ -16,6 +16,8 @@ public class CityObjects {
 	public HashMap<BeerSort, FactoryProduction> factory;
 	public HashMap<BeerSort, Float> prices;
 	
+	public int storageBuildRemaining = 0;
+	
 	public CityObjects(City cityRef, StorageSize storageSize, FactorySize factorySize) {
 		this.cityRef = cityRef;
 		this.storageSize = storageSize;

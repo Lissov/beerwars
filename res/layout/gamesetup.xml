@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+	android:gravity="center">
+
+	<LinearLayout
+		android:layout_width="600dp"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:weightSum="3" 
+		android:layout_marginTop="20dp">
+		<TextView
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:gravity="center_vertical"
+			android:text="@string/gamesetup_playername"/>
+		<EditText
+			android:layout_weight="2"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:id="@+id/gamesetup_etPlayerName" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="600dp"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:weightSum="3" 
+		android:layout_marginTop="20dp">
+		<TextView
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:gravity="center_vertical"
+			android:text="@string/gamesetup_map"/>
+		<Spinner
+			android:layout_weight="2"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:id="@+id/gamesetup_spMap" />
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="600dp"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:weightSum="3" 
+		android:layout_marginTop="20dp">
+		<TextView
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:gravity="center_vertical"
+			android:text="@string/gamesetup_city"/>
+		<Spinner
+			android:layout_weight="2"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:id="@+id/gamesetup_spStartCity" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="600dp"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:weightSum="3" 
+		android:layout_marginTop="20dp">
+		<TextView
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:gravity="center_vertical"
+			android:text="@string/gamesetup_opponentsCount"/>
+		<Spinner
+			android:layout_weight="2"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:id="@+id/gamesetup_spOpponentsCount" />
+	</LinearLayout>
+	
+	<Button 
+		android:layout_width="400dp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:onClick="onStartClick"
+		android:text="@string/gamesetup_start" />
+</LinearLayout>

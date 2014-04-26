@@ -6,5 +6,5 @@ public class TransportOrder {
 	public City fromCity;
 	public City toCity;
 	
-	public int packageQuality;
+	public int packageQuantity;
 }

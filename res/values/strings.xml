@@ -3,8 +3,17 @@
 
     <string name="app_name">Beer Trade Wars</string>
 
-    <string name="main_btn_start">Start game</string>
-
+    <string name="main_btn_start_new">Start new game</string>
+    <string name="main_btn_continue">Continue last game</string>
+	
+    <string name="gamesetup_map">Map</string>
+    <string name="gamesetup_city">Headquarters city</string>
+    <string name="gamesetup_playername">Player name</string>
+	<string name="gamesetup_opponentsCount">Opponents count</string>
+	<string name="gamesetup_start">Start</string>
+	
+	<string name="map_basic">Two islands</string>
+    
     <string name="city_trinkburg">Trinkburg</string>
     <string name="city_feldkirchen">Feldkirchen</string>
     <string name="city_weissau">Weissau</string>
@@ -21,6 +30,8 @@
 
     <string name="cityinfo_population">Population:</string>
     <string name="cityinfo_consumption">Estimated consumption:</string>
+    <string name="cityinfo_others">Objects of other players:</string>
+    <string name="cityinfo_other_has">%1$s has %2$s.</string>
     <string name="cityinfo_consumption_unknown">Unknown</string>
     <string name="cityinfo_connections">Transportation costs (per 1000 bottles):</string>
     <string name="cityinfo_prices">Prices (per bottle):</string>
@@ -29,7 +40,16 @@
     <string name="cityinfo_storage_expand">Expand</string>
     <string name="cityinfo_close">Close</string>
 
+    <string name="expand_title_storage">Expand Storage in %1$s</string>
+    <string name="expand_title_factory">Expand Factory in %1$s</string>
+    <string name="expand_storage_current">%1$s\nSize: %2$s\nDaily support cost: %3$s</string>
+    <string name="expand_storage_new">Expand to: %1$s</string>
+    <string name="expand_storage_new_expl">Size: %1$s\nDaily support cost: %2$s\nBuilding time: %3$s weeks\nPrice: %4$s</string>
+    <string name="expand_build">Build (%1$s)</string>
+	<string name="expand_close">Close</string>
+	
     <string name="nextturn_title">Moving to next week</string>
+    <string name="nextturn_autosave">Autosave&#8230;</string>
     <string name="nextturn_close">Close</string>
 
     <string name="beersort_standard">Standard</string>
@@ -45,4 +65,13 @@
 	<string name="game_nt_producedLost">\tStorage full: %1$s liters of %2$s lost!</string>	
 	<string name="game_nt_consumedCity">City %1$s sold:</string>
 	<string name="game_nt_consumedSort">\t%1$s bottles of %2$s (%3$s).</string>
+	
+    <string name="storage_none">None</string>
+    <string name="storage_small">Shed</string>
+    <string name="storage_medium">Storage</string>
+    <string name="storage_big">Storing area</string>
+    <string name="factory_none">None</string>
+    <string name="factory_small">Brewery</string>
+    <string name="factory_medium">Factory</string>
+    <string name="factory_big">Beer plant</string>
 </resources>

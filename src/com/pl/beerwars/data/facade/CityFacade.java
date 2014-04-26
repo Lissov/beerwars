@@ -1,6 +1,7 @@
 package com.pl.beerwars.data.facade;
 import com.pl.beerwars.data.map.*;
 import com.pl.beerwars.data.transport.*;
+import java.util.*;
 
 public class CityFacade
 {
@@ -20,4 +21,6 @@ public class CityFacade
 	public TransportPrice[] transportPrices;
 	
 	public int estConsumption;
+	
+	public HashMap<Integer, PlayerCityFacade> others;
 }
