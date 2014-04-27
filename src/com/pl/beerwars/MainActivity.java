@@ -17,7 +17,7 @@ public class MainActivity extends Activity
         setContentView(R.layout.main);
 		
 		((Button)findViewById(R.id.main_btnContinue))
-			.setEnabled(GameHolder.getGame() != null);
+			.setEnabled(GameHolder.getGame(this) != null);
     }
 	
 	public void btnStartNewClick(View view){

@@ -71,7 +71,7 @@
     <string name="storage_medium">Storage</string>
     <string name="storage_big">Storing area</string>
     <string name="factory_none">None</string>
-    <string name="factory_small">Brewery</string>
-    <string name="factory_medium">Factory</string>
-    <string name="factory_big">Beer plant</string>
+    <string name="factory_small">Pub</string>
+    <string name="factory_medium">Brewery</string>
+    <string name="factory_big">Factory</string>
 </resources>

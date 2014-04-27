@@ -47,7 +47,7 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 			public void run(){
 				_game.makeTurn(cb);
 				display(R.string.nextturn_autosave, null);
-				GameHolder.saveGame("Autosave " + _game.date.toString());
+				GameHolder.saveGame(_context, "Autosave " + _game.date.toString());
 			}
 		};
 		new Thread(r).start();

@@ -26,7 +26,7 @@ public class GameView extends View implements IOverlayView
 		super(context);
 		this._context = context;
 		
-		_game = GameHolder.getGame();
+		_game = GameHolder.getGame(_context);
 		viewShower = shower;	
 		
 		preparePaints();

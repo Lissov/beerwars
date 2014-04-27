@@ -105,7 +105,7 @@ public class GameSetupActivity extends Activity
 		int opCount = Integer.parseInt(spOC.getSelectedItem().toString());
 		
 		GameHolder.constructNewGame(mapId, name, cityid, opCount);
-		GameHolder.saveGame("Autosave New Game");
+		GameHolder.saveGame(this, "Autosave New Game");
 		
 		startActivity(new Intent(this, GameActivity.class));
 	}

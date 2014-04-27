@@ -1,31 +1,36 @@
 package com.pl.beerwars.data;
 
-import com.pl.beerwars.data.map.*;
+import android.content.*;
 import com.pl.beerwars.data.Constants.*;
-import com.pl.beerwars.data.playerdata.*;
-import com.pl.beerwars.data.playerdata.CityObjects.FactoryProduction;
-
-import java.util.*;
-
 import com.pl.beerwars.data.beer.*;
+import com.pl.beerwars.data.map.*;
+import com.pl.beerwars.data.playerdata.*;
+import com.pl.beerwars.data.playerdata.CityObjects.*;
+import java.util.*;
 
 public class GameHolder {
 	private static Game _game = null;
 	private static Random rnd = new Random();
 
-	public static Game getGame() {
+	public static Game getGame(Context ctx) {
 		if (_game == null)
-			loadLastGame();
+			loadLastGame(ctx);
 
 		return _game;
 	}
 
-	private static void loadLastGame() {
-
+	private static void loadLastGame(Context ctx) {
+		Storage s = new Storage(ctx);
+		int lastId = s.getLatestId();
+		if (lastId < 0)
+			return;
+			
+		_game = s.load(lastId);
 	}
 
-	public static void saveGame(String name) {
-		// Storage s = new Storage();
+	public static void saveGame(Context ctx, String name) {
+		Storage s = new Storage(ctx);
+		s.save(_game, name);
 	}
 
 	public static void constructNewGame(int mapId, String playerName,

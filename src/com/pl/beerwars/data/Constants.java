@@ -68,8 +68,8 @@ public class Constants
 
 	public static int FactoryVolume(FactorySize size){
 		switch (size){
-			case Small: return 10;
-			case Medium: return 100;
+			case Small: return 5;
+			case Medium: return 50;
 			case Big: return 500;
 			case None:
 			default: return 0;
@@ -78,9 +78,9 @@ public class Constants
 
 	public static int FactorySupportCost(FactorySize size){
 		switch (size){
-			case Small: return 500;
-			case Medium: return 6000;
-			case Big: return 25000;
+			case Small: return 200;
+			case Medium: return 1500;
+			case Big: return 7000;
 			case None:
 			default: return 0;
 		}
@@ -108,9 +108,9 @@ public class Constants
 
 	public static int StorageSupportCost(StorageSize size){
 		switch (size){
-			case Small: return 500;
-			case Medium: return 3000;
-			case Big: return 10000;
+			case Small: return 100;
+			case Medium: return 750;
+			case Big: return 3500;
 			case None:
 			default: return 0;
 		}
