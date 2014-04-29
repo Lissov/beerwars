@@ -34,4 +34,12 @@ public class PlayerData {
 		recurringOrders = new LinkedList<TransportOrder>();
 		oneTimeOrders = new LinkedList<TransportOrder>();
 	}
+	
+	public BeerSort getSort(int id){
+		for (BeerSort sort: ownedSorts){
+			if (sort.id == id)
+				return sort;
+		}
+		return null;
+	}
 }

@@ -8,7 +8,7 @@ public class Map
 	
 	public City getCityById(String id){
 		for (City c : cities){
-			if (c.id == id)
+			if (c.id.equals(id))
 				return c;
 		}
 		
@@ -17,7 +17,7 @@ public class Map
 
 	public int getCityIndex(String id){
 		for (int i = 0; i<cities.length; i++){
-			if (cities[i].id == id)
+			if (cities[i].id.equals(id))
 				return i;
 		}
 

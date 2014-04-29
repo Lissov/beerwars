@@ -16,4 +16,10 @@ public class BeerSort {
 		this.quality = quality;
 	}
 
+	public BeerSort(int id, String name, float selfprice, float quality) {
+		this.id = id++;
+		this.name = name;
+		this.selfprice = selfprice;
+		this.quality = quality;
+	}
 }

@@ -194,61 +194,102 @@ public class Storage extends SQLiteOpenHelper
 			int mapId = cursor.getInt(1);
 			int date = cursor.getInt(2);
 			game.map = GameHolder.getMap(mapId);
-			game.date = new Date(date);
+			game.date = new Date();
+			game.date.setTime(date);
 			game.players = new HashMap<Integer, PlayerData>();
 			
 			Cursor cursorPl = db.rawQuery("Select id, playerNum, intellectId, name, money from player where gameId = " + id, null);
-			if (cursorPl.moveToFirst()){
+			cursorPl.moveToFirst();
+			do {
 				int playerId = cursorPl.getInt(0);
 				int plN = cursorPl.getInt(1);
 				PlayerData p = new PlayerData(cursorPl.getInt(2), cursorPl.getString(3));
 				p.id = plN;
 				p.money = cursorPl.getInt(4);
+				
+				Cursor cursorInner = db.rawQuery("Select id, name, quality, selfprice from ownedSort where playerId = " + playerId, null);
+				cursorInner.moveToFirst();
+				do {
+					BeerSort sort = new BeerSort(
+						cursorInner.getInt(0), cursorInner.getString(1), cursorInner.getFloat(2), cursorInner.getFloat(3));
+					p.ownedSorts.add(sort);
+				} while (cursorInner.moveToNext());
+				cursorInner.close();
+				
+				cursorInner = db.rawQuery("Select fromCity, toCity, quantity, isRecurring from transportOrder where playerId = " + playerId, null);
+				if (cursorInner.moveToFirst()){
+					do {
+						TransportOrder tro = new TransportOrder();
+						tro.fromCity = game.map.getCityById(cursorInner.getString(0));
+						tro.toCity = game.map.getCityById(cursorInner.getString(1));
+						tro.packageQuantity = cursorInner.getInt(2);
+						boolean isRecurring = cursorInner.getInt(3) == 1;
+						if (isRecurring)
+							p.recurringOrders.add(tro);
+						else
+							p.oneTimeOrders.add(tro);
+					} while (cursorInner.moveToNext());
+				}
+				cursorInner.close();								
+				
+				p.cityObjects = new CityObjects[game.map.cities.length];
+				cursorInner = db.rawQuery("Select id, cityId, storageSize, storageBuildRemaining, factorySize, factoryBuildRemaining from cityObject where playerId = " + playerId, null);
+				cursorInner.moveToFirst();
+				do {
+					int coid = cursorInner.getInt(0);
+					CityObjects co = new CityObjects(
+						game.map.getCityById(cursorInner.getString(1)),
+						ToStor(cursorInner.getInt(2)),
+						ToFact(cursorInner.getInt(4))
+					);
+					co.storageBuildRemaining = cursorInner.getInt(3);
+					co.storageBuildRemaining = cursorInner.getInt(5);
+					
+					int index = game.map.getCityIndex(co.cityRef.id);
+					p.cityObjects[index] = co;
+					
+					Cursor cSo = db.rawQuery("Select beerId, price from price where cityObjectId = " + coid, null);
+					if (cSo.moveToFirst()){
+						do{
+							int sortId = cSo.getInt(0);
+							float price = cSo.getFloat(1);
+							co.prices.put(p.getSort(sortId), price);
+						} while (cSo.moveToNext());
+					}
+					cSo.close();
+					
+					cSo = db.rawQuery("Select beerId, amount from storageUnit where cityObjectId = " + coid, null);
+					if (cSo.moveToFirst()) {
+						do{
+							int sortId = cSo.getInt(0);
+							int amount = cSo.getInt(1);
+							co.storage.put(p.getSort(sortId), amount);
+						} while (cSo.moveToNext());
+					}
+					cSo.close();
+
+					cSo = db.rawQuery("Select beerId, total, working from factoryUnit where cityObjectId = " + coid, null);
+					if (cSo.moveToFirst()) {
+						do{
+							int sortId = cSo.getInt(0);
+							CityObjects.FactoryProduction prod = co.new FactoryProduction();
+							prod.totalUnits = cSo.getInt(1);
+							prod.workingUnits = cSo.getInt(2);
+							co.factory.put(p.getSort(sortId), prod);
+						} while (cSo.moveToNext());
+					}
+					cSo.close();
+					
+				} while (cursorInner.moveToNext());
+				cursorInner.close();
+
 				game.players.put(plN, p);
-			}
+			} while (cursorPl.moveToNext());
 			cursorPl.close();
 		}
 		cursor.close();
 
 		game.start();
-		/*"CREATE TABLE ownedSort (" +
-			"playerId INTEGER," +
-			"id INTEGER," +
-			"name TEXT," + 
-			"quality DECIMAL," +
-			"selfprice DECIMAL)",
-		//3
-		"CREATE TABLE transportOrder (" +
-			"playerId INTEGER," +
-			"fromCity INTEGER," +
-			"toCity INTEGER," + 
-			"isRecurring INTEGER," +
-			"quantity INTEGER)",
-		//4
-		"CREATE TABLE cityObject (" +
-			"id INTEGER PRIMARY KEY AUTOINCREMENT," +
-			"playerId INTEGER," +
-			"cityId TEXT," +
-			"storageSize INTEGER," + 
-			"storageBuildRemaining INTEGER," +
-			"factorySize INTEGER," +
-			"factoryBuildRemaining INTEGER)",
-		//5
-		"CREATE TABLE price (" +
-			"cityObjectId INTEGER," +
-			"beerId INTEGER," +
-			"price DECIMAL)",
-		//6
-		"CREATE TABLE storageUnit (" +
-			"cityObjectId INTEGER," +
-			"beerId INTEGER," +
-			"amount INTEGER)",
-		//7
-		"CREATE TABLE factoryUnit (" +
-			"cityObjectId INTEGER," +
-			"beerId INTEGER," +
-			"total INTEGER," +
-			"working INTEGER)"		*/
 		
 		return game;
 	}
@@ -284,6 +325,28 @@ public class Storage extends SQLiteOpenHelper
 			case None:
 			default: 
 				return 0;
+		}
+	}
+
+	private Constants.StorageSize ToStor(int size){
+		switch (size) {
+			case 1: return Constants.StorageSize.Small;
+			case 2: return Constants.StorageSize.Medium;
+			case 3: return Constants.StorageSize.Small;
+			case 0:
+			default: 
+				return Constants.StorageSize.None;
+		}
+	}
+
+	private Constants.FactorySize ToFact(int size){
+		switch (size) {
+			case 1: return Constants.FactorySize.Small;
+			case 2: return Constants.FactorySize.Medium;
+			case 3: return Constants.FactorySize.Small;
+			case 0:
+			default: 
+				return Constants.FactorySize.None;
 		}
 	}
 }
