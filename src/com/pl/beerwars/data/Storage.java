@@ -192,7 +192,7 @@ public class Storage extends SQLiteOpenHelper
 		Cursor cursor = db.rawQuery("Select savename, mapId, date from game where id = " + id, null);
 		if (cursor.moveToFirst()){
 			int mapId = cursor.getInt(1);
-			int date = cursor.getInt(2);
+			long date = cursor.getLong(2);
 			game.map = GameHolder.getMap(mapId);
 			game.date = new Date();
 			game.date.setTime(date);
