@@ -49,13 +49,14 @@ public class Constants
 		public final static int transportPerKm = 20;
 		public final static int transportReload = 50;
 		
-		public final static int unitSize = 1000;
+		public final static int unitSize = 10000;
 
 		public final static int startMoney = 1000;
 		public final static int startUnits = 2;
 		public final static int startBeer = startUnits * unitSize;
 				
 		public final static int unitIdleCost = 100;
+		public final static float unitsPerCitizenWeek = 1;
 	}
 	
 	public static enum StorageSize{
@@ -88,9 +89,9 @@ public class Constants
 	
 	public static int StorageVolume(StorageSize size){
 		switch (size){
-			case Small: return 20000;
-			case Medium: return 200000;
-			case Big: return 1000000;
+			case Small: return 200000;
+			case Medium: return 2000000;
+			case Big: return 10000000;
 			case None:
 			default: return 0;
 		}

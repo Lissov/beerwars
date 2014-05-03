@@ -3,6 +3,9 @@ package com.pl.beerwars.data;
 import android.content.*;
 import com.pl.beerwars.data.Constants.*;
 import com.pl.beerwars.data.beer.*;
+import com.pl.beerwars.data.consumption.Beta;
+import com.pl.beerwars.data.consumption.PriceAdjust;
+import com.pl.beerwars.data.consumption.QualityDemand;
 import com.pl.beerwars.data.map.*;
 import com.pl.beerwars.data.playerdata.*;
 import com.pl.beerwars.data.playerdata.CityObjects.*;
@@ -161,6 +164,13 @@ public class GameHolder {
 				0.9f, 0.8f), 260000);
 		// total population 5 025 000
 
+		for (City c : map.cities){
+			c.PriceDemand = new Beta(5, 2, 0.2f, 2f);
+			((Beta)c.PriceDemand).scale = c.population / Constants.Economics.unitsPerCitizenWeek;
+			c.PriceAdjuster = new PriceAdjust(0.2f, 4, 4, 4);
+			c.QualityDemand = new QualityDemand();
+		}
+		
 		map.roads = new Road[13];
 		map.roads[0] = new Road(Constants.CityIds.Trinkburg,
 				Constants.CityIds.Weissau, 2.5f);
