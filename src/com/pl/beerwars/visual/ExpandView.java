@@ -14,6 +14,7 @@ public class ExpandView extends OverlayFrame {
 	Context _context;
 	Translator _translator;
 	CityObjects _obj;
+	LinearLayout llFactoryUnits;
 	
 	public ExpandView(Context context, final IViewShower shower, Translator translator, CityObjects obj, boolean isStorage) {
 		super(context);
@@ -32,8 +33,15 @@ public class ExpandView extends OverlayFrame {
 			)
 		);
 		
-		if (isStorage)
+		llFactoryUnits = (LinearLayout)findViewById(R.id.expand_llFactoryUnits);
+		
+		if (isStorage){
+			llFactoryUnits.setVisibility(View.GONE);
 			addStorageData(obj);
+		} else{
+			llFactoryUnits.setVisibility(View.VISIBLE);
+			
+		}
 		
 		//addOptions(isStorage);
 		
