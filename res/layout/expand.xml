@@ -36,14 +36,28 @@
 			android:textColor="@color/overlay_text"
 			android:id="@+id/expand_txtExpandTo"
 			android:text="Expand to something"/>
-		<TextView
+		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:textSize="@dimen/textSmall"
-			android:layout_marginTop="10dp"
-			android:textColor="@color/overlay_text"
-			android:id="@+id/expand_txtNew"
-			android:text="Current explanation"/>
+			android:orientation="horizontal"
+			android:gravity="left"
+			android:weightSum="4">
+			<TextView
+				android:layout_width="0dp"
+				android:layout_weight="3"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/textSmall"
+				android:layout_marginTop="10dp"
+				android:textColor="@color/overlay_text"
+				android:id="@+id/expand_txtNew"
+				android:text="New explanation"/>
+			<Button
+				android:layout_width="0dp"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:text="@string/expand_build"
+				android:id="@+id/expand_btnBuild"/>
+		</LinearLayout>
 		
 		<!--LinearLayout
 			android:layout_width="fill_parent"
@@ -66,15 +80,9 @@
 		android:layout_width="fill_parent"
 		android:layout_height="0dp"
 		android:orientation="horizontal"
-		android:gravity="left"
+		android:gravity="right"
 		android:background="@color/overlay_border"
 		android:weightSum="2">
-		<Button
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:layout_height="fill_parent"
-			android:text="@string/expand_build"
-			android:id="@+id/expand_btnBuild"/>
 		<Button
 			android:layout_width="0dp"
 			android:layout_weight="1"

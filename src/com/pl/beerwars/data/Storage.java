@@ -30,12 +30,12 @@ public class Storage extends SQLiteOpenHelper
 		int firstS = 0;
 		switch (oldver){
 			case 0: firstS = 0; break;
-			case 1: firstS = 8; break;
+			case 1: firstS = 9; break;
 		}
 
 		int lastS = 0;
 		switch (newver){
-			case 1: lastS = 7; break;
+			case 1: lastS = 8; break;
 		}	
 		//Toast.makeText(context, "Upgrading database", Toast.LENGTH_SHORT).show();
 		runScripts(db, firstS, lastS);
@@ -85,6 +85,7 @@ public class Storage extends SQLiteOpenHelper
 		"storageSize INTEGER," + 
 		"storageBuildRemaining INTEGER," +
 		"factorySize INTEGER," +
+		"factoryUnitsCount INTEGER," +
 		"factoryBuildRemaining INTEGER)",
 		//5
 		"CREATE TABLE price (" +
@@ -100,8 +101,12 @@ public class Storage extends SQLiteOpenHelper
 		"CREATE TABLE factoryUnit (" +
 		"cityObjectId INTEGER," +
 		"beerId INTEGER," +
-		"total INTEGER," +
-		"working INTEGER)"
+		"working INTEGER)",
+		//7
+		"CREATE TABLE factoryUnitsExtension (" +
+		"cityObjectId INTEGER," +
+		"unitsCount INTEGER," +
+		"weeksLeft INTEGER)"
 	};
 	
 	public void save(Game game, String saveName){
@@ -153,6 +158,7 @@ public class Storage extends SQLiteOpenHelper
 				values.put("storageSize", ConvertStor(co.storageSize));
 				values.put("storageBuildRemaining", co.storageBuildRemaining);
 				values.put("factorySize", ConvertFact(co.factorySize));
+				values.put("factoryUnitsCount", co.factoryUnits);
 				values.put("factoryBuildRemaining", co.factoryBuildRemaining);
 				long cobjId = db.insert("cityObject", null, values);				
 
@@ -172,12 +178,17 @@ public class Storage extends SQLiteOpenHelper
 				}
 				
 				for (BeerSort sf : co.factory.keySet()){
-					CityObjects.FactoryProduction prod = co.factory.get(sf);
 					db.execSQL(String.format(
-								   "INSERT into factoryUnit (cityObjectId, beerId, total, working) " +
-								   "values (%1$s, %2$s, %3$s, %4$s)",
-								   cobjId, sf.id, prod.totalUnits, prod.workingUnits));
-
+								   "INSERT into factoryUnit (cityObjectId, beerId, working) " +
+								   "values (%1$s, %2$s, %3$s)",
+								   cobjId, sf.id, co.factory.get(sf)));
+				}
+				
+				for (FactoryChange chg : co.factoryUnitsExtensions){
+					db.execSQL(String.format(
+								   "INSERT into factoryUnitsExtension (cityObjectId, unitsCount, weeksLeft) " +
+								   "values (%1$s, %2$s, %3$s)",
+								   cobjId, chg.unitsCount, chg.weeksLeft));
 				}
 			}
 		}
@@ -192,7 +203,7 @@ public class Storage extends SQLiteOpenHelper
 		Cursor cursor = db.rawQuery("Select savename, mapId, date from game where id = " + id, null);
 		if (cursor.moveToFirst()){
 			int mapId = cursor.getInt(1);
-			int date = cursor.getInt(2);
+			long date = cursor.getLong(2);
 			game.map = GameHolder.getMap(mapId);
 			game.date = new Date();
 			game.date.setTime(date);
@@ -233,7 +244,7 @@ public class Storage extends SQLiteOpenHelper
 				cursorInner.close();								
 				
 				p.cityObjects = new CityObjects[game.map.cities.length];
-				cursorInner = db.rawQuery("Select id, cityId, storageSize, storageBuildRemaining, factorySize, factoryBuildRemaining from cityObject where playerId = " + playerId, null);
+				cursorInner = db.rawQuery("Select id, cityId, storageSize, storageBuildRemaining, factorySize, factoryUnitsCount, factoryBuildRemaining from cityObject where playerId = " + playerId, null);
 				cursorInner.moveToFirst();
 				do {
 					int coid = cursorInner.getInt(0);
@@ -243,8 +254,8 @@ public class Storage extends SQLiteOpenHelper
 						ToFact(cursorInner.getInt(4))
 					);
 					co.storageBuildRemaining = cursorInner.getInt(3);
-					co.storageBuildRemaining = cursorInner.getInt(5);
-					
+					co.factoryUnits = cursorInner.getInt(5);
+					co.factoryBuildRemaining = cursorInner.getInt(6);
 					int index = game.map.getCityIndex(co.cityRef.id);
 					p.cityObjects[index] = co;
 					
@@ -268,14 +279,20 @@ public class Storage extends SQLiteOpenHelper
 					}
 					cSo.close();
 
-					cSo = db.rawQuery("Select beerId, total, working from factoryUnit where cityObjectId = " + coid, null);
+					cSo = db.rawQuery("Select beerId, working from factoryUnit where cityObjectId = " + coid, null);
 					if (cSo.moveToFirst()) {
 						do{
 							int sortId = cSo.getInt(0);
-							CityObjects.FactoryProduction prod = co.new FactoryProduction();
-							prod.totalUnits = cSo.getInt(1);
-							prod.workingUnits = cSo.getInt(2);
-							co.factory.put(p.getSort(sortId), prod);
+							co.factory.put(p.getSort(sortId), cSo.getInt(1));
+						} while (cSo.moveToNext());
+					}
+					cSo.close();
+					
+
+					cSo = db.rawQuery("Select unitsCount, weeksLeft from factoryUnitsExtension where cityObjectId = " + coid, null);
+					if (cSo.moveToFirst()) {
+						do{
+							co.factoryUnitsExtensions.add(new FactoryChange(cSo.getInt(0), cSo.getInt(1)));
 						} while (cSo.moveToNext());
 					}
 					cSo.close();

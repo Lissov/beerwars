@@ -12,9 +12,11 @@ public class CityObjects {
 	public StorageSize storageSize;
 	public FactorySize factorySize;
 	
+	public Integer factoryUnits;
 	public HashMap<BeerSort, Integer> storage;
-	public HashMap<BeerSort, FactoryProduction> factory;
+	public HashMap<BeerSort, Integer> factory;
 	public HashMap<BeerSort, Float> prices;
+	public List<FactoryChange> factoryUnitsExtensions;
 	
 	public int storageBuildRemaining = 0;
 	public int factoryBuildRemaining = 0;
@@ -25,8 +27,10 @@ public class CityObjects {
 		this.factorySize = factorySize;
 		
 		this.storage = new HashMap<BeerSort, Integer>();
-		this.factory = new HashMap<BeerSort, FactoryProduction>();
+		this.factory = new HashMap<BeerSort, Integer>();
 		this.prices = new HashMap<BeerSort, Float>();
+		this.factoryUnitsExtensions = new LinkedList<FactoryChange>();
+		this.factoryUnits = 0;
 	}
 	
 	public int getTotalStorage(){
@@ -41,10 +45,32 @@ public class CityObjects {
 		return Constants.StorageVolume(storageSize);
 	}
 	
-	public int getUnitsCount(boolean onlyOperating){
+	public int getFactoryMax(){
+		return Constants.FactoryVolume(factorySize);
+	}
+
+	public int getOperatingUnitsCount(){
 		int s = 0;
-		for (FactoryProduction sortUnits : factory.values()){
-			s += onlyOperating ? sortUnits.workingUnits : sortUnits.totalUnits;
+		for (Integer sortUnits : factory.values()){
+			s += sortUnits;
+		}
+		return s;
+	}
+	
+	public int getConstructedCount(){
+		int s = 0;
+		for (FactoryChange fc : factoryUnitsExtensions){
+			if (fc.unitsCount > 0)
+				s += fc.unitsCount;
+		}
+		return s;
+	}
+	
+	public int getDestructedCount(){
+		int s = 0;
+		for (FactoryChange fc : factoryUnitsExtensions){
+			if (fc.unitsCount < 0)
+				s += -fc.unitsCount;
 		}
 		return s;
 	}
@@ -54,7 +80,7 @@ public class CityObjects {
 		int maxS = getStorageMax();
 		ProductionResult result = new ProductionResult();
 		for (BeerSort sort : factory.keySet()){
-			int produced = factory.get(sort).workingUnits * Constants.Economics.unitSize;
+			int produced = factory.get(sort) * Constants.Economics.unitSize;
 			result.costs += produced * sort.selfprice;
 			result.produced.put(sort, produced);
 			if (stor + produced > maxS){
@@ -72,16 +98,11 @@ public class CityObjects {
 	
 	public int calculateCityCosts(){
 		float price = 0;
-		for (FactoryProduction sortUnits : factory.values()){
-			price += sortUnits.totalUnits * Constants.Economics.unitIdleCost;
-		}
+
+		price += factoryUnits * Constants.Economics.unitIdleCost;
+
 		price += Constants.FactorySupportCost(factorySize);
 		price += Constants.StorageSupportCost(storageSize);
 		return (int)price;
-	}
-	
-	public class FactoryProduction{
-		public int totalUnits;
-		public int workingUnits;
 	}
 }

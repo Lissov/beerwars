@@ -38,6 +38,11 @@
     <string name="cityinfo_storage">Storage</string>
     <string name="cityinfo_storage_avail">Usage:</string>
     <string name="cityinfo_storage_expand">Expand</string>
+    <string name="cityinfo_factory">Factory</string>
+    <string name="cityinfo_factory_avail">Usage:</string>
+    <string name="cityinfo_units_construct">%1$s units under construction</string>
+    <string name="cityinfo_units_destruct">%1$s units avaiting removal</string>
+    <string name="cityinfo_factory_expand">Expand</string>
     <string name="cityinfo_close">Close</string>
 
     <string name="expand_title_storage">Expand Storage in %1$s</string>
@@ -46,7 +51,9 @@
     <string name="expand_storage_new">Expand to: %1$s</string>
     <string name="expand_storage_new_expl">Size: %1$s\nDaily support cost: %2$s\nBuilding time: %3$s weeks\nPrice: %4$s</string>
     <string name="expand_build">Build (%1$s)</string>
-	<string name="expand_close">Close</string>
+	<string name="expand_factory_build_units">Build</string>
+	<string name="expand_factory_build_units_e">Price %1$s ter unit, %2$s weeks</string>
+    <string name="expand_close">Close</string>
 	
     <string name="nextturn_title">Moving to next week</string>
     <string name="nextturn_autosave">Autosave&#8230;</string>

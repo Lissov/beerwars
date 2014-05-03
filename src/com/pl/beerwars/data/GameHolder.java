@@ -7,16 +7,21 @@ import com.pl.beerwars.data.map.*;
 import com.pl.beerwars.data.playerdata.*;
 import com.pl.beerwars.data.playerdata.CityObjects.*;
 import java.util.*;
+import android.widget.*;
 
 public class GameHolder {
 	private static Game _game = null;
 	private static Random rnd = new Random();
 
 	public static Game getGame(Context ctx) {
-		if (_game == null)
-			loadLastGame(ctx);
-
-		return _game;
+		try{
+			if (_game == null)
+				loadLastGame(ctx);
+			return _game;
+		} catch (Exception ex){
+			Toast.makeText(ctx, "Can't load last save: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+			return null;
+		}
 	}
 
 	private static void loadLastGame(Context ctx) {
@@ -102,17 +107,13 @@ public class GameHolder {
 			City c = map.cities[i];
 
 			if (c.id == cityId) {
-				player.cityObjects[i] = new CityObjects(c, StorageSize.Small,
-						FactorySize.Small);
-				FactoryProduction fp = player.cityObjects[i].new FactoryProduction();
-				fp.totalUnits = Constants.Economics.startUnits;
-				fp.workingUnits = Constants.Economics.startUnits;
-				player.cityObjects[i].factory.put(sort, fp);
-				player.cityObjects[i].storage.put(sort,
-						Constants.Economics.startBeer);
+				player.cityObjects[i] = new CityObjects(c, StorageSize.Small, FactorySize.Small);
+						
+				player.cityObjects[i].factoryUnits = Constants.Economics.startUnits;
+				player.cityObjects[i].factory.put(sort, Constants.Economics.startUnits);
+				player.cityObjects[i].storage.put(sort,	Constants.Economics.startBeer);
 			} else
-				player.cityObjects[i] = new CityObjects(c, StorageSize.None,
-						FactorySize.None);
+				player.cityObjects[i] = new CityObjects(c, StorageSize.None, FactorySize.None);
 
 			player.cityObjects[i].prices.put(sort, price);
 		}

@@ -141,6 +141,58 @@
 			android:orientation="vertical"
 			android:id="@+id/cityinfo_llStorage" />
 		
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="20dp"
+			android:textSize="@dimen/textNormal"
+			android:textColor="@color/overlay_text" 
+			android:text="@string/cityinfo_factory"/>
+		<LinearLayout 
+		    android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			android:paddingTop="2dp"
+			android:layout_marginLeft="10dp"
+			android:weightSum="10"
+			android:orientation="horizontal" >
+			<TextView
+				android:layout_width="0dp"
+				android:layout_weight="2"
+				android:layout_height="fill_parent"
+				android:layout_gravity="center_vertical"
+				android:paddingTop="5dp"
+				android:textSize="@dimen/textNormal"
+				android:textColor="@color/overlay_text" 
+				android:text="@string/cityinfo_factory_avail"/>
+			<TextView
+				android:layout_width="0dp"
+				android:layout_weight="2"
+				android:layout_height="fill_parent"
+				android:layout_gravity="center_vertical"
+				android:paddingTop="5dp"
+				android:textSize="@dimen/textNormal"
+				android:textColor="@color/overlay_text"
+				android:id="@+id/cityinfo_factory_usage" 
+				android:text="@string/cityinfo_factory_avail"/>
+			<Button
+				android:layout_width="0dp"
+				android:layout_weight="2"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/textSmall"
+				android:text="@string/cityinfo_storage_expand"
+				android:id="@+id/cityinfo_btnFactoryExpand"/>	
+		</LinearLayout>
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:minHeight="10dp"
+			android:layout_marginTop="10dp"
+			android:layout_marginRight="10dp"
+			android:background="@drawable/border_inner"
+			android:padding="5dp" 
+			android:orientation="vertical"
+			android:id="@+id/cityinfo_llFactory" />
+
 		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="15dp"

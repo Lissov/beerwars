@@ -54,7 +54,8 @@ public class CityInfoView extends OverlayFrame
 		showOthers(city);
 		showPrices();
 		showStorage();
-
+		showFactory();
+		
 		Button btnClose = (Button)findViewById(R.id.cityinfo_btnClose);
 		btnClose.setOnClickListener(new View.OnClickListener(){
 				public void onClick(View view)
@@ -147,8 +148,10 @@ public class CityInfoView extends OverlayFrame
 					@Override
 					public void afterTextChanged(Editable s)
 					{
-						float f = Float.parseFloat(s.toString());
-						obj.prices.put(capturedS, f);
+						try{
+							float f = Float.parseFloat(s.toString());
+							obj.prices.put(capturedS, f);
+						} catch (Exception ex){}
 					}
 				});
 			llSort.addView(et);
@@ -159,7 +162,6 @@ public class CityInfoView extends OverlayFrame
 
 	private void showStorage()
 	{
-
 		Resources res = _context.getResources();
 		final CityObjects obj = _data.cityObjects[_data.game.getCityIndex(_cityId)];
 
@@ -182,6 +184,53 @@ public class CityInfoView extends OverlayFrame
 				public void onClick(View v)
 				{
 					_shower.showView(new ExpandView(_context, _shower, _translator, obj, true));
+				}
+			});
+
+		btnExpand.setEnabled(
+			obj.storageSize != StorageSize.Big 
+			&& obj.storageBuildRemaining == 0);
+	}
+	
+	private void showFactory()
+	{
+		Resources res = _context.getResources();
+		final CityObjects obj = _data.cityObjects[_data.game.getCityIndex(_cityId)];
+
+		TextView tvAvail = (TextView)findViewById(R.id.cityinfo_factory_usage);
+		String avText = obj.factoryUnits
+			+ "(" + obj.getOperatingUnitsCount() + ")"
+			+ " / " + obj.getFactoryMax();
+		if (obj.getConstructedCount() > 0){
+			avText = avText + " (" + 
+				String.format(res.getString(R.string.cityinfo_units_construct),
+							  obj.getConstructedCount())
+				+ ")";
+		}
+		if (obj.getDestructedCount() > 0){
+			avText = avText + " (" + 
+				String.format(res.getString(R.string.cityinfo_units_destruct),
+							  obj.getDestructedCount())
+				+ ")";
+		}
+		tvAvail.setText(avText);
+
+		LinearLayout llStorage = (LinearLayout)findViewById(R.id.cityinfo_llFactory);
+		for (BeerSort sort : obj.factory.keySet())
+		{
+			TextView tv = new TextView(_context);
+			tv.setTextColor(res.getColor(R.color.overlay_text));
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
+			tv.setText(sort.name + ":\t\t" + obj.factory.get(sort));
+			llStorage.addView(tv);
+		}
+
+		Button btnExpand = (Button)findViewById(R.id.cityinfo_btnFactoryExpand);
+		btnExpand.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v)
+				{
+					_shower.showView(new ExpandView(_context, _shower, _translator, obj, false));
 				}
 			});
 

@@ -58,9 +58,9 @@ public class CityPainter extends BasePainter
 
 		float xn = paintStorage(canvas, x, y, cobj.storageSize, 
 				(float)cobj.getTotalStorage() / Constants.StorageVolume(cobj.storageSize));
-		float fs = (float)Constants.FactoryVolume(cobj.factorySize);
-		float working = cobj.getUnitsCount(true);
-		float all = cobj.getUnitsCount(false);
+		float fs = Constants.FactoryVolume(cobj.factorySize);
+		float working = cobj.getOperatingUnitsCount();
+		float all = cobj.factoryUnits;
 		xn = paintFactory(canvas, x + xn, y, cobj.factorySize, working/fs, all/fs);
 	}
 	

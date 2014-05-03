@@ -1,0 +1,124 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/border"
+    android:orientation="vertical"
+    android:weightSum="10" >
+
+	<LinearLayout
+		android:layout_weight="8"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="30dp"
+		android:orientation="vertical">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/textBig" 
+			android:textColor="@color/overlay_text"
+			android:id="@+id/expand_f_txtTitle"
+			android:gravity="center"
+			android:text="Expand something"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/textNormal"
+			android:layout_marginTop="10dp"
+			android:textColor="@color/overlay_text"
+			android:id="@+id/expand_f_txtCurrentUnits"
+			android:text="Currently ... units"/>
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:weightSum="4">
+			<TextView
+				android:layout_width="0dp"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/textNormal"
+				android:layout_marginTop="5dp"
+				android:textColor="@color/overlay_text"
+				android:text="@string/expand_factory_build_units"/>
+			<EditText
+				android:layout_width="0dp"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/textNormal"
+				android:layout_marginTop="5dp"
+				android:textColor="@color/overlay_text"
+				android:id="@+id/expand_f_unitsCount" />
+			<TextView
+				android:layout_width="0dp"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/textNormal"
+				android:layout_marginTop="5dp"
+				android:textColor="@color/overlay_text"
+				android:text="Total cost"/>
+			<Button
+				android:layout_width="0dp"
+				android:layout_weight="1"
+				android:layout_height="fill_parent"
+				android:text="@string/expand_build"
+				android:id="@+id/expand_f_btnUnits"/>
+		</LinearLayout>
+		<!--TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/textSmall"
+			android:layout_marginTop="10dp"
+			android:textColor="@color/overlay_text"
+			android:id="@+id/expand_f_txtCurrent"
+			android:text="Current explanation"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/textNormal"
+			android:layout_marginTop="30dp"
+			android:textColor="@color/overlay_text"
+			android:id="@+id/expand_txtExpandTo"
+			android:text="Expand to something"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/textSmall"
+			android:layout_marginTop="10dp"
+			android:textColor="@color/overlay_text"
+			android:id="@+id/expand_txtNew"
+			android:text="Current explanation"/>
+
+		<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:minHeight="5dp"
+		android:layout_marginRight="20dp"
+		android:padding="10dp"
+		android:orientation="vertical"
+		android:background="@drawable/border_inner"
+		android:id="@+id/expand_llVariants" /-->
+
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="20dp"
+			android:orientation="vertical" />
+
+	</LinearLayout>
+	<LinearLayout
+		android:layout_weight="2"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:orientation="horizontal"
+		android:gravity="left"
+		android:background="@color/overlay_border"
+		android:weightSum="2">
+		<Button
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="fill_parent"
+			android:text="@string/expand_close"
+			android:id="@+id/expand_f_btnClose"/>
+	</LinearLayout>
+
+</LinearLayout>
