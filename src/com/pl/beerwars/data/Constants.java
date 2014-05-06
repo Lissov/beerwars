@@ -77,16 +77,36 @@ public class Constants
 		}
 	}
 
+	public static int FactoryBuildPrice(FactorySize size){
+		switch (size){
+			case Small: return 50000;
+			case Medium: return 300000;
+			case Big: return 1000000;
+			case None:
+			default: return 0;
+		}
+	}
+
 	public static int FactorySupportCost(FactorySize size){
 		switch (size){
-			case Small: return 200;
-			case Medium: return 1500;
-			case Big: return 7000;
+			case Small: return 2000;
+			case Medium: return 15000;
+			case Big: return 60000;
 			case None:
 			default: return 0;
 		}
 	}
 	
+	public static int FactoryBuildingTime(FactorySize size){
+		switch (size){
+			case Small: return 8;
+			case Medium: return 12;
+			case Big: return 20;
+			case None:
+			default: return 0;
+		}
+	}
+
 	public static int StorageVolume(StorageSize size){
 		switch (size){
 			case Small: return 200000;
@@ -99,9 +119,9 @@ public class Constants
 	
 	public static int StorageBuildPrice(StorageSize size){
 		switch (size){
-			case Small: return 5000;
-			case Medium: return 30000;
-			case Big: return 100000;
+			case Small: return 50000;
+			case Medium: return 300000;
+			case Big: return 1000000;
 			case None:
 			default: return 0;
 		}
@@ -109,9 +129,9 @@ public class Constants
 
 	public static int StorageSupportCost(StorageSize size){
 		switch (size){
-			case Small: return 100;
-			case Medium: return 750;
-			case Big: return 3500;
+			case Small: return 1000;
+			case Medium: return 7500;
+			case Big: return 35000;
 			case None:
 			default: return 0;
 		}
@@ -135,6 +155,17 @@ public class Constants
 			case Big:
 			default:
 				return StorageSize.None;
+		}
+	}
+
+	public static FactorySize FactoryNextSize(FactorySize size){
+		switch (size){
+			case None: return FactorySize.Small;
+			case Small: return FactorySize.Medium;
+			case Medium: return FactorySize.Big;
+			case Big:
+			default:
+				return FactorySize.None;
 		}
 	}
 

@@ -40,7 +40,7 @@ public class ExpandView extends OverlayFrame {
 			addStorageData(obj);
 		} else{
 			llFactoryUnits.setVisibility(View.VISIBLE);
-			
+			addFactoryData(obj);
 		}
 		
 		//addOptions(isStorage);
@@ -61,7 +61,7 @@ public class ExpandView extends OverlayFrame {
 
 		((TextView)findViewById(R.id.expand_txtCurrent)).setText(
 			String.format(res.getString(
-					R.string.expand_storage_current,
+					R.string.expand_main_current,
 					_translator.getStorageName(obj.storageSize),
 					Constants.StorageVolume(obj.storageSize),
 					Constants.StorageSupportCost(obj.storageSize) + Constants.Economics.Currency
@@ -71,11 +71,11 @@ public class ExpandView extends OverlayFrame {
 		
 		String sizeS = _translator.getStorageName(sNext);
 		((TextView)findViewById(R.id.expand_txtExpandTo)).setText(
-			String.format(res.getString(R.string.expand_storage_new), sizeS)
+			String.format(res.getString(R.string.expand_main_new), sizeS)
 		);
 		
 		((TextView)findViewById(R.id.expand_txtNew)).setText(
-			String.format(res.getString(R.string.expand_storage_new_expl), 
+			String.format(res.getString(R.string.expand_main_new_expl), 
 				Constants.StorageVolume(sNext),
 				"" + Constants.StorageSupportCost(sNext) + Constants.Economics.Currency,
 				Constants.StorageBuildingTime(sNext),
@@ -96,6 +96,50 @@ public class ExpandView extends OverlayFrame {
 				}	
 			});*/
 	}
+	
+	private void addFactoryData(CityObjects obj){
+		Resources res = _context.getResources();
+
+		FactorySize fNext = Constants.FactoryNextSize(obj.factorySize);
+
+		((TextView)findViewById(R.id.expand_txtCurrent)).setText(
+			String.format(res.getString(
+							  R.string.expand_main_current,
+							  _translator.getFactoryName(obj.factorySize),
+							  Constants.FactoryVolume(obj.factorySize),
+							  Constants.FactorySupportCost(obj.factorySize) + Constants.Economics.Currency
+						  )
+					)
+		);
+
+		String sizeS = _translator.getFactoryName(fNext);
+		((TextView)findViewById(R.id.expand_txtExpandTo)).setText(
+			String.format(res.getString(R.string.expand_main_new), sizeS)
+		);
+
+		((TextView)findViewById(R.id.expand_txtNew)).setText(
+			String.format(res.getString(R.string.expand_main_new_expl), 
+						  Constants.FactoryVolume(fNext),
+						  "" + Constants.FactorySupportCost(fNext) + Constants.Economics.Currency,
+						  Constants.FactoryBuildingTime(fNext),
+						  "" + Constants.FactoryBuildPrice(fNext) + Constants.Economics.Currency
+						  )
+		);
+
+		Button btnBuild = (Button)findViewById(R.id.expand_btnBuild);
+		btnBuild.setText(String.format(
+							 res.getString(R.string.expand_build),
+							 Constants.FactoryBuildPrice(fNext)
+						 )
+						 );
+		/*btnBuild.setOnClickListener(new View.OnClickListener(){
+		 public void onClick(View view){
+		 if (isActive)
+		 shower.closeLastView(null);
+		 }	
+		 });*/
+	}
+	
 	/*
 	private void addOptions(boolean isStorage){
 		LinearLayout llOptions = (LinearLayout)findViewById(R.id.expand_llVariants);

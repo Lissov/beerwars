@@ -26,6 +26,7 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
+			android:layout_marginBottom="30dp"
 			android:id="@+id/expand_llFactoryUnits">
 			<TextView
 				android:layout_width="fill_parent"
@@ -87,7 +88,7 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:textSize="@dimen/textNormal"
-			android:layout_marginTop="30dp"
+			android:layout_marginTop="20dp"
 			android:textColor="@color/overlay_text"
 			android:id="@+id/expand_txtExpandTo"
 			android:text="Expand to something"/>
