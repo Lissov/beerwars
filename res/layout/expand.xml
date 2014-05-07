@@ -49,14 +49,20 @@
 					android:layout_marginTop="5dp"
 					android:textColor="@color/overlay_text"
 					android:text="@string/expand_factory_build_units"/>
-				<EditText
+				
+				<com.michaelnovakjr.numberpicker.NumberPicker
+					xmlns:picker="http://schemas.android.com/apk/res-auto"
 					android:layout_width="0dp"
 					android:layout_weight="1"
 					android:layout_height="wrap_content"
 					android:textSize="@dimen/textNormal"
 					android:layout_marginTop="5dp"
 					android:textColor="@color/overlay_text"
-					android:id="@+id/expand_f_unitsCount" />
+					android:id="@+id/expand_f_unitsCount"
+					picker:startRange="0.01"
+        			picker:endRange="10.00"
+        			picker:step="0.05" />
+								
 				<TextView
 					android:layout_width="0dp"
 					android:layout_weight="1"

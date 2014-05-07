@@ -34,6 +34,8 @@ public class GameHolder {
 			return;
 			
 		_game = s.load(lastId);
+		if (_game.map == null)
+			_game = null;
 	}
 
 	public static void saveGame(Context ctx, String name) {
