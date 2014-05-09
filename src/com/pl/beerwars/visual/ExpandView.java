@@ -99,7 +99,8 @@ public class ExpandView extends OverlayFrame {
 	
 	private void addFactoryData(CityObjects obj){
 		Resources res = _context.getResources();
-
+		
+		// factory expansion
 		FactorySize fNext = Constants.FactoryNextSize(obj.factorySize);
 
 		((TextView)findViewById(R.id.expand_txtCurrent)).setText(

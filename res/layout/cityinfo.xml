@@ -53,23 +53,6 @@
 			android:orientation="vertical"
 		    android:background="@drawable/border"
 			android:id="@+id/cityinfo_llTransports" /-->
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="20dp"
-			android:textSize="@dimen/textNormal"
-			android:textColor="@color/overlay_text" 
-			android:text="@string/cityinfo_others"/>
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:minHeight="5dp"
-			android:layout_marginRight="10dp"
-			android:padding="5dp"
-			android:orientation="vertical"
-		    android:background="@drawable/border_inner"
-			android:id="@+id/cityinfo_llOthers" />
 		
 		<TextView
 			android:layout_width="fill_parent"
@@ -193,6 +176,23 @@
 			android:orientation="vertical"
 			android:id="@+id/cityinfo_llFactory" />
 
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="20dp"
+			android:textSize="@dimen/textNormal"
+			android:textColor="@color/overlay_text" 
+			android:text="@string/cityinfo_others"/>
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:minHeight="5dp"
+			android:layout_marginRight="10dp"
+			android:padding="5dp"
+			android:orientation="vertical"
+		    android:background="@drawable/border_inner"
+			android:id="@+id/cityinfo_llOthers" />
+		
 		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="15dp"

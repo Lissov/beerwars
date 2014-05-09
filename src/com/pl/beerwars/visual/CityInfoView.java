@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.*;
+import com.michaelnovakjr.numberpicker.NumberPicker;
 
 public class CityInfoView extends OverlayFrame
 {
@@ -130,13 +131,44 @@ public class CityInfoView extends OverlayFrame
 			tv.setLayoutParams(params);
 			llSort.addView(tv);
 
-			EditText et = new EditText(_context);
+			final BeerSort capturedS = sort; 
+			
+			/*
+			<com.michaelnovakjr.numberpicker.NumberPicker
+					xmlns:picker="http://schemas.android.com/apk/res-auto"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/textNormal"
+					android:layout_marginTop="5dp"
+					android:textColor="@color/overlay_text"
+					android:id="@+id/expand_f_unitsCount"
+					picker:isInteger="false"
+					picker:startRange="0.01"
+        			picker:endRange="10.00"
+        			picker:step="0.05" />
+					*/
+			NumberPicker np = new NumberPicker(_context);
+			np.setLayoutParams(params);
+			np.setCurrent(obj.prices.get(sort));
+			np.setIsInteger(false);
+			np.setStartRange(0.01f);
+			np.setEndRange(99.98f);
+			np.setStep(0.05f);
+			llSort.addView(np);
+			np.setOnChangeListener(new NumberPicker.OnChangedListener(){
+				@Override
+				public void onChanged(NumberPicker picker, float oldVal, float newVal){
+					obj.prices.put(capturedS, newVal); 	
+				}
+			});
+			
+			/*EditText et = new EditText(_context);
 			et.setTextColor(res.getColor(R.color.overlay_text));
 			et.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textNormal));
 			et.setText("" + obj.prices.get(sort));
 			et.setLayoutParams(params);
 			et.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-			final BeerSort capturedS = sort; 
 			et.addTextChangedListener(new TextWatcher() {
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count)
@@ -154,7 +186,7 @@ public class CityInfoView extends OverlayFrame
 						} catch (Exception ex){}
 					}
 				});
-			llSort.addView(et);
+			llSort.addView(et);*/
 
 			llPrices.addView(llSort);
 		}		
@@ -215,14 +247,14 @@ public class CityInfoView extends OverlayFrame
 		}
 		tvAvail.setText(avText);
 
-		LinearLayout llStorage = (LinearLayout)findViewById(R.id.cityinfo_llFactory);
+		LinearLayout llFactory = (LinearLayout)findViewById(R.id.cityinfo_llFactory);
 		for (BeerSort sort : obj.factory.keySet())
 		{
 			TextView tv = new TextView(_context);
 			tv.setTextColor(res.getColor(R.color.overlay_text));
 			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
 			tv.setText(sort.name + ":\t\t" + obj.factory.get(sort));
-			llStorage.addView(tv);
+			llFactory.addView(tv);
 		}
 
 		Button btnExpand = (Button)findViewById(R.id.cityinfo_btnFactoryExpand);

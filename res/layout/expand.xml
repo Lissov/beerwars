@@ -59,10 +59,11 @@
 					android:layout_marginTop="5dp"
 					android:textColor="@color/overlay_text"
 					android:id="@+id/expand_f_unitsCount"
-					picker:startRange="0.01"
-        			picker:endRange="10.00"
-        			picker:step="0.05" />
-								
+					picker:isInteger="true"
+					picker:startRange="1"
+        			picker:endRange="999"
+        			picker:step="1" />
+				
 				<TextView
 					android:layout_width="0dp"
 					android:layout_weight="1"
