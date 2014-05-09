@@ -150,11 +150,11 @@ public class CityInfoView extends OverlayFrame
 					*/
 			NumberPicker np = new NumberPicker(_context);
 			np.setLayoutParams(params);
-			np.setCurrent(obj.prices.get(sort));
 			np.setIsInteger(false);
 			np.setStartRange(0.01f);
 			np.setEndRange(99.98f);
 			np.setStep(0.05f);
+			np.setCurrent(obj.prices.get(sort));
 			llSort.addView(np);
 			np.setOnChangeListener(new NumberPicker.OnChangedListener(){
 				@Override
