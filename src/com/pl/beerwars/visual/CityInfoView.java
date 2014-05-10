@@ -109,7 +109,6 @@ public class CityInfoView extends OverlayFrame
 
 	private void showPrices()
 	{
-
 		Resources res = _context.getResources();
 		final CityObjects obj = _data.cityObjects[_data.game.getCityIndex(_cityId)];
 
@@ -148,6 +147,11 @@ public class CityInfoView extends OverlayFrame
         			picker:endRange="10.00"
         			picker:step="0.05" />
 					*/
+			
+					
+			params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+			params.weight = 1;
+			
 			NumberPicker np = new NumberPicker(_context);
 			np.setLayoutParams(params);
 			np.setIsInteger(false);
