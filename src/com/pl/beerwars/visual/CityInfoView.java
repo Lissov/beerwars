@@ -131,24 +131,7 @@ public class CityInfoView extends OverlayFrame
 			llSort.addView(tv);
 
 			final BeerSort capturedS = sort; 
-			
-			/*
-			<com.michaelnovakjr.numberpicker.NumberPicker
-					xmlns:picker="http://schemas.android.com/apk/res-auto"
-					android:layout_width="0dp"
-					android:layout_weight="1"
-					android:layout_height="wrap_content"
-					android:textSize="@dimen/textNormal"
-					android:layout_marginTop="5dp"
-					android:textColor="@color/overlay_text"
-					android:id="@+id/expand_f_unitsCount"
-					picker:isInteger="false"
-					picker:startRange="0.01"
-        			picker:endRange="10.00"
-        			picker:step="0.05" />
-					*/
-			
-					
+
 			params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
 			params.weight = 1;
 			
@@ -166,31 +149,6 @@ public class CityInfoView extends OverlayFrame
 					obj.prices.put(capturedS, newVal); 	
 				}
 			});
-			
-			/*EditText et = new EditText(_context);
-			et.setTextColor(res.getColor(R.color.overlay_text));
-			et.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textNormal));
-			et.setText("" + obj.prices.get(sort));
-			et.setLayoutParams(params);
-			et.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-			et.addTextChangedListener(new TextWatcher() {
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count)
-					{}				
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after)
-					{ }
-
-					@Override
-					public void afterTextChanged(Editable s)
-					{
-						try{
-							float f = Float.parseFloat(s.toString());
-							obj.prices.put(capturedS, f);
-						} catch (Exception ex){}
-					}
-				});
-			llSort.addView(et);*/
 
 			llPrices.addView(llSort);
 		}		
@@ -219,7 +177,7 @@ public class CityInfoView extends OverlayFrame
 				@Override
 				public void onClick(View v)
 				{
-					_shower.showView(new ExpandView(_context, _shower, _translator, obj, true));
+					_shower.showView(new ExpandView(_context, _shower, _translator, _data, obj.cityRef.id, true));
 				}
 			});
 
@@ -266,7 +224,7 @@ public class CityInfoView extends OverlayFrame
 				@Override
 				public void onClick(View v)
 				{
-					_shower.showView(new ExpandView(_context, _shower, _translator, obj, false));
+					_shower.showView(new ExpandView(_context, _shower, _translator, _data, obj.cityRef.id, false));
 				}
 			});
 

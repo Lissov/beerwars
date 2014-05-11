@@ -55,6 +55,8 @@ public class Constants
 		public final static int startUnits = 2;
 		public final static int startBeer = startUnits * unitSize;
 				
+		public final static int unitBuildCost = 5000;
+		public final static int unitBuildTime = 4;
 		public final static int unitIdleCost = 100;
 		public final static float unitsPerCitizenWeek = 1;
 	}
@@ -171,8 +173,8 @@ public class Constants
 
 	public static class startBeerParameters{
 		public final static float selfprice = 0.7f;
-		public final static float quality = 0.5f;		
-		public final static float deviation = 0.4f;		
+		public final static float quality = 0.7f;		
+		public final static float deviation = 0.3f;		
 	}
 	
 	public enum ScreenButton {

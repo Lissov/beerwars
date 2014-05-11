@@ -1,6 +1,7 @@
 package com.pl.beerwars.data.playerdata;
 import java.util.LinkedList;
 import java.util.List;
+import com.pl.beerwars.data.*;
 import com.pl.beerwars.data.beer.BeerSort;
 import com.pl.beerwars.data.facade.GameFacade;
 
@@ -42,4 +43,24 @@ public class PlayerData {
 		}
 		return null;
 	}
+	
+
+	public boolean expandUnits(String cityId, int count){
+
+		int price = count * Constants.Economics.unitBuildCost;
+		if (money < price)
+			return false;
+
+		CityObjects cobj = cityObjects[game.getCityIndex(cityId)];
+		if (count > cobj.getPosibleUnitsExtension())
+			return false;
+		
+		money -= price;
+		cobj.factoryUnitsExtensions.add(new FactoryChange(
+			count, Constants.Economics.unitBuildTime
+		));
+		
+		return true;
+	}
+	
 }

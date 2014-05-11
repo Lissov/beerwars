@@ -52,8 +52,10 @@
     <string name="expand_main_new_expl">Size: %1$s\nDaily support cost: %2$s\nBuilding time: %3$s weeks\nPrice: %4$s</string>
     <string name="expand_build">Build (%1$s)</string>
 	<string name="expand_factory_build_units">Build</string>
-	<string name="expand_factory_build_units_e">Price %1$s ter unit, %2$s weeks</string>
+	<string name="expand_factory_build_units_e">Price %1$s per unit, %2$s weeks</string>
     <string name="expand_close">Close</string>
+	<string name="expand_build_started">Construction started</string>
+	<string name="expand_build_cant_start">Cannot start construction</string>
 	
     <string name="nextturn_title">Moving to next week</string>
     <string name="nextturn_autosave">Autosave&#8230;</string>
@@ -64,7 +66,8 @@
 	<string name="game_nt_consumptionCalculations">Calculating consumption&#8230;</string>
 	<string name="game_nt_transportCalculations">Calculating transport&#8230;</string>
 	<string name="game_nt_productionCalculations">Calculating production&#8230;</string>
-	<string name="game_nt_supportCalculations">Calculating costs of ownership&#8230;</string>	
+	<string name="game_nt_supportCalculations">Calculating costs of ownership&#8230;</string>
+	<string name="game_nt_constructionCalculations">Calculating construction&#8230;</string>
 	<string name="game_nt_complete">Turn COMPLETE!</string>
 	<string name="game_nt_bankrupt">%1$s has no money. Production and logistics are terminated!</string>
 	<string name="game_nt_producedCity">City %1$s produced:</string>
@@ -72,6 +75,8 @@
 	<string name="game_nt_producedLost">\tStorage full: %1$s liters of %2$s lost!</string>	
 	<string name="game_nt_consumedCity">City %1$s sold:</string>
 	<string name="game_nt_consumedSort">\t%1$s bottles of %2$s (%3$s).</string>
+	<string name="game_nt_constructedFactory">\t%1$s constructed in %2$s!</string>
+	<string name="game_nt_constructedUnits">\t%1$s units installed in %2$s!</string>
 	
     <string name="storage_none">None</string>
     <string name="storage_small">Shed</string>

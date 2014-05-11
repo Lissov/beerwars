@@ -105,4 +105,8 @@ public class CityObjects {
 		price += Constants.StorageSupportCost(storageSize);
 		return (int)price;
 	}
+	
+	public int getPosibleUnitsExtension(){
+		return getFactoryMax() - (factoryUnits + getConstructedCount());
+	}
 }

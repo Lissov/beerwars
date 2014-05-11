@@ -8,19 +8,23 @@ import android.widget.*;
 import com.pl.beerwars.data.Constants.*;
 import android.util.*;
 import com.pl.beerwars.data.*;
+import com.michaelnovakjr.numberpicker.NumberPicker;
+import com.pl.beerwars.data.playerdata.*;
 
 public class ExpandView extends OverlayFrame {
 
 	Context _context;
 	Translator _translator;
+	PlayerData _player;
 	CityObjects _obj;
 	LinearLayout llFactoryUnits;
 	
-	public ExpandView(Context context, final IViewShower shower, Translator translator, CityObjects obj, boolean isStorage) {
+	public ExpandView(Context context, final IViewShower shower, Translator translator, PlayerData player, String cityId, boolean isStorage) {
 		super(context);
 		_context = context;
 		_translator = translator;
-		_obj = obj;
+		_player = player;
+		_obj = player.cityObjects[player.game.getCityIndex(cityId)];
 		
 		View.inflate(context, R.layout.expand, this);
 
@@ -29,7 +33,7 @@ public class ExpandView extends OverlayFrame {
 		((TextView)findViewById(R.id.expand_txtTitle)).setText(
 			String.format(res.getString(
 					isStorage ? R.string.expand_title_storage : R.string.expand_title_factory
-				), translator.getCityName(obj.cityRef.id)
+				), translator.getCityName(_obj.cityRef.id)
 			)
 		);
 		
@@ -37,10 +41,10 @@ public class ExpandView extends OverlayFrame {
 		
 		if (isStorage){
 			llFactoryUnits.setVisibility(View.GONE);
-			addStorageData(obj);
+			addStorageData(_obj);
 		} else{
 			llFactoryUnits.setVisibility(View.VISIBLE);
-			addFactoryData(obj);
+			addFactoryData(_obj);
 		}
 		
 		//addOptions(isStorage);
@@ -97,8 +101,11 @@ public class ExpandView extends OverlayFrame {
 			});*/
 	}
 	
-	private void addFactoryData(CityObjects obj){
-		Resources res = _context.getResources();
+	private Button btnBuildUnits;
+	private NumberPicker npBuildUnits;
+	
+	private void addFactoryData(final CityObjects obj){
+		final Resources res = _context.getResources();
 		
 		// factory expansion
 		FactorySize fNext = Constants.FactoryNextSize(obj.factorySize);
@@ -139,6 +146,49 @@ public class ExpandView extends OverlayFrame {
 		 shower.closeLastView(null);
 		 }	
 		 });*/
+		 
+		 
+		// Units
+		final TextView tvTotal = (TextView)findViewById(R.id.expand_f_total);		
+		tvTotal.setText(String.format(
+			res.getString(R.string.expand_factory_build_units_e),
+			Constants.Economics.unitBuildCost + Constants.Economics.Currency,
+			Constants.Economics.unitBuildTime
+		));
+		btnBuildUnits = (Button)findViewById(R.id.expand_f_btnUnits);
+		
+		npBuildUnits = (NumberPicker)findViewById(R.id.expand_f_unitsCount);
+		npBuildUnits.setOnChangeListener(new NumberPicker.OnChangedListener(){
+			@Override
+			public void onChanged(NumberPicker picker, float oldVal, float newVal){
+				btnBuildUnits.setText(String.format(
+					res.getString(R.string.expand_build),
+					(Constants.Economics.unitBuildCost * newVal) + Constants.Economics.Currency
+				));
+			}
+		});
+		
+		btnBuildUnits.setOnClickListener(new OnClickListener(){
+			public void onClick(View view){
+				boolean result = _player.expandUnits(obj.cityRef.id, (int)npBuildUnits.getCurrent());
+				Toast.makeText(_context, 
+							result 
+							   ? R.string.expand_build_started
+							   : R.string.expand_build_cant_start,
+							Toast.LENGTH_SHORT)
+					.show();
+				updateMayBuildCount(obj);
+			}	
+		});
+		
+		updateMayBuildCount(obj);
+	}
+	
+	private void updateMayBuildCount(CityObjects obj){
+		int mayBuildUnits = obj.getPosibleUnitsExtension();
+		btnBuildUnits.setEnabled(mayBuildUnits > 0);
+		npBuildUnits.setEndRange(mayBuildUnits);
+		npBuildUnits.setCurrent(1);
 	}
 	
 	/*

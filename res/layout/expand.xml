@@ -56,7 +56,7 @@
 					android:layout_weight="1"
 					android:layout_height="wrap_content"
 					android:textSize="@dimen/textNormal"
-					android:layout_marginTop="5dp"
+					android:layout_marginTop="15dp"
 					android:textColor="@color/overlay_text"
 					android:id="@+id/expand_f_unitsCount"
 					picker:isInteger="true"
@@ -71,6 +71,7 @@
 					android:textSize="@dimen/textNormal"
 					android:layout_marginTop="5dp"
 					android:textColor="@color/overlay_text"
+					android:id="@+id/expand_f_total"
 					android:text="Total cost"/>
 				<Button
 					android:layout_width="0dp"
