@@ -242,6 +242,17 @@ public class Game
 		{
 			for (CityObjects co : p.cityObjects)
 			{
+				if (co.storageBuildRemaining > 0)
+				{
+					co.storageBuildRemaining -= 1;
+					if (co.storageBuildRemaining == 0)
+					{
+						co.storageSize = Constants.StorageNextSize(co.storageSize);
+						if (p.intellect_id == Constants.IntellectId.Human)
+							callback.displayStorageBuilt(co.cityRef.id, co.storageSize);
+					}
+				}
+
 				if (co.factoryBuildRemaining > 0)
 				{
 					co.factoryBuildRemaining -= 1;
@@ -280,6 +291,7 @@ public class Game
 		void display(int resId, Object[] parameters);
 		void complete();
 
+		void displayStorageBuilt(String cityId, StorageSize newSize);
 		void displayFactoryBuilt(String cityId, FactorySize newSize);
 		void displayUnitsExtension(String cityId, int built);
 	}

@@ -18,6 +18,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.*;
 import com.michaelnovakjr.numberpicker.NumberPicker;
+import java.util.*;
 
 public class CityInfoView extends OverlayFrame
 {
@@ -181,9 +182,7 @@ public class CityInfoView extends OverlayFrame
 				}
 			});
 
-		btnExpand.setEnabled(
-			obj.storageSize != StorageSize.Big 
-			&& obj.storageBuildRemaining == 0);
+		btnExpand.setEnabled(obj.storageSize != StorageSize.Big);
 	}
 	
 	private void showFactory()
@@ -209,15 +208,7 @@ public class CityInfoView extends OverlayFrame
 		}
 		tvAvail.setText(avText);
 
-		LinearLayout llFactory = (LinearLayout)findViewById(R.id.cityinfo_llFactory);
-		for (BeerSort sort : obj.factory.keySet())
-		{
-			TextView tv = new TextView(_context);
-			tv.setTextColor(res.getColor(R.color.overlay_text));
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
-			tv.setText(sort.name + ":\t\t" + obj.factory.get(sort));
-			llFactory.addView(tv);
-		}
+		showFactorySorts(obj);
 
 		Button btnExpand = (Button)findViewById(R.id.cityinfo_btnFactoryExpand);
 		btnExpand.setOnClickListener(new OnClickListener() {
@@ -227,9 +218,76 @@ public class CityInfoView extends OverlayFrame
 					_shower.showView(new ExpandView(_context, _shower, _translator, _data, obj.cityRef.id, false));
 				}
 			});
+	}
+	
+	private void showFactorySorts(final CityObjects obj){
+		Resources res = _context.getResources();
+		
+		LinearLayout llFactory = (LinearLayout)findViewById(R.id.cityinfo_llFactory);
+		
+		final TextView tvUnused = new TextView(_context);
+		tvUnused.setTextColor(res.getColor(R.color.overlay_text));
+		tvUnused.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
+		
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+		params.weight = 1;
+		
+		final HashMap<BeerSort, NumberPicker> npickers = new HashMap<BeerSort, NumberPicker>();
+		
+		for (BeerSort sort : obj.factory.keySet())
+		{
+			LinearLayout llSort = new LinearLayout(_context);
+			llSort.setOrientation(LinearLayout.HORIZONTAL);
+			llSort.setWeightSum(5);
+		
+			TextView tv = new TextView(_context);
+			tv.setTextColor(res.getColor(R.color.overlay_text));
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
+			tv.setLayoutParams(params);
+			tv.setText(sort.name);
+			llSort.addView(tv);
+			
+			int cnt = obj.factory.get(sort);
+			NumberPicker np = new NumberPicker(_context);
+			np.setLayoutParams(params);
+			np.setIsInteger(true);
+			np.setStartRange(0);
+			np.setEndRange(10000);
+			np.setStep(1);
+			np.setCurrent(obj.factory.get(sort));
+			llSort.addView(np);
+			
+			llFactory.addView(llSort);
+			
+			npickers.put(sort, np);
+			final BeerSort capturedS = sort;
+			np.setOnChangeListener(new NumberPicker.OnChangedListener(){
+				@Override
+				public void onChanged(NumberPicker picker, float oldVal, float newVal){
+					obj.factory.put(capturedS, (int)newVal);
+					updateRanges(obj, tvUnused, npickers);
+				}
+			});
+		}
 
-		btnExpand.setEnabled(
-			obj.storageSize != StorageSize.Big 
-			&& obj.storageBuildRemaining == 0);
+		llFactory.addView(tvUnused);
+		
+		updateRanges(obj, tvUnused, npickers);
+	}
+	
+	private void updateRanges(final CityObjects obj, TextView tvUnused, HashMap<BeerSort, NumberPicker> npickers){
+		Resources res = _context.getResources();
+		
+		int idleUnits = obj.factoryUnits - obj.getOperatingUnitsCount();
+		tvUnused.setText(String.format(
+							 res.getString(R.string.cityinfo_factory_unused),
+							 idleUnits
+						 ));
+		
+		for (BeerSort sort : npickers.keySet()){
+			npickers.get(sort).setEndRange(
+				obj.factory.get(sort) + idleUnits
+			);
+		}
 	}
 }

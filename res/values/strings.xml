@@ -40,6 +40,7 @@
     <string name="cityinfo_storage_expand">Expand</string>
     <string name="cityinfo_factory">Factory</string>
     <string name="cityinfo_factory_avail">Usage:</string>
+    <string name="cityinfo_factory_unused">Idle units: %1$s</string>
     <string name="cityinfo_units_construct">%1$s units under construction</string>
     <string name="cityinfo_units_destruct">%1$s units avaiting removal</string>
     <string name="cityinfo_factory_expand">Expand</string>
@@ -75,6 +76,7 @@
 	<string name="game_nt_producedLost">\tStorage full: %1$s liters of %2$s lost!</string>	
 	<string name="game_nt_consumedCity">City %1$s sold:</string>
 	<string name="game_nt_consumedSort">\t%1$s bottles of %2$s (%3$s).</string>
+	<string name="game_nt_constructedStorage">\t%1$s constructed in %2$s!</string>
 	<string name="game_nt_constructedFactory">\t%1$s constructed in %2$s!</string>
 	<string name="game_nt_constructedUnits">\t%1$s units installed in %2$s!</string>
 	

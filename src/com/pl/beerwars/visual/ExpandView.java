@@ -58,10 +58,10 @@ public class ExpandView extends OverlayFrame {
 			});
 	}
 	
-	private void addStorageData(CityObjects obj){
+	private void addStorageData(final CityObjects obj){
 		Resources res = _context.getResources();
 		
-		StorageSize sNext = Constants.StorageNextSize(obj.storageSize);
+		final StorageSize sNext = Constants.StorageNextSize(obj.storageSize);
 
 		((TextView)findViewById(R.id.expand_txtCurrent)).setText(
 			String.format(res.getString(
@@ -87,18 +87,28 @@ public class ExpandView extends OverlayFrame {
 			)
 		);
 		
-		Button btnBuild = (Button)findViewById(R.id.expand_btnBuild);
+		final Button btnBuild = (Button)findViewById(R.id.expand_btnBuild);
 		btnBuild.setText(String.format(
 				res.getString(R.string.expand_build),
 				Constants.StorageBuildPrice(sNext)
 			)
 		);
-		/*btnBuild.setOnClickListener(new View.OnClickListener(){
+		btnBuild.setOnClickListener(new View.OnClickListener(){
 				public void onClick(View view){
-					if (isActive)
-						shower.closeLastView(null);
+					if (!isActive) return;
+					boolean result = _player.expandStorage(obj.cityRef.id, sNext);
+					Toast.makeText(_context, 
+								   result 
+								   ? R.string.expand_build_started
+								   : R.string.expand_build_cant_start,
+								   Toast.LENGTH_SHORT)
+						.show();
+					btnBuild.setEnabled(false);
 				}	
-			});*/
+			});
+		btnBuild.setEnabled(
+			obj.storageSize != Constants.StorageSize.Big &&
+			obj.storageBuildRemaining == 0);
 	}
 	
 	private Button btnBuildUnits;
@@ -139,13 +149,16 @@ public class ExpandView extends OverlayFrame {
 							 res.getString(R.string.expand_build),
 							 Constants.FactoryBuildPrice(fNext)
 						 )
-						 );
+			);
 		/*btnBuild.setOnClickListener(new View.OnClickListener(){
 		 public void onClick(View view){
 		 if (isActive)
 		 shower.closeLastView(null);
 		 }	
 		 });*/
+		btnBuild.setEnabled(
+			obj.factorySize != Constants.FactorySize.Big &&
+			obj.factoryBuildRemaining == 0);
 		 
 		 
 		// Units
@@ -170,6 +183,7 @@ public class ExpandView extends OverlayFrame {
 		
 		btnBuildUnits.setOnClickListener(new OnClickListener(){
 			public void onClick(View view){
+				if (!isActive) return;
 				boolean result = _player.expandUnits(obj.cityRef.id, (int)npBuildUnits.getCurrent());
 				Toast.makeText(_context, 
 							result 

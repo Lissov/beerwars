@@ -27,6 +27,9 @@
 		<activity
             android:label="@string/app_name"
             android:name=".GameActivity" />
+		<activity
+            android:label="@string/app_name"
+            android:name=".LoadGameActivity" />
     </application>
 
 </manifest>

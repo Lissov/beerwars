@@ -1,4 +1,5 @@
 package com.pl.beerwars.data.playerdata;
+import com.pl.beerwars.data.Constants;
 import java.util.LinkedList;
 import java.util.List;
 import com.pl.beerwars.data.*;
@@ -63,4 +64,18 @@ public class PlayerData {
 		return true;
 	}
 	
+	public boolean expandStorage(String cityId, Constants.StorageSize newSize)
+	{
+		int price = Constants.StorageBuildPrice(newSize);
+		if (money < price)
+			return false;
+		
+		CityObjects cobj = cityObjects[game.getCityIndex(cityId)];
+		if (Constants.StorageNextSize(cobj.storageSize) != newSize)
+			return false;
+			
+		money -= price;
+		cobj.storageBuildRemaining = Constants.StorageBuildingTime(newSize);
+		return true;
+	}
 }

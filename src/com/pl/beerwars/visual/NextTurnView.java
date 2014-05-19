@@ -93,6 +93,20 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 	}
 	
 	@Override
+	public void displayStorageBuilt(final String cityId, final Constants.StorageSize newSize){
+		((Activity)_context).runOnUiThread(new Runnable(){
+				public void run(){
+					showMessage(String.format(
+									_context.getResources().getString(R.string.game_nt_constructedStorage),
+									_translator.getStorageName(newSize),
+									_translator.getCityName(cityId)
+								));
+				}
+			});
+	}
+		
+	
+	@Override
 	public void displayFactoryBuilt(final String cityId, final Constants.FactorySize newSize){
 		((Activity)_context).runOnUiThread(new Runnable(){
 				public void run(){
