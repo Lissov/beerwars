@@ -118,7 +118,7 @@ public class ExpandView extends OverlayFrame {
 		final Resources res = _context.getResources();
 		
 		// factory expansion
-		FactorySize fNext = Constants.FactoryNextSize(obj.factorySize);
+		final FactorySize fNext = Constants.FactoryNextSize(obj.factorySize);
 
 		((TextView)findViewById(R.id.expand_txtCurrent)).setText(
 			String.format(res.getString(
@@ -144,18 +144,25 @@ public class ExpandView extends OverlayFrame {
 						  )
 		);
 
-		Button btnBuild = (Button)findViewById(R.id.expand_btnBuild);
+		final Button btnBuild = (Button)findViewById(R.id.expand_btnBuild);
 		btnBuild.setText(String.format(
 							 res.getString(R.string.expand_build),
 							 Constants.FactoryBuildPrice(fNext)
 						 )
 			);
-		/*btnBuild.setOnClickListener(new View.OnClickListener(){
-		 public void onClick(View view){
-		 if (isActive)
-		 shower.closeLastView(null);
-		 }	
-		 });*/
+		btnBuild.setOnClickListener(new View.OnClickListener(){
+				public void onClick(View view){
+					if (!isActive) return;
+					boolean result = _player.expandFactory(obj.cityRef.id, fNext);
+					Toast.makeText(_context, 
+								   result 
+								   ? R.string.expand_build_started
+								   : R.string.expand_build_cant_start,
+								   Toast.LENGTH_SHORT)
+						.show();
+					btnBuild.setEnabled(false);
+				}	
+			});
 		btnBuild.setEnabled(
 			obj.factorySize != Constants.FactorySize.Big &&
 			obj.factoryBuildRemaining == 0);

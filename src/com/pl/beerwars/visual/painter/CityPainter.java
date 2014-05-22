@@ -88,6 +88,11 @@ public class CityPainter extends BasePainter
 				canvas.drawRect(xs, ys - s*1/2, xs + s*3/4, ys, pntStorage);
 				canvas.drawRect(xs + s*4/8, ys - s, xs + s*5/8, ys, pntStorage);
 				return s + paintLevel(canvas, xs + s*5/6, ys, used, potential);
+			case Medium:
+				canvas.drawRect(xs, ys - s*1/2, xs + s, ys, pntStorage);
+				canvas.drawRect(xs + s*3/8, ys - s*3/4, xs + s*4/8, ys, pntStorage);
+				canvas.drawRect(xs + s*5/8, ys - s, xs + s*6/8, ys, pntStorage);
+				return s + paintLevel(canvas, xs + s*7/6, ys, used, potential);				
 			case None:
 			default: return 0;
 		}	

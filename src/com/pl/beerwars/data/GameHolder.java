@@ -38,6 +38,14 @@ public class GameHolder {
 			_game = null;
 	}
 
+	public static void loadGame(Context ctx, int gameId) {
+		Storage s = new Storage(ctx);
+
+		_game = s.load(gameId);
+		if (_game.map == null)
+			_game = null;
+	}
+
 	public static void saveGame(Context ctx, String name) {
 		Storage s = new Storage(ctx);
 		s.save(_game, name);

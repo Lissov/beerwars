@@ -26,4 +26,7 @@ public class MainActivity extends Activity
 	public void btnContinueClick(View view){
 		startActivity(new Intent(this, GameActivity.class));
 	}
+	public void btnLoadClick(View view){
+		startActivity(new Intent(this, LoadGameActivity.class));
+	}
 }

@@ -29,7 +29,8 @@
             android:name=".GameActivity" />
 		<activity
             android:label="@string/app_name"
-            android:name=".LoadGameActivity" />
+            android:name=".LoadGameActivity"
+			android:noHistory="true" />
     </application>
 
 </manifest>

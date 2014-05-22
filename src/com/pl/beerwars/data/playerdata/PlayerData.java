@@ -78,4 +78,19 @@ public class PlayerData {
 		cobj.storageBuildRemaining = Constants.StorageBuildingTime(newSize);
 		return true;
 	}
+	
+	public boolean expandFactory(String cityId, Constants.FactorySize newSize)
+	{
+		int price = Constants.FactoryBuildPrice(newSize);
+		if (money < price)
+			return false;
+
+		CityObjects cobj = cityObjects[game.getCityIndex(cityId)];
+		if (Constants.FactoryNextSize(cobj.factorySize) != newSize)
+			return false;
+
+		money -= price;
+		cobj.factoryBuildRemaining = Constants.FactoryBuildingTime(newSize);
+		return true;
+	}
 }

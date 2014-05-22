@@ -4,6 +4,7 @@
     <string name="app_name">Beer Trade Wars</string>
 
     <string name="main_btn_start_new">Start new game</string>
+    <string name="main_btn_load">Load game</string>
     <string name="main_btn_continue">Continue last game</string>
 	
     <string name="gamesetup_map">Map</string>

@@ -198,27 +198,27 @@ public class Game
 	{
 		ConsumptionModel model = new ConsumptionModel();
 
-		for (City c : map.cities)
+		for (int i = 0; i<map.cities.length; i++)
 		{
+			City c = map.cities[i];
 			HashMap<BeerSort, Integer> consumed = model.calculateConsumption(this, c);
 
 			for (PlayerData p : players.values())
 			{
-				for (CityObjects co : p.cityObjects)
+				CityObjects co = p.cityObjects[i];
+				
+				HashMap<BeerSort, Integer> cityC = new HashMap<BeerSort, Integer>();
+				for (BeerSort sort : co.factory.keySet())
 				{
-					HashMap<BeerSort, Integer> cityC = new HashMap<BeerSort, Integer>();
-					for (BeerSort sort : co.factory.keySet())
-					{
-						if (!consumed.containsKey(sort)) continue;
-						int cons = consumed.get(sort);
-						cityC.put(sort, cons);
-						co.storage.put(sort, co.storage.get(sort) - cons);
-						p.money += cons * co.prices.get(sort);
-					}
-
-					if (p.intellect_id == Constants.IntellectId.Human)
-						reportConsumption(callback, c, cityC);
+					if (!consumed.containsKey(sort)) continue;
+					int cons = consumed.get(sort);
+					cityC.put(sort, cons);
+					co.storage.put(sort, co.storage.get(sort) - cons);
+					p.money += cons * co.prices.get(sort);
 				}
+
+				if (p.intellect_id == Constants.IntellectId.Human)
+					reportConsumption(callback, c, cityC);
 			}
 		}
 	}	
@@ -281,6 +281,8 @@ public class Game
 					if (p.intellect_id == Constants.IntellectId.Human)
 						callback.displayUnitsExtension(co.cityRef.id, newUnits);
 				}
+				
+				co.updateBeerItems(p);
 			}
 		}
 	}

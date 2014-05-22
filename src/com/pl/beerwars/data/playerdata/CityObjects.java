@@ -109,4 +109,19 @@ public class CityObjects {
 	public int getPosibleUnitsExtension(){
 		return getFactoryMax() - (factoryUnits + getConstructedCount());
 	}
+	
+	public void updateBeerItems(PlayerData player){
+		if (storageSize != StorageSize.None){
+			for (BeerSort sort : player.ownedSorts){
+				if (!storage.containsKey(sort))
+					storage.put(sort, 0);
+			}
+		}
+		if (factorySize != FactorySize.None){
+			for (BeerSort sort : player.ownedSorts){
+				if (!factory.containsKey(sort))
+					factory.put(sort, 0);
+			}
+		}
+	}
 }
