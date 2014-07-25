@@ -17,6 +17,7 @@ public class CityObjects {
 	public HashMap<BeerSort, Integer> factory;
 	public HashMap<BeerSort, Float> prices;
 	public List<FactoryChange> factoryUnitsExtensions;
+	public HashMap<Integer, HashMap<BeerSort, Integer>> consumptionHistory;
 	
 	public int storageBuildRemaining = 0;
 	public int factoryBuildRemaining = 0;
@@ -30,6 +31,7 @@ public class CityObjects {
 		this.factory = new HashMap<BeerSort, Integer>();
 		this.prices = new HashMap<BeerSort, Float>();
 		this.factoryUnitsExtensions = new LinkedList<FactoryChange>();
+		this.consumptionHistory = new HashMap<Integer, HashMap<BeerSort, Integer>>();
 		this.factoryUnits = 0;
 	}
 	

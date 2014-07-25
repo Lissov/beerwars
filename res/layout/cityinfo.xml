@@ -54,35 +54,48 @@
 		    android:background="@drawable/border"
 			android:id="@+id/cityinfo_llTransports" /-->
 		
-		<TextView
+		<TableLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="20dp"
-			android:textSize="@dimen/textNormal"
-			android:textColor="@color/overlay_text" 
-			android:text="@string/cityinfo_prices"/>
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:minHeight="5dp"
+			android:id="@+id/cityinfo_tlBeers"
+			android:stretchColumns="*"
+			android:layout_marginTop="20dp"
 			android:layout_marginRight="10dp"
-			android:padding="5dp"
-			android:orientation="vertical"
-		    android:background="@drawable/border_inner"
-			android:id="@+id/cityinfo_llPrices" />
+			android:background="@color/overlay_table_line">
+			<TableRow
+				android:layout_marginBottom="1dp"
+				android:background="@color/overlay_background">
+				<TextView
+					android:text = "@string/cityinfo_header_sort"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/cityinfo_header_consumed"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/cityinfo_header_stored"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/cityinfo_header_production"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/cityinfo_header_price"
+					android:gravity="center_horizontal" />
+			</TableRow>
+		</TableLayout>
+		
 		
 		
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="20dp"
+			android:layout_marginTop="15dp"
 			android:textSize="@dimen/textNormal"
 			android:textColor="@color/overlay_text" 
 			android:text="@string/cityinfo_storage"/>
 		<LinearLayout 
 		    android:layout_width="fill_parent"
 			android:layout_height="wrap_content" 
-			android:paddingTop="2dp"
+			android:layout_marginTop="2dp"
 			android:layout_marginLeft="10dp"
 			android:weightSum="10"
 			android:orientation="horizontal" >
@@ -113,21 +126,11 @@
 				android:text="@string/cityinfo_storage_expand"
 				android:id="@+id/cityinfo_btnStorageExpand"/>	
 		</LinearLayout>
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:minHeight="10dp"
-			android:layout_marginTop="10dp"
-			android:layout_marginRight="10dp"
-			android:background="@drawable/border_inner"
-			android:padding="5dp" 
-			android:orientation="vertical"
-			android:id="@+id/cityinfo_llStorage" />
 		
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="20dp"
+			android:layout_marginTop="15dp"
 			android:textSize="@dimen/textNormal"
 			android:textColor="@color/overlay_text" 
 			android:text="@string/cityinfo_factory"/>
@@ -165,21 +168,11 @@
 				android:text="@string/cityinfo_storage_expand"
 				android:id="@+id/cityinfo_btnFactoryExpand"/>	
 		</LinearLayout>
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:minHeight="10dp"
-			android:layout_marginTop="10dp"
-			android:layout_marginRight="10dp"
-			android:background="@drawable/border_inner"
-			android:padding="5dp" 
-			android:orientation="vertical"
-			android:id="@+id/cityinfo_llFactory" />
-
+		
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="20dp"
+			android:layout_marginTop="15dp"
 			android:textSize="@dimen/textNormal"
 			android:textColor="@color/overlay_text" 
 			android:text="@string/cityinfo_others"/>

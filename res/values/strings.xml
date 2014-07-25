@@ -33,6 +33,7 @@
     <string name="cityinfo_consumption">Estimated consumption:</string>
     <string name="cityinfo_others">Objects of other players:</string>
     <string name="cityinfo_other_has">%1$s has %2$s.</string>
+	<string name="cityinfo_other_none">Other players have nothing in this city.</string>
     <string name="cityinfo_consumption_unknown">Unknown</string>
     <string name="cityinfo_connections">Transportation costs (per 1000 bottles):</string>
     <string name="cityinfo_prices">Prices (per bottle):</string>
@@ -45,6 +46,13 @@
     <string name="cityinfo_units_construct">%1$s units under construction</string>
     <string name="cityinfo_units_destruct">%1$s units avaiting removal</string>
     <string name="cityinfo_factory_expand">Expand</string>
+    <string name="cityinfo_header_sort">Sort</string>
+    <string name="cityinfo_header_consumed">Consumed</string>
+    <string name="cityinfo_header_stored">Stored</string>
+    <string name="cityinfo_header_transport_in">Sort</string>
+    <string name="cityinfo_header_transport_out">Sort</string>
+    <string name="cityinfo_header_production">Production</string>
+    <string name="cityinfo_header_price">Price</string>
     <string name="cityinfo_close">Close</string>
 
     <string name="expand_title_storage">Expand Storage in %1$s</string>

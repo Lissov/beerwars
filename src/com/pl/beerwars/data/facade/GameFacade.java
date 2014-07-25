@@ -13,6 +13,8 @@ public class GameFacade
 	
 	public Date date;
 	
+	public int turnNum;
+	
 	public CityFacade[] cities;
 
 	public CityFacade getCity(String cityId){

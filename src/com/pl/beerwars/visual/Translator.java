@@ -97,4 +97,11 @@ public class Translator
 				return res.getString(R.string.factory_none);
 		}
 	}
+	
+	public String formatRelative(float newValue, float previous){
+		if (previous == 0)
+			return "-";
+		float p = ((newValue - previous) / previous);
+		return (p >= 0 ? "+" : "") + (Math.round(p * 10000)/100) + "%";
+	}
 }

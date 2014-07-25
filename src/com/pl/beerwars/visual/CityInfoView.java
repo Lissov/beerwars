@@ -19,6 +19,7 @@ import android.text.TextWatcher;
 import android.util.*;
 import com.michaelnovakjr.numberpicker.NumberPicker;
 import java.util.*;
+import android.graphics.*;
 
 public class CityInfoView extends OverlayFrame
 {
@@ -26,6 +27,7 @@ public class CityInfoView extends OverlayFrame
 	private Translator _translator;
 	private PlayerData _data;
 	private String _cityId;
+	private Resources res;
 
 	public CityInfoView(Context context, IViewShower shower, Translator translator, PlayerData data, String cityId)
 	{
@@ -35,8 +37,10 @@ public class CityInfoView extends OverlayFrame
 		_data = data;
 		_cityId = cityId;
 
+		res = this.getResources();
+		
 		View.inflate(context, R.layout.cityinfo, this);
-
+		
 		Resources res = context.getResources();
 		CityFacade city = _data.game.getCity(_cityId);
 
@@ -53,15 +57,20 @@ public class CityInfoView extends OverlayFrame
 		tvConsumption.setText(res.getString(R.string.cityinfo_consumption) + "  " + consS);
 
 		//showConnections(city, translator, res);
+		showBeers();
 		showOthers(city);
-		showPrices();
 		showStorage();
 		showFactory();
 		
+		//final View t = this;
 		Button btnClose = (Button)findViewById(R.id.cityinfo_btnClose);
 		btnClose.setOnClickListener(new View.OnClickListener(){
 				public void onClick(View view)
 				{
+					//float w = t.getMeasuredWidth();
+					//float h = t.getMeasuredHeight();
+					//Toast.makeText(_context, "" + w + " : " + h, Toast.LENGTH_LONG).show();
+					
 					if (isActive)
 						_shower.closeLastView(null);
 				}	
@@ -85,6 +94,7 @@ public class CityInfoView extends OverlayFrame
 		LinearLayout llOther = (LinearLayout)findViewById(R.id.cityinfo_llOthers);
 		Resources res = _context.getResources();
 
+		boolean anything = false;
 		for (PlayerCityFacade pcf : city.others.values())
 		{
 			if (pcf.storageSize != StorageSize.None)
@@ -95,6 +105,7 @@ public class CityInfoView extends OverlayFrame
 				tv.setText(String.format(res.getString(R.string.cityinfo_other_has),
 										 pcf.playerName, _translator.getStorageName(pcf.storageSize)));
 				llOther.addView(tv);
+				anything = true;
 			}
 			if (pcf.factorySize != FactorySize.None)
 			{
@@ -104,55 +115,144 @@ public class CityInfoView extends OverlayFrame
 				tv.setText(String.format(res.getString(R.string.cityinfo_other_has),
 										 pcf.playerName, _translator.getFactoryName(pcf.factorySize)));
 				llOther.addView(tv);
+				anything = true;
 			}
+		}
+
+		if (!anything){
+			TextView tv = new TextView(_context);
+			tv.setTextColor(res.getColor(R.color.overlay_text));
+			tv.setTypeface(null, Typeface.ITALIC);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textNormal));
+			tv.setText(res.getString(R.string.cityinfo_other_none));
+			llOther.addView(tv);				
 		}
 	}
 
-	private void showPrices()
+	private void showBeers()
 	{
 		Resources res = _context.getResources();
 		final CityObjects obj = _data.cityObjects[_data.game.getCityIndex(_cityId)];
 
-		LinearLayout llPrices = (LinearLayout)findViewById(R.id.cityinfo_llPrices);
-		for (BeerSort sort : obj.prices.keySet())
+		final HashMap<BeerSort, NumberPicker> npickers = new HashMap<BeerSort, NumberPicker>();
+
+		//todo: put it on a screen
+		final TextView tvUnused = new TextView(_context);
+		tvUnused.setTextColor(res.getColor(R.color.overlay_text));
+		tvUnused.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
+		
+		int totalConsumed = 0;
+		int totalStored = 0;
+		int totalProduced = 0;
+		
+		HashMap<BeerSort, Integer> consumedLast = 
+			obj.consumptionHistory.containsKey(_data.game.turnNum-1) 
+				? obj.consumptionHistory.get(_data.game.turnNum-1)
+				: null;
+		HashMap<BeerSort, Integer> consumedPrev =
+			obj.consumptionHistory.containsKey(_data.game.turnNum-2) 
+				? obj.consumptionHistory.get(_data.game.turnNum-2)
+				: null;
+		TableLayout table = (TableLayout)findViewById(R.id.cityinfo_tlBeers);
+		for (BeerSort sort : obj.storage.keySet())
 		{
-			LinearLayout llSort = new LinearLayout(_context);
-			llSort.setOrientation(LinearLayout.HORIZONTAL);
-			llSort.setWeightSum(3);
-
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-			params.weight = 1;
-			params.setMargins(30, 5, 0, 0);
-
-			TextView tv = new TextView(_context);
-			tv.setTextColor(res.getColor(R.color.overlay_text));
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textNormal));
-			tv.setText(sort.name);
-			tv.setLayoutParams(params);
-			llSort.addView(tv);
-
-			final BeerSort capturedS = sort; 
-
-			params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-			params.weight = 1;
+			TableRow row = new TableRow(_context);
+			row.setBackgroundColor(res.getColor(R.color.overlay_background));
 			
+			row.addView(getTextView(sort.name));
+
+			if (consumedLast != null && consumedLast.containsKey(sort))
+			{
+				int c = consumedLast.get(sort);
+				String text = "" + c;
+				if (consumedPrev != null && consumedPrev.containsKey(sort))
+				{
+					int p = consumedPrev.get(sort);
+					if (p > 0){
+						text += " (" + _translator.formatRelative(c, p) + ")";
+					}
+				}
+				row.addView(getTextView(text, Gravity.CENTER_HORIZONTAL));
+				totalConsumed += c;
+			} else {
+				row.addView(getTextView("---", Gravity.CENTER_HORIZONTAL));
+			}
+
+			row.addView(getTextView(obj.storage.get(sort), Gravity.CENTER_HORIZONTAL));
+			totalStored += obj.storage.get(sort);
+						
+			final BeerSort capturedS = sort;
+
+			
+			if (obj.factory.containsKey(sort)){
+				int cnt = obj.factory.get(sort);
+				NumberPicker nf = new NumberPicker(_context);
+				nf.setIsInteger(true);
+				nf.setStartRange(0);
+				nf.setEndRange(10000);
+				nf.setStep(1);
+				nf.setCurrent(obj.factory.get(sort));
+				row.addView(nf);
+				totalProduced += obj.factory.get(sort);
+				
+				npickers.put(sort, nf);
+				nf.setOnChangeListener(new NumberPicker.OnChangedListener(){
+					@Override
+					public void onChanged(NumberPicker picker, float oldVal, float newVal){
+						obj.factory.put(capturedS, (int)newVal);
+						updateRanges(obj, tvUnused, npickers);
+					}
+				});
+			}
+			else{
+				row.addView(getTextView("-", Gravity.CENTER_HORIZONTAL));
+			}
+
+
 			NumberPicker np = new NumberPicker(_context);
-			np.setLayoutParams(params);
 			np.setIsInteger(false);
 			np.setStartRange(0.01f);
 			np.setEndRange(99.98f);
 			np.setStep(0.05f);
 			np.setCurrent(obj.prices.get(sort));
-			llSort.addView(np);
 			np.setOnChangeListener(new NumberPicker.OnChangedListener(){
-				@Override
-				public void onChanged(NumberPicker picker, float oldVal, float newVal){
-					obj.prices.put(capturedS, newVal); 	
-				}
-			});
+					@Override
+					public void onChanged(NumberPicker picker, float oldVal, float newVal){
+						obj.prices.put(capturedS, newVal); 	
+					}
+				});
 
-			llPrices.addView(llSort);
-		}		
+			row.addView(np);
+			
+			table.addView(row);
+		}
+		
+		TableRow summaryRow = new TableRow(_context);
+		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+		params.setMargins(0, 1, 0, 0);
+		summaryRow.setBackgroundColor(res.getColor(R.color.overlay_background));
+		summaryRow.setLayoutParams(params);
+		summaryRow.addView(getTextView(""));
+		summaryRow.addView(getTextView(totalConsumed, Gravity.CENTER_HORIZONTAL));
+		summaryRow.addView(getTextView(totalStored, Gravity.CENTER_HORIZONTAL));		
+		summaryRow.addView(getTextView(totalProduced, Gravity.CENTER_HORIZONTAL));
+		table.addView(summaryRow);
+		
+		updateRanges(obj, tvUnused, npickers);		
+	}
+	
+	private TextView getTextView(Object text){
+		return getTextView(text, Gravity.LEFT);
+	}
+	
+	private TextView getTextView(Object text, int gravity){
+		
+		TextView tv = new TextView(_context);
+		tv.setTextColor(res.getColor(R.color.overlay_text));
+		tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textNormal));
+		tv.setText(text.toString());
+		tv.setGravity(gravity);
+		return tv;
 	}
 
 	private void showStorage()
@@ -162,16 +262,6 @@ public class CityInfoView extends OverlayFrame
 
 		TextView tvAvail = (TextView)findViewById(R.id.cityinfo_storage_usage);
 		tvAvail.setText(obj.getTotalStorage() + "/" + obj.getStorageMax());
-
-		LinearLayout llStorage = (LinearLayout)findViewById(R.id.cityinfo_llStorage);
-		for (BeerSort sort : obj.storage.keySet())
-		{
-			TextView tv = new TextView(_context);
-			tv.setTextColor(res.getColor(R.color.overlay_text));
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
-			tv.setText(sort.name + ":\t\t" + obj.storage.get(sort));
-			llStorage.addView(tv);
-		}
 
 		Button btnExpand = (Button)findViewById(R.id.cityinfo_btnStorageExpand);
 		btnExpand.setOnClickListener(new OnClickListener() {
@@ -208,8 +298,6 @@ public class CityInfoView extends OverlayFrame
 		}
 		tvAvail.setText(avText);
 
-		showFactorySorts(obj);
-
 		Button btnExpand = (Button)findViewById(R.id.cityinfo_btnFactoryExpand);
 		btnExpand.setOnClickListener(new OnClickListener() {
 				@Override
@@ -218,61 +306,6 @@ public class CityInfoView extends OverlayFrame
 					_shower.showView(new ExpandView(_context, _shower, _translator, _data, obj.cityRef.id, false));
 				}
 			});
-	}
-	
-	private void showFactorySorts(final CityObjects obj){
-		Resources res = _context.getResources();
-		
-		LinearLayout llFactory = (LinearLayout)findViewById(R.id.cityinfo_llFactory);
-		
-		final TextView tvUnused = new TextView(_context);
-		tvUnused.setTextColor(res.getColor(R.color.overlay_text));
-		tvUnused.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
-		
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-		params.weight = 1;
-		
-		final HashMap<BeerSort, NumberPicker> npickers = new HashMap<BeerSort, NumberPicker>();
-		
-		for (BeerSort sort : obj.factory.keySet())
-		{
-			LinearLayout llSort = new LinearLayout(_context);
-			llSort.setOrientation(LinearLayout.HORIZONTAL);
-			llSort.setWeightSum(5);
-		
-			TextView tv = new TextView(_context);
-			tv.setTextColor(res.getColor(R.color.overlay_text));
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
-			tv.setLayoutParams(params);
-			tv.setText(sort.name);
-			llSort.addView(tv);
-			
-			int cnt = obj.factory.get(sort);
-			NumberPicker np = new NumberPicker(_context);
-			np.setLayoutParams(params);
-			np.setIsInteger(true);
-			np.setStartRange(0);
-			np.setEndRange(10000);
-			np.setStep(1);
-			np.setCurrent(obj.factory.get(sort));
-			llSort.addView(np);
-			
-			llFactory.addView(llSort);
-			
-			npickers.put(sort, np);
-			final BeerSort capturedS = sort;
-			np.setOnChangeListener(new NumberPicker.OnChangedListener(){
-				@Override
-				public void onChanged(NumberPicker picker, float oldVal, float newVal){
-					obj.factory.put(capturedS, (int)newVal);
-					updateRanges(obj, tvUnused, npickers);
-				}
-			});
-		}
-
-		llFactory.addView(tvUnused);
-		
-		updateRanges(obj, tvUnused, npickers);
 	}
 	
 	private void updateRanges(final CityObjects obj, TextView tvUnused, HashMap<BeerSort, NumberPicker> npickers){

@@ -1,13 +1,13 @@
 package com.pl.beerwars.visual;
-import com.pl.beerwars.*;
-import android.content.*;
-import com.pl.beerwars.visual.painter.*;
-import com.pl.beerwars.data.*;
-import android.view.*;
-import android.widget.*;
 import android.app.*;
+import android.content.*;
 import android.content.res.*;
 import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.pl.beerwars.*;
+import com.pl.beerwars.data.*;
+import com.pl.beerwars.visual.painter.*;
 
 public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallback
 {
@@ -130,6 +130,22 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 								));
 				}
 			});		
+	}
+
+	@Override
+	public void displayConsumption(final String cityId, final String sortName, final int consumed, final int previous)
+	{
+		((Activity)_context).runOnUiThread(new Runnable(){
+				public void run(){
+					showMessage(String.format(
+									_context.getResources().getString(R.string.game_nt_consumedSort),
+									consumed,
+									sortName,
+									_translator.formatRelative(consumed, previous)
+								));
+				}
+			});		
+				
 	}
 	
 	private void showMessage(String message){

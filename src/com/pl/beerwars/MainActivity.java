@@ -28,5 +28,7 @@ public class MainActivity extends Activity
 	}
 	public void btnLoadClick(View view){
 		startActivity(new Intent(this, LoadGameActivity.class));
+
+		//startActivity(new Intent(this, DatabaseActivity.class));
 	}
 }

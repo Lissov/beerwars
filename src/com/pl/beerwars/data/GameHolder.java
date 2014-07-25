@@ -61,6 +61,7 @@ public class GameHolder {
 		Calendar c = Calendar.getInstance();
 		c.set(2014, 00, 06);
 		_game.date = c.getTime();
+		_game.turnNum = 1;
 
 		_game.start();
 	}

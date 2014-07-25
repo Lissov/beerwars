@@ -15,6 +15,7 @@
 	<color name="overlay_border_inner">#AAAA66</color>
 	<color name="overlay_background">#FFFF88</color>
 	<color name="overlay_text">#000000</color>
+	<color name="overlay_table_line">#909090</color>
 	
 	<color name="game_playerDataText">#555500</color>
 

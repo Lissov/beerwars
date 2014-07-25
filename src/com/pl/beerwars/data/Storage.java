@@ -6,14 +6,15 @@ import android.database.*;
 import com.pl.beerwars.data.playerdata.*;
 import com.pl.beerwars.data.beer.*;
 import java.util.*;
+import com.pl.beerwars.data.map.*;
 
 public class Storage extends SQLiteOpenHelper
 {
-	private static final int DB_VERSION = 2;
+	private static final int DB_VERSION = 1;
 	private Context context;
 	public Storage(Context context)
 	{
-		super(context, "beerwars_db", null, DB_VERSION);
+		super(context, "beerwars", null, DB_VERSION);
 		this.context = context;
 	}
 
@@ -21,24 +22,24 @@ public class Storage extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db)
 	{
 		Toast.makeText(context, "Creating database", Toast.LENGTH_SHORT).show();
-		runScripts(db, 0, scripts.length - 1);
+		runScripts(db, 0, getVerLastIndex(DB_VERSION));
 	}
-	
+
+	private int getVerLastIndex(int version){
+		switch (version){
+			case 0: return -1;
+			case 1: return 9;
+			default:
+				return -1;
+		}
+	}
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldver, int newver)
 	{
-		int firstS = 0;
-		switch (oldver){
-			case 0: firstS = 0; break;
-			case 1: firstS = 9; break;
-			case 2: firstS = 10; break;
-		}
+		int firstS = getVerLastIndex(oldver) + 1;
 
-		int lastS = 0;
-		switch (newver){
-			case 1: lastS = 8; break;
-			case 2: lastS = 9; break;
-		}	
+		int lastS = getVerLastIndex(newver);
+		
 		//Toast.makeText(context, "Upgrading database", Toast.LENGTH_SHORT).show();
 		runScripts(db, firstS, lastS);
 	}
@@ -56,7 +57,9 @@ public class Storage extends SQLiteOpenHelper
 		"savename TEXT," +
 		"mapId INTEGER," +
 		"playerCount INTEGER," +
-		"date INTEGER)",
+		"date INTEGER,"+
+		"turnnum INTEGER,"+
+		"complete INTEGER)",
 		//1
 		"CREATE TABLE player (" +
 		"id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -75,8 +78,8 @@ public class Storage extends SQLiteOpenHelper
 		//3
 		"CREATE TABLE transportOrder (" +
 		"playerId INTEGER," +
-		"fromCity INTEGER," +
-		"toCity INTEGER," + 
+		"fromCity TEXT," +
+		"toCity TEXT," + 
 		"isRecurring INTEGER," +
 		"quantity INTEGER)",
 		//4
@@ -104,23 +107,29 @@ public class Storage extends SQLiteOpenHelper
 		"cityObjectId INTEGER," +
 		"beerId INTEGER," +
 		"working INTEGER)",
-		//7
+		//8
 		"CREATE TABLE factoryUnitsExtension (" +
 		"cityObjectId INTEGER," +
 		"unitsCount INTEGER," +
 		"weeksLeft INTEGER)",
-		
-		//v2
-		//8
-		"ALTER TABLE game ADD COLUMN complete INTEGER",
+		//9
+		"CREATE TABLE marketHistory (" +
+		"playerId INTEGER," +
+		"turnNumber INTEGER," +
+		"cityId TEXT," +
+		"beerId INTEGER," +
+		"amount INTEGER)",
 	};
 	
 	public void save(Game game, String saveName){
 		SQLiteDatabase db = this.getWritableDatabase();
-
+		
+		db.beginTransaction();
+		
 		ContentValues values = new ContentValues();
 		values.put("savename", saveName);
 		values.put("date", game.date.getTime());
+		values.put("turnnum", game.turnNum);
 		values.put("mapId", game.map.mapId);
 		values.put("complete", 0);
 		long gameId = db.insert("game", null, values);
@@ -197,25 +206,41 @@ public class Storage extends SQLiteOpenHelper
 								   "values (%1$s, %2$s, %3$s)",
 								   cobjId, chg.unitsCount, chg.weeksLeft));
 				}
+				
+				for (Integer turn : co.consumptionHistory.keySet()){
+					HashMap<BeerSort, Integer> turnsold = co.consumptionHistory.get(turn);
+
+					for (BeerSort sort : turnsold.keySet()){
+						db.execSQL(String.format(
+							"INSERT into marketHistory (turnNumber, playerId, cityId, beerId, amount) " +
+							"values (%1$s, %2$s, '%3$s', %4$s, %5$s)",
+							turn, playerId, co.cityRef.id, sort.id, turnsold.get(sort)));
+					}
+				}
 			}
 		}
-		
+
 		db.execSQL("update game set complete = 1 where id = " + gameId);
+		db.setTransactionSuccessful();
+		db.endTransaction();
 
 		db.close();
+
+		//Toast.makeText(context, "Save complete: " + saveName, Toast.LENGTH_SHORT).show();
 	}
 	
 	public Game load(int id){
 		Game game = new Game();
 		
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery("Select savename, mapId, date from game where id = " + id, null);
+		Cursor cursor = db.rawQuery("Select savename, mapId, date, turnnum from game where id = " + id, null);
 		if (cursor.moveToFirst()){
 			int mapId = cursor.getInt(1);
 			long date = cursor.getLong(2);
 			game.map = GameHolder.getMap(mapId);
 			game.date = new Date();
 			game.date.setTime(date);
+			game.turnNum = cursor.getInt(3);
 			game.players = new HashMap<Integer, PlayerData>();
 			
 			Cursor cursorPl = db.rawQuery("Select id, playerNum, intellectId, name, money from player where gameId = " + id, null);
@@ -306,6 +331,8 @@ public class Storage extends SQLiteOpenHelper
 					}
 					cSo.close();
 					
+					readMarketHistory(db, playerId, co, p);
+					
 				} while (cursorInner.moveToNext());
 				cursorInner.close();
 
@@ -317,7 +344,34 @@ public class Storage extends SQLiteOpenHelper
 
 		game.start();
 		
+		//db.close();
+		
 		return game;
+	}
+	
+	private void readMarketHistory(SQLiteDatabase db, int playerId, CityObjects co, PlayerData player){
+			
+		if (co.consumptionHistory == null)
+			co.consumptionHistory = new HashMap<Integer, HashMap<BeerSort, Integer>>();
+			
+		Cursor curs = db.rawQuery(
+				"SELECT turnNumber, beerId, amount " +
+				"FROM marketHistory where cityId = '" + co.cityRef.id + 
+				"' AND playerId = " + playerId, null);
+				
+		if (curs.moveToFirst()) {
+			do{
+				int turnnum = curs.getInt(0);
+				
+				if (!co.consumptionHistory.containsKey(turnnum))
+					co.consumptionHistory.put(turnnum, new HashMap<BeerSort, Integer>());
+				HashMap<BeerSort, Integer> cons = co.consumptionHistory.get(turnnum);
+					
+				BeerSort beer = player.getSort(curs.getInt(1));
+				cons.put(beer, curs.getInt(2));
+			} while (curs.moveToNext());
+		}
+		curs.close();
 	}
 	
 	public int getLatestId(){
@@ -399,6 +453,26 @@ public class Storage extends SQLiteOpenHelper
 		
 		c.close();
 		
+		//db.close();
+		
 		return res;
+	}
+
+	public void ExecuteNonQuery(String sql){
+		SQLiteDatabase db = getWritableDatabase();
+
+		db.execSQL(sql);
+
+		db.close();
+	}
+
+	public Cursor ExecuteQuery(String sql){
+		
+		SQLiteDatabase db= getReadableDatabase();
+		try{
+			return db.rawQuery(sql, null);
+		} finally {
+			//db.close();
+		}
 	}
 }

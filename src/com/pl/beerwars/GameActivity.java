@@ -50,4 +50,13 @@ public class GameActivity extends Activity implements IViewShower
 		} else
 			_gameView.activate();
 	}
+
+	@Override
+	public void onBackPressed()
+	{
+		if (currentViewCount > 0)
+			closeLastView(null);
+		else
+			super.onBackPressed();
+	}
 }

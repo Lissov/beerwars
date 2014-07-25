@@ -17,6 +17,7 @@ import com.pl.beerwars.data.playerdata.*;
 public class Game
 {
 	public Date date;
+	public int turnNum;
 
 	public com.pl.beerwars.data.map.Map map;
 	//private Random rnd = new Random();
@@ -66,6 +67,7 @@ public class Game
 		for (PlayerData player : players.values())
 		{
 			player.game.date = date;
+			player.game.turnNum = turnNum;
 
 			for (int i = 0; i < player.cityObjects.length; i++)
 			{
@@ -125,6 +127,7 @@ public class Game
 			c.setTime(date);
 			c.add(Calendar.DAY_OF_YEAR, 7);
 			date = c.getTime();
+			turnNum++;
 
 			updateFacades();
 		}
@@ -217,27 +220,40 @@ public class Game
 					p.money += cons * co.prices.get(sort);
 				}
 
+				co.consumptionHistory.put(turnNum, cityC);
+
 				if (p.intellect_id == Constants.IntellectId.Human)
-					reportConsumption(callback, c, cityC);
+					reportConsumption(callback, co, cityC);
 			}
 		}
-	}	
+	}
 
-	private void reportConsumption(TurnMessageCallback callback, City c, HashMap<BeerSort, Integer> consumed)
+	private void reportConsumption(TurnMessageCallback callback, CityObjects co, HashMap<BeerSort, Integer> consumed)
 	{
 		if (consumed.size() == 0)
 			return;
 
-		callback.displayCity(R.string.game_nt_consumedCity, c.id);
+		callback.displayCity(R.string.game_nt_consumedCity, co.cityRef.id);
+		
+		HashMap<BeerSort, Integer> prev = 
+			co.consumptionHistory.containsKey(turnNum - 1)
+				? co.consumptionHistory.get(turnNum-1)
+				: null;
 		for (BeerSort sort : consumed.keySet())
 		{
-			callback.display(R.string.game_nt_consumedSort, new String[] { "" + consumed.get(sort), sort.name, "+100%" });
+			int c = consumed.get(sort);
+			String text = "" + c;
+			if (prev != null && prev.containsKey(sort)){
+				int p = prev.get(sort);
+				callback.displayConsumption(co.cityRef.id, sort.name, c, prev.get(sort));
+			} else{
+				callback.displayConsumption(co.cityRef.id, sort.name, c, 0);
+			}
 		}
 	}
 
 	private void processConstruction(TurnMessageCallback callback)
 	{
-
 		for (PlayerData p : players.values())
 		{
 			for (CityObjects co : p.cityObjects)
@@ -291,6 +307,7 @@ public class Game
 	{
 		void displayCity(int resId, String cityId);
 		void display(int resId, Object[] parameters);
+		void displayConsumption(String cityId, String sortName, int consumed, int previous);
 		void complete();
 
 		void displayStorageBuilt(String cityId, StorageSize newSize);
