@@ -11,6 +11,7 @@ import com.pl.beerwars.data.playerdata.*;
 import com.pl.beerwars.data.playerdata.CityObjects.*;
 import java.util.*;
 import android.widget.*;
+import com.pl.beerwars.ArtIntelligence.*;
 
 public class GameHolder {
 	private static Game _game = null;
@@ -84,7 +85,9 @@ public class GameHolder {
 			while (owned.contains(map.cities[cn].id))
 				cn = rnd.nextInt(map.cities.length);
 
-			players.put(playerId, buildPlayer(playerId, map, names[i], Constants.IntellectId.AI, map.cities[cn].id));
+			int[] ais = AIHolder.getSupportedAis();
+			int intellectId = ais[rnd.nextInt(ais.length)];
+			players.put(playerId, buildPlayer(playerId, map, names[i], intellectId, map.cities[cn].id));
 			playerId++;
 		}
 		return players;
@@ -99,6 +102,7 @@ public class GameHolder {
 		player.money = Constants.Economics.startMoney;
 		player.name = name;
 		player.intellect_id = intellectId;
+		player.artIntelligence = AIHolder.getArtIntelligence(intellectId);
 
 		float dev = (float) rnd.nextGaussian()
 				* Constants.startBeerParameters.deviation;

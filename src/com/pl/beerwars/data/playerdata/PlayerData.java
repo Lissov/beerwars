@@ -5,6 +5,7 @@ import java.util.List;
 import com.pl.beerwars.data.*;
 import com.pl.beerwars.data.beer.BeerSort;
 import com.pl.beerwars.data.facade.GameFacade;
+import com.pl.beerwars.ArtIntelligence.*;
 
 public class PlayerData {
 	
@@ -25,6 +26,8 @@ public class PlayerData {
 	public GameFacade game;
 	
 	public boolean bankrupt;
+	
+	public IPlayer artIntelligence;
 
 	
 	public PlayerData(int intellect_id, String name) {
@@ -92,5 +95,46 @@ public class PlayerData {
 		money -= price;
 		cobj.factoryBuildRemaining = Constants.FactoryBuildingTime(newSize);
 		return true;
+	}
+	
+	public int calculateTotalSold(){
+		
+		int total = 0;
+		
+		for (CityObjects cobj : cityObjects){
+			if (!cobj.consumptionHistory.containsKey(game.turnNum-1))
+				continue;
+			for (int sold : cobj.consumptionHistory.get(game.turnNum - 1).values()){
+				total += sold;
+			}
+		}
+		
+		return total;
+	}
+	
+	public int calculateTotalProduction(){
+
+		int total = 0;
+
+		for (CityObjects cobj : cityObjects){
+			total += cobj.getOperatingUnitsCount();
+		}
+
+		return total * Constants.Economics.unitSize;
+	}
+	
+	public int calculateMarketValue(){
+		int total = money;
+		
+		for (CityObjects cobj : cityObjects){
+			total += Constants.FactorySellPrice(cobj.factorySize);
+			
+			total += Constants.StorageSellPrice(cobj.storageSize);
+			for (BeerSort sort : cobj.storage.keySet()){
+				total += getSort(sort.id).selfprice * cobj.storage.get(sort);			
+			}
+		}
+		
+		return total;
 	}
 }

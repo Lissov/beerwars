@@ -241,20 +241,6 @@ public class CityInfoView extends OverlayFrame
 		updateRanges(obj, tvUnused, npickers);		
 	}
 	
-	private TextView getTextView(Object text){
-		return getTextView(text, Gravity.LEFT);
-	}
-	
-	private TextView getTextView(Object text, int gravity){
-		
-		TextView tv = new TextView(_context);
-		tv.setTextColor(res.getColor(R.color.overlay_text));
-		tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textNormal));
-		tv.setText(text.toString());
-		tv.setGravity(gravity);
-		return tv;
-	}
-
 	private void showStorage()
 	{
 		Resources res = _context.getResources();

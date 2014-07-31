@@ -34,9 +34,9 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 		btnClose = (Button)findViewById(R.id.nextturn_btnClose);
 		btnClose.setOnClickListener(new View.OnClickListener(){
 				public void onClick(View view){
-					if (isActive && !calculating)
-						_pressedButton.isDown = false;
+					if (isActive && !calculating){
 						_shower.closeLastView(null);
+					}
 				}	
 			});
 			
@@ -53,6 +53,12 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 		new Thread(r).start();
 	}
 
+	@Override
+	public boolean onClosing(){
+		_pressedButton.isDown = false;
+		return super.onClosing();
+	}
+	
 	@Override
 	public void display(final int resId, final Object[] params)
 	{
@@ -144,16 +150,36 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 									_translator.formatRelative(consumed, previous)
 								));
 				}
-			});		
-				
+			});
+	}
+
+	@Override
+	public void displayProcessingPlayerTurn(final String playerName)
+	{
+		((Activity)_context).runOnUiThread(new Runnable(){
+				public void run(){
+					showMessage(String.format(
+									_context.getResources().getString(R.string.game_nt_processingPlayerTurn),
+									playerName
+								));
+				}
+			});
 	}
 	
-	private void showMessage(String message){
-		Resources res = _context.getResources();
-		TextView tv = new TextView(_context);
-		tv.setTextColor(res.getColor(R.color.overlay_text));
-		tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
-		tv.setText(message);
-		llLog.addView(tv);		
+	public void displayDebugMessage(final String message){
+		showMessage("DEBUG: " + message);
+	}
+	
+	private void showMessage(final String message){
+		((Activity)_context).runOnUiThread(new Runnable(){
+				public void run(){
+					Resources res = _context.getResources();
+					TextView tv = new TextView(_context);
+					tv.setTextColor(res.getColor(R.color.overlay_text));
+					tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.textSmall));
+					tv.setText(message);
+					llLog.addView(tv);		
+				}
+			});		
 	}
 }

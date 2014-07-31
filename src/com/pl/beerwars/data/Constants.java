@@ -13,7 +13,7 @@ public class Constants
 	
 	public static class IntellectId {
 		public final static int Human = 1;		
-		public final static int AI = 10;		
+		public final static int AI_Normal = 10;		
 	}
 	
 	public static class CityIds{
@@ -89,6 +89,10 @@ public class Constants
 		}
 	}
 
+	public static int FactorySellPrice(FactorySize size){
+		return FactoryBuildPrice(size) / 2;
+	}
+	
 	public static int FactorySupportCost(FactorySize size){
 		switch (size){
 			case Small: return 2000;
@@ -127,6 +131,10 @@ public class Constants
 			case None:
 			default: return 0;
 		}
+	}
+	
+	public static int StorageSellPrice(StorageSize size){
+		return StorageBuildPrice(size) * 3/4;
 	}
 
 	public static int StorageSupportCost(StorageSize size){

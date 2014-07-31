@@ -53,8 +53,17 @@
     <string name="cityinfo_header_transport_out">Sort</string>
     <string name="cityinfo_header_production">Production</string>
     <string name="cityinfo_header_price">Price</string>
-    <string name="cityinfo_close">Close</string>
 
+    <string name="overlay_close">Close</string>
+
+    <string name="stats_header">Statistics</string>
+	<string name="stats_header_player">Player</string>
+	<string name="stats_header_ownedSorts">Sorts owned</string>
+	<string name="stats_header_production">Production</string>
+	<string name="stats_header_sold">Sold</string>
+	<string name="stats_header_marketShare">Share</string>
+	<string name="stats_header_value">Market price</string>
+	
     <string name="expand_title_storage">Expand Storage in %1$s</string>
     <string name="expand_title_factory">Expand Factory in %1$s</string>
     <string name="expand_main_current">%1$s\nSize: %2$s\nDaily support cost: %3$s</string>
@@ -88,6 +97,7 @@
 	<string name="game_nt_constructedStorage">\t%1$s constructed in %2$s!</string>
 	<string name="game_nt_constructedFactory">\t%1$s constructed in %2$s!</string>
 	<string name="game_nt_constructedUnits">\t%1$s units installed in %2$s!</string>
+	<string name="game_nt_processingPlayerTurn">Calculating turn of %1$s.</string>
 	
     <string name="storage_none">None</string>
     <string name="storage_small">Shed</string>

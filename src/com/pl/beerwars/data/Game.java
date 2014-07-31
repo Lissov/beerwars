@@ -57,6 +57,15 @@ public class Game
 					gv.cities[i].others.put(other.id, new PlayerCityFacade(other.name));
 				}
 			}
+			
+			int j = 0;
+			gv.otherPlayerData = new OtherPlayerStats[players.size()];
+			for (PlayerData other : players.values()){ // others inkl this
+				gv.otherPlayerData[j] = new OtherPlayerStats();
+				gv.otherPlayerData[j].playerId = other.id;
+				gv.otherPlayerData[j].playerName = other.name;
+				j++;
+			}
 
 			player.game = gv;
 		}
@@ -64,10 +73,14 @@ public class Game
 
 	private void updateFacades()
 	{
+		int[] consumedAvgByCities = getConsumedAverages();
+		
 		for (PlayerData player : players.values())
 		{
 			player.game.date = date;
 			player.game.turnNum = turnNum;
+			
+			setFacadeIntels(player, player.game, consumedAvgByCities);
 
 			for (int i = 0; i < player.cityObjects.length; i++)
 			{
@@ -80,6 +93,62 @@ public class Game
 					pcf.storageSize = cobj.storageSize;
 				}
 			}
+		}
+	}
+	
+	private int[] getConsumedAverages(){
+		int[] consumedC = new int[map.cities.length];
+		
+		int mt = turnNum >= 4 ? 4 : turnNum;
+		for (int cityn = 0; cityn < map.cities.length; cityn++){
+			int[] consumed = new int[4];
+			boolean any = false;
+			for (PlayerData p : players.values()){
+				for (int tn = 1; tn <= mt; tn++)
+				{
+					int t = turnNum - tn;
+					
+					if (!p.cityObjects[cityn].consumptionHistory.containsKey(t))
+						continue;
+					HashMap<BeerSort, Integer> ch = p.cityObjects[cityn].consumptionHistory.get(t);
+
+					if (ch.values().size() == 0)
+						continue;
+					
+					any = true;
+					for (int cons : ch.values()){
+						consumed[tn-1] += cons;
+					}
+				}
+			}
+			
+			if (!any)
+				consumedC[cityn] = -1;
+			else{
+				int total = 0;
+				for (int c : consumed)
+					total += c;
+				consumedC[cityn] = total / mt;
+			}
+		}
+		
+		return consumedC;
+	}
+	
+	private void setFacadeIntels(PlayerData player, GameFacade pfacade, int[] consAverages){
+		// TODO: design how known consumption depends on intelligence level
+		for (int cind = 0; cind < map.cities.length; cind++){
+			int c = consAverages[cind];
+			pfacade.cities[cind].estConsumption = c >= 0 ? c : Constants.ValueUnknown;
+		}
+		
+		//TODO: design estimates of other players statistics
+		for (PlayerData other : players.values()){
+			OtherPlayerStats ps = player.game.getStatsForPlayer(other.id);
+			ps.totalSold = other.calculateTotalSold();
+			ps.totalProduction = other.calculateTotalProduction();
+			ps.capital = other.calculateMarketValue();
+			ps.sortsOwnedCnt = other.ownedSorts.size();
 		}
 	}
 
@@ -109,6 +178,11 @@ public class Game
 	{
 		try
 		{
+			for (PlayerData player : players.values()) {
+				if (player.artIntelligence != null)
+					player.artIntelligence.makeTurn(player, callback);
+			}
+			
 			processNTpreconditions(callback);
 			callback.display(R.string.game_nt_consumptionCalculations, null);
 			processConsumption(callback);
@@ -222,7 +296,7 @@ public class Game
 
 				co.consumptionHistory.put(turnNum, cityC);
 
-				if (p.intellect_id == Constants.IntellectId.Human)
+				//if (p.intellect_id == Constants.IntellectId.Human)
 					reportConsumption(callback, co, cityC);
 			}
 		}
@@ -313,5 +387,9 @@ public class Game
 		void displayStorageBuilt(String cityId, StorageSize newSize);
 		void displayFactoryBuilt(String cityId, FactorySize newSize);
 		void displayUnitsExtension(String cityId, int built);
+		
+		void displayProcessingPlayerTurn(String playerName);
+		
+		void displayDebugMessage(String message);
 	}
 }

@@ -86,6 +86,9 @@ public class GameView extends View implements IOverlayView
 				if (buttonTouched.id == Constants.ScreenButton.NextTurn){
 					nextTurn(buttonTouched);
 				}
+				if (buttonTouched.id == Constants.ScreenButton.Player){
+					showStats(buttonTouched);
+				}
 			}
 			
 			City touched = getTouchedCity(event.getX(), event.getY());
@@ -102,6 +105,18 @@ public class GameView extends View implements IOverlayView
 		button.isDown = true;
 		this.invalidate();
 		viewShower.showView(new NextTurnView(_context, viewShower, translator, _game, button));		
+	}
+
+	private void showStats(ButtonData button){
+		button.isDown = true;
+		this.invalidate();
+		viewShower.showView(
+			new StatsView(
+				_context, viewShower, translator, 
+				_game.getViewForPlayerId(Constants.Players.MainHuman), 
+				button
+			)
+		);	
 	}
 
 	private void showCityInfo(City city){
@@ -134,6 +149,13 @@ public class GameView extends View implements IOverlayView
 		isActive = true;
 		this.invalidate();
 	}
+
+	@Override
+	public boolean onClosing()
+	{
+		return false;
+	}
+
 	
 	//TODO: remove
 	/*private void drawRoads(Canvas canvas){

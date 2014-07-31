@@ -29,4 +29,14 @@ public class GameFacade
 	public int getCityIndex(String id){
 		return _game.map.getCityIndex(id);
 	}
+	
+	public OtherPlayerStats[] otherPlayerData;
+	public OtherPlayerStats getStatsForPlayer(int playerId){
+		for (OtherPlayerStats d : otherPlayerData){
+			if (d.playerId == playerId)
+				return d;
+		}
+		
+		return null;
+	}
 }

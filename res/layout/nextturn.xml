@@ -18,15 +18,18 @@
 			android:textColor="@color/overlay_text"
 			android:text="@string/nextturn_title"
 			android:gravity="center"/>
-
-		<LinearLayout
+		<ScrollView
 			android:layout_width="fill_parent"
 			android:layout_height="200dp"
 			android:layout_marginLeft="20dp"
-			android:layout_marginTop="30dp"
-			android:orientation="vertical"
-			android:id="@+id/nextturn_llLog" />
-
+			android:layout_marginTop="30dp">
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:id="@+id/nextturn_llLog" />
+		</ScrollView>
+				
 	</LinearLayout>
 	<LinearLayout
 		android:layout_weight="2"
@@ -40,7 +43,7 @@
 			android:layout_width="0dp"
 			android:layout_weight="1"
 			android:layout_height="fill_parent"
-			android:text="@string/cityinfo_close"
+			android:text="@string/overlay_close"
 			android:id="@+id/nextturn_btnClose"/>
 	</LinearLayout>
 

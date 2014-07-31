@@ -104,4 +104,8 @@ public class Translator
 		float p = ((newValue - previous) / previous);
 		return (p >= 0 ? "+" : "") + (Math.round(p * 10000)/100) + "%";
 	}
+	
+	public String formatPecentage(float perc){
+		return (Math.round(perc * 10000)/100) + "%";
+	}
 }

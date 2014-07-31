@@ -7,6 +7,7 @@ import com.pl.beerwars.data.playerdata.*;
 import com.pl.beerwars.data.beer.*;
 import java.util.*;
 import com.pl.beerwars.data.map.*;
+import com.pl.beerwars.ArtIntelligence.*;
 
 public class Storage extends SQLiteOpenHelper
 {
@@ -67,7 +68,8 @@ public class Storage extends SQLiteOpenHelper
 		"intellectId INTEGER," +
 		"name TEXT," + 
 		"playerNum INTEGER," +
-		"money INTEGER)",
+		"money INTEGER," +
+		"ai_state TEXT)",
 		//2
 		"CREATE TABLE ownedSort (" +
 		"playerId INTEGER," +
@@ -143,6 +145,10 @@ public class Storage extends SQLiteOpenHelper
 			values.put("intellectId", pl.intellect_id);
 			values.put("name", pl.name);
 			values.put("money", pl.money);
+			values.put("ai_state", 
+					pl.artIntelligence == null 
+						? "" 
+						: pl.artIntelligence.getState());
 			long playerId = db.insert("player", null, values);
 			
 			for (BeerSort sort : pl.ownedSorts){
@@ -243,7 +249,7 @@ public class Storage extends SQLiteOpenHelper
 			game.turnNum = cursor.getInt(3);
 			game.players = new HashMap<Integer, PlayerData>();
 			
-			Cursor cursorPl = db.rawQuery("Select id, playerNum, intellectId, name, money from player where gameId = " + id, null);
+			Cursor cursorPl = db.rawQuery("Select id, playerNum, intellectId, name, money, ai_state from player where gameId = " + id, null);
 			cursorPl.moveToFirst();
 			do {
 				int playerId = cursorPl.getInt(0);
@@ -251,6 +257,10 @@ public class Storage extends SQLiteOpenHelper
 				PlayerData p = new PlayerData(cursorPl.getInt(2), cursorPl.getString(3));
 				p.id = plN;
 				p.money = cursorPl.getInt(4);
+				p.artIntelligence = AIHolder.getArtIntelligence(p.intellect_id);
+				if (p.artIntelligence != null){
+					p.artIntelligence.setState(cursorPl.getString(5));
+				}
 				
 				Cursor cursorInner = db.rawQuery("Select id, name, quality, selfprice from ownedSort where playerId = " + playerId, null);
 				cursorInner.moveToFirst();
@@ -378,7 +388,7 @@ public class Storage extends SQLiteOpenHelper
 		SQLiteDatabase db = this.getReadableDatabase();
 		int id = -1;
 		Cursor cursor = db.rawQuery("Select max(id) from game", null);
-		if (cursor.moveToFirst()){
+		if (cursor.moveToFirst() && !cursor.isNull(0)){
 			id = cursor.getInt(0);
 		}
 		cursor.close();

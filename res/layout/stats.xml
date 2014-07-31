@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/border"
+    android:orientation="vertical"
+    android:weightSum="10" >
+
+	<LinearLayout
+		android:layout_weight="8"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="30dp"
+		android:orientation="vertical">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/textBig" 
+			android:textColor="@color/overlay_text"
+			android:gravity="center"
+			android:text="@string/stats_header" />
+
+		<TableLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/stats_tlPlayers"
+			android:stretchColumns="*"
+			android:layout_marginTop="20dp"
+			android:layout_marginRight="10dp"
+			android:background="@color/overlay_table_line">
+			<TableRow
+				android:layout_marginBottom="1dp"
+				android:background="@color/overlay_background">
+				<TextView
+					android:text = "@string/stats_header_player"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/stats_header_ownedSorts"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/stats_header_production"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/stats_header_sold"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/stats_header_marketShare"
+					android:gravity="center_horizontal" />
+				<TextView
+					android:text = "@string/stats_header_value"
+					android:gravity="center_horizontal" />
+			</TableRow>
+		</TableLayout>
+		
+
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="15dp"
+			android:orientation="vertical"/>
+
+	</LinearLayout>
+	<LinearLayout
+		android:layout_weight="2"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:orientation="horizontal"
+		android:gravity="right"
+		android:background="@color/overlay_border"
+		android:weightSum="2">
+		<Button
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="fill_parent"
+			android:text="@string/overlay_close"
+			android:id="@+id/stats_btnClose"/>
+	</LinearLayout>
+
+</LinearLayout>

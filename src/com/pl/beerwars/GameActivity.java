@@ -40,6 +40,13 @@ public class GameActivity extends Activity implements IViewShower
 	}
 	
 	public void closeLastView(Object parameter){
+		if (currentViewCount <= 0)
+			return;
+			
+		boolean allowed = displayedViews[currentViewCount-1].onClosing();
+		if (!allowed)
+			return;
+		
 		LinearLayout overlapView = (LinearLayout)findViewById(R.id.llGameOverlap);
 		overlapView.removeAllViews();
 
@@ -47,8 +54,9 @@ public class GameActivity extends Activity implements IViewShower
 		if (currentViewCount > 0){
 			overlapView.addView((View)displayedViews[currentViewCount-1]);
 			displayedViews[currentViewCount-1].activate();
-		} else
+		} else {
 			_gameView.activate();
+		}
 	}
 
 	@Override

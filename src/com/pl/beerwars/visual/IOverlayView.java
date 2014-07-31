@@ -5,4 +5,6 @@ public interface IOverlayView
 	void deactivate();
 
 	void activate();
+	
+	boolean onClosing();
 }
