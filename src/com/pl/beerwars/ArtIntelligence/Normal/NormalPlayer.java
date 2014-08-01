@@ -34,10 +34,10 @@ public class NormalPlayer implements IPlayer
 				int sold = cobj.consumptionHistory.containsKey(data.game.turnNum-1)
 							? cobj.consumptionHistory.get(data.game.turnNum-1).containsKey(sort)
 								? cobj.consumptionHistory.get(data.game.turnNum-1).get(sort)
-								: 0
-							: 0;
+								: -1
+							: -1;
 
-				if (sold == 0) {
+				if (sold == -1) {
 					float newPrice = helper.roundPrice(refPr * 1.1f);
 					cobj.prices.put(sort, newPrice);	//make bit higher initially
 					if (cobj.storage.containsKey(sort) && cobj.storage.get(sort) > 0){
@@ -60,9 +60,25 @@ public class NormalPlayer implements IPlayer
 						nps = 0.01f;
 					if (nps <= 0 && nps > -0.01f) 
 						nps = -0.01f;
-					storePreviousPriceStep(cobj.cityRef.id, sort.id, nps);
 					
-					float newPrice = helper.roundPrice( pr + nps );
+					// make smooth decrease near the minimum economic valuable price
+					float newPrice = pr + nps;
+					if (pr > refPr && newPrice < refPr) {
+						newPrice = refPr;
+						nps = -0.01f;
+					}
+					if (pr > eqPr && newPrice < eqPr) {
+						newPrice = eqPr;
+						nps = -0.01f;
+					}
+					if (newPrice < sort.selfprice) {
+						newPrice = sort.selfprice;
+						nps = -0.01f;
+					}
+					storePreviousPriceStep(cobj.cityRef.id, sort.id, nps);
+					newPrice = helper.roundPrice( newPrice );
+					
+					cobj.prices.put(sort, newPrice);
 					callback.displayDebugMessage(cobj.cityRef.id + ": " + act + " price for " + sort.name + " to " + newPrice);
 				}
 			}
