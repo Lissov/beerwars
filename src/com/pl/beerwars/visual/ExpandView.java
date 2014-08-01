@@ -208,7 +208,7 @@ public class ExpandView extends OverlayFrame {
 	private void updateMayBuildCount(CityObjects obj){
 		int mayBuildUnits = obj.getPosibleUnitsExtension();
 		btnBuildUnits.setEnabled(mayBuildUnits > 0);
-		npBuildUnits.setEndRange(mayBuildUnits);
+		npBuildUnits.setEndRange(mayBuildUnits > 0 ? mayBuildUnits : 1);
 		npBuildUnits.setCurrent(1);
 	}
 	
