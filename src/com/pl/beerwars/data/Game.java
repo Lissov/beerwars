@@ -80,8 +80,6 @@ public class Game
 			player.game.date = date;
 			player.game.turnNum = turnNum;
 			
-			setFacadeIntels(player, player.game, consumedAvgByCities);
-
 			for (int i = 0; i < player.cityObjects.length; i++)
 			{
 				CityObjects cobj = player.cityObjects[i];
@@ -93,6 +91,12 @@ public class Game
 					pcf.storageSize = cobj.storageSize;
 				}
 			}
+		}
+		
+		for (PlayerData player : players.values()){
+			// TODO: this is moved here so that player has info about the latest turn of opponents. 
+			// Think - maybe delay in one or more turns is desired?  
+			setFacadeIntels(player, player.game, consumedAvgByCities);
 		}
 	}
 	
