@@ -5,5 +5,5 @@ public class TransportPrice
 	public String cityFrom;
 	public String cityTo;
 	
-	public int price1000;
+	public int pricePack;
 }

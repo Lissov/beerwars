@@ -6,15 +6,15 @@
     <string name="main_btn_start_new">Start new game</string>
     <string name="main_btn_load">Load game</string>
     <string name="main_btn_continue">Continue last game</string>
-	
+
     <string name="gamesetup_map">Map</string>
     <string name="gamesetup_city">Headquarters city</string>
     <string name="gamesetup_playername">Player name</string>
 	<string name="gamesetup_opponentsCount">Opponents count</string>
 	<string name="gamesetup_start">Start</string>
-	
+
 	<string name="map_basic">Two islands</string>
-    
+
     <string name="city_trinkburg">Trinkburg</string>
     <string name="city_feldkirchen">Feldkirchen</string>
     <string name="city_weissau">Weissau</string>
@@ -26,7 +26,7 @@
     <string name="city_prems">Prems</string>
     <string name="city_regenwald">Regenwald</string>
     <string name="city_hochstadt">Hochstadt</string>
-	
+
     <string name="bpw">bottles per week</string>
 
     <string name="cityinfo_population">Population:</string>
@@ -63,7 +63,7 @@
 	<string name="stats_header_sold">Sold</string>
 	<string name="stats_header_marketShare">Share</string>
 	<string name="stats_header_value">Market price</string>
-	
+
     <string name="expand_title_storage">Expand Storage in %1$s</string>
     <string name="expand_title_factory">Expand Factory in %1$s</string>
     <string name="expand_main_current">%1$s\nSize: %2$s\nDaily support cost: %3$s</string>
@@ -75,30 +75,33 @@
     <string name="expand_close">Close</string>
 	<string name="expand_build_started">Construction started</string>
 	<string name="expand_build_cant_start">Cannot start construction</string>
-	
+
     <string name="nextturn_title">Moving to next week</string>
     <string name="nextturn_autosave">Autosave&#8230;</string>
     <string name="nextturn_close">Close</string>
 
     <string name="beersort_standard">Standard</string>
-	
+
 	<string name="game_nt_consumptionCalculations">Calculating consumption&#8230;</string>
 	<string name="game_nt_transportCalculations">Calculating transport&#8230;</string>
 	<string name="game_nt_productionCalculations">Calculating production&#8230;</string>
 	<string name="game_nt_supportCalculations">Calculating costs of ownership&#8230;</string>
 	<string name="game_nt_constructionCalculations">Calculating construction&#8230;</string>
 	<string name="game_nt_complete">Turn COMPLETE!</string>
-	<string name="game_nt_bankrupt">%1$s has no money. Production and logistics are terminated!</string>
+	<string name="game_nt_bankrupt">%1$s has no money. Production and logistics are TERMINATED!</string>
 	<string name="game_nt_producedCity">City %1$s produced:</string>
 	<string name="game_nt_producedSort">\t%1$s liters of %2$s produced.</string>	
-	<string name="game_nt_producedLost">\tStorage full: %1$s liters of %2$s lost!</string>	
+	<string name="game_nt_producedLost">\tStorage full: %1$s liters of %2$s LOST!</string>	
 	<string name="game_nt_consumedCity">City %1$s sold:</string>
 	<string name="game_nt_consumedSort">\t%1$s bottles of %2$s (%3$s).</string>
 	<string name="game_nt_constructedStorage">\t%1$s constructed in %2$s!</string>
 	<string name="game_nt_constructedFactory">\t%1$s constructed in %2$s!</string>
 	<string name="game_nt_constructedUnits">\t%1$s units installed in %2$s!</string>
 	<string name="game_nt_processingPlayerTurn">Calculating turn of %1$s.</string>
-	
+	<string name="game_nt_cantSend">CAN NOT send %1$s packs of %2$s from %3$s to %4$s - not enough on storage.</string>
+	<string name="game_nt_sent">Sent %1$s packs of %2$s from %3$s to %4$s.</string>
+	<string name="game_nt_receivedDropped">%1$s bottles of %2$s delivered to %3$s and LOST - insufficient storage space.</string>
+
     <string name="storage_none">None</string>
     <string name="storage_small">Shed</string>
     <string name="storage_medium">Storage</string>

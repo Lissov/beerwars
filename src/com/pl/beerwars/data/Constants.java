@@ -13,7 +13,8 @@ public class Constants
 	
 	public static class IntellectId {
 		public final static int Human = 1;		
-		public final static int AI_Normal = 10;		
+		public final static int AI_Normal = 10;
+		public final static int AI_Tasky = 20;
 	}
 	
 	public static class CityIds{
@@ -43,6 +44,8 @@ public class Constants
 		public final static float TouchRadiusSquare = 900; // in pixels
 	}
 	
+	public final static float Impossible = 1000000000f;
+
 	public static class Economics{
 		public final static String Currency = "$";
 
@@ -50,7 +53,8 @@ public class Constants
 		public final static int transportReload = 50;
 		
 		public final static int unitSize = 10000;
-
+		public final static int packSize = 1000;
+		
 		public final static int startMoney = 1000;
 		public final static int startUnits = 2;
 		public final static int startBeer = startUnits * unitSize;

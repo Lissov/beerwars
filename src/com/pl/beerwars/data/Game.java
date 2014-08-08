@@ -169,7 +169,7 @@ public class Game
 			result[n] = new TransportPrice();
 			result[n].cityFrom = fromCity;
 			result[n].cityTo = map.cities[i].id;
-			result[n].price1000 = (int)(Constants.Economics.transportReload
+			result[n].pricePack = (int)(Constants.Economics.transportReload
 				+ map.distances[thisI][i] * Constants.Economics.transportPerKm);
 
 			n++;
@@ -183,15 +183,19 @@ public class Game
 		try
 		{
 			for (PlayerData player : players.values()) {
+				callback.displayProcessingPlayerTurn(player.name);
 				if (player.artIntelligence != null)
 					player.artIntelligence.makeTurn(player, callback);
 			}
 			
 			processNTpreconditions(callback);
+			callback.display(R.string.game_nt_transportCalculations, null);
+			processTransportSend(callback);
 			callback.display(R.string.game_nt_consumptionCalculations, null);
 			processConsumption(callback);
 			callback.display(R.string.game_nt_transportCalculations, null);
-			Thread.sleep(1000);
+			processTransportReceive(callback);
+			
 			callback.display(R.string.game_nt_productionCalculations, null);
 			processProduction(callback);
 
@@ -209,11 +213,64 @@ public class Game
 
 			updateFacades();
 		}
-		catch (InterruptedException ex)
-		{}
 		finally
 		{
 			callback.complete();
+		}
+	}
+
+	private HashMap<PlayerData, List<TransportOrder>> executed;
+	private void processTransportSend(TurnMessageCallback callback)
+	{
+		executed = new HashMap<PlayerData, List<TransportOrder>>();
+		for (PlayerData p : players.values())
+		{
+			executed.put(p, new LinkedList<TransportOrder>());
+			if (p.bankrupt) continue;
+			
+			executeOrders(p, p.recurringOrders, callback);
+			executeOrders(p, p.oneTimeOrders, callback);
+			
+			p.oneTimeOrders.clear();
+		}
+	}
+	
+	private void executeOrders(PlayerData player, List<TransportOrder> orders, TurnMessageCallback callback){
+		for (TransportOrder order : orders){
+			CityObjects cf = player.cityObjects[player.game.getCityIndex(order.fromCity.id)];
+			CityObjects ct = player.cityObjects[player.game.getCityIndex(order.toCity.id)];
+			int ordered = order.packageQuantity * Constants.Economics.packSize;
+			if (cf.storage.get(order.sort) <= ordered){
+				if (player.intellect_id == Constants.IntellectId.Human){
+					callback.displayCantSend(cf.cityRef.id, ct.cityRef.id, order.sort.name, order.packageQuantity);
+				}
+				continue;
+			} else {
+				executed.get(player).add(order);
+				callback.displaySent(cf.cityRef.id, ct.cityRef.id, order.sort.name, order.packageQuantity);
+			}
+		}		
+	}
+	
+	private void processTransportReceive(TurnMessageCallback callback)
+	{
+		for (PlayerData p : players.values())
+		{
+			for (TransportOrder order : executed.get(p)) {
+				CityObjects co = p.cityObjects[p.game.getCityIndex(order.toCity.id)];
+				int ordered = order.packageQuantity * Constants.Economics.packSize;
+				
+				int free = co.getStorageMax() - co.getTotalStorage();
+				int stored = co.storage.containsKey(order.sort) 
+								? co.storage.get(order.sort)
+								: 0;
+				if (ordered < free){
+					co.storage.put(order.sort, stored + ordered);
+				} else {
+					co.storage.put(order.sort, stored + free);
+					callback.displayReceivedDropped(co.cityRef.id, order.sort.name, ordered - free);
+				}
+			}
 		}
 	}
 
@@ -391,6 +448,9 @@ public class Game
 		void displayStorageBuilt(String cityId, StorageSize newSize);
 		void displayFactoryBuilt(String cityId, FactorySize newSize);
 		void displayUnitsExtension(String cityId, int built);
+		void displayCantSend(String cityFrom, String cityTo, String sortName, int packs);
+		void displaySent(String cityFrom, String cityTo, String sortName, int packs);
+		void displayReceivedDropped(String cityId, String sortName, int bottles);
 		
 		void displayProcessingPlayerTurn(String playerName);
 		

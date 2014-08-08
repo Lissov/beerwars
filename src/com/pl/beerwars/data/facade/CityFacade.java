@@ -1,4 +1,5 @@
 package com.pl.beerwars.data.facade;
+import com.pl.beerwars.data.*;
 import com.pl.beerwars.data.map.*;
 import com.pl.beerwars.data.transport.*;
 import java.util.*;
@@ -23,4 +24,13 @@ public class CityFacade
 	public int estConsumption;
 	
 	public HashMap<Integer, PlayerCityFacade> others;
+	
+	public float getTransportPrice(String toCity){
+		for (TransportPrice t : transportPrices){
+			if (t.cityFrom == getId() && t.cityTo == toCity)
+				return t.pricePack;
+		}
+		
+		return Constants.Impossible;
+	}
 }

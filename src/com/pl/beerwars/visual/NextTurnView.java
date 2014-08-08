@@ -156,14 +156,37 @@ public class NextTurnView extends OverlayFrame implements Game.TurnMessageCallba
 	@Override
 	public void displayProcessingPlayerTurn(final String playerName)
 	{
-		((Activity)_context).runOnUiThread(new Runnable(){
-				public void run(){
-					showMessage(String.format(
+		showMessage(String.format(
 									_context.getResources().getString(R.string.game_nt_processingPlayerTurn),
 									playerName
 								));
-				}
-			});
+	}
+	
+	@Override
+	public void displayCantSend(final String cityFrom, final String cityTo, final String sortName, final int packs){
+		showMessage(String.format(
+						_context.getResources().getString(R.string.game_nt_cantSend),
+						packs, sortName,
+						_translator.getCityName(cityFrom),
+						_translator.getCityName(cityTo)
+					));		
+	}
+	
+	public void displaySent(final String cityFrom, final String cityTo, final String sortName, final int packs){
+		showMessage(String.format(
+						_context.getResources().getString(R.string.game_nt_sent),
+						packs, sortName,
+						_translator.getCityName(cityFrom),
+						_translator.getCityName(cityTo)
+					));		
+	}
+	
+	public void displayReceivedDropped(String cityId, String sortName, int bottles) {
+		showMessage(String.format(
+						_context.getResources().getString(R.string.game_nt_receivedDropped),
+						bottles, sortName,
+						_translator.getCityName(cityId)
+					));		
 	}
 	
 	public void displayDebugMessage(final String message){

@@ -6,25 +6,23 @@ import com.pl.beerwars.data.beer.*;
 import com.pl.beerwars.data.playerdata.*;
 import java.util.*;
 
-public class NormalPlayer implements IPlayer
+public class NormalPlayer extends BasePlayer<NormalState>
 {
 	public float riskLevel = 0.9f;
-	
+
+	@Override
+	protected NormalState initState()
+	{
+		return new NormalState();
+	}
+
 	private final float factBuildRiskLevel = 0.8f;
 	private final float TargetMinPriceK = 1.1f;
 	private final float IncreaseProdDemand = 1.1f;
 	private final float ExpandFactDemand = 1.2f;
-		
-	private NormalState state = new NormalState();
-	PlayerHelper helper = new PlayerHelper();
-	
+
 	public void makeTurn(PlayerData data, Game.TurnMessageCallback callback){
-		int baseexp = helper.calculateBaseExpenses(data);
-		int totalProd = data.calculateTotalProduction();
-		float sp = 1;
-		if (totalProd > 0){
-			sp = (float)baseexp / (float)totalProd;
-		}
+		float sp = helper.getSupportPricePerBottle(data);
 		
 		int budget = (int)(riskLevel * data.money);
 		
@@ -33,7 +31,7 @@ public class NormalPlayer implements IPlayer
 				float eqPr = sort.selfprice + sp;
 				float refPr = eqPr * TargetMinPriceK;
 				
-				BeerPriceMove bpm = calcNewBeerPrice(sort, cobj, data, eqPr, refPr, callback);
+				PlayerHelper.BeerPriceMove bpm = calcNewBeerPrice(sort, cobj, data, eqPr, refPr, callback);
 				
 				cobj.prices.put(sort, bpm.newPrice);
 				
@@ -43,7 +41,7 @@ public class NormalPlayer implements IPlayer
 		}
 	}
 	
-	private int makeFactoryChange(BeerPriceMove bpm, BeerSort sort, CityObjects cobj, PlayerData data, int budget, Game.TurnMessageCallback callback){
+	private int makeFactoryChange(PlayerHelper.BeerPriceMove bpm, BeerSort sort, CityObjects cobj, PlayerData data, int budget, Game.TurnMessageCallback callback){
 		if (bpm.allSold){
 			int freeItemsCnt = cobj.factoryUnits - cobj.getOperatingUnitsCount();
 			if (freeItemsCnt > 0){
@@ -74,7 +72,7 @@ public class NormalPlayer implements IPlayer
 					int currentIncr = cobj.getConstructedCount();
 					if (itemsToIncrease > currentIncr){
 						int haveMoney = (int)Math.floor(budget / Constants.Economics.unitBuildCost);
-						int haveSpace = cobj.getFactoryMax() - cobj.factoryUnits;
+						int haveSpace = cobj.getFactoryMax() - cobj.factoryUnits - currentIncr;
 						if (haveSpace > 0){
 							int ii = itemsToIncrease - currentIncr;
 							if (ii > haveMoney)
@@ -116,79 +114,15 @@ public class NormalPlayer implements IPlayer
 			}
 	}
 
-	private class BeerPriceMove {
-		private float newPrice;
-		private boolean allSold;
-		private float priceMult;
-		public BeerPriceMove(float newprice, boolean allsold, float pricemult){
-			newPrice = newprice;
-			allSold = allsold;
-			priceMult = pricemult;
-		}
-	}
-	private BeerPriceMove calcNewBeerPrice(BeerSort sort, CityObjects cobj, PlayerData data,
+	private PlayerHelper.BeerPriceMove calcNewBeerPrice(BeerSort sort, CityObjects cobj, PlayerData data,
 			float eqPr, float refPr, Game.TurnMessageCallback callback) {
 				
-		BeerPriceMove result;
+		PlayerHelper.BeerPriceMove result = helper.calcNewAdjustedPrice(sort, cobj, data, 
+							eqPr, refPr, getPreviousPriceStep(cobj.cityRef.id, sort.id), callback);
+							
 		
-		float pr = cobj.prices.get(sort);
-		float pps = getPreviousPriceStep(cobj.cityRef.id, sort.id);
-		
-		int coming = cobj.factory.containsKey(sort) 
-			? cobj.factory.get(sort) * Constants.Economics.unitSize
-			: 0;
-		coming += 0;// transport
-		
-		int sold = cobj.consumptionHistory.containsKey(data.game.turnNum-1)
-					? cobj.consumptionHistory.get(data.game.turnNum-1).containsKey(sort)
-						? cobj.consumptionHistory.get(data.game.turnNum-1).get(sort)
-						: -1
-					: -1;
-
-		if (sold == -1) {
-			float newPrice = helper.roundPrice(refPr * 1.1f);
-			result = new BeerPriceMove(newPrice, false, newPrice / eqPr);
-			if (cobj.storage.containsKey(sort) && cobj.storage.get(sort) > 0){
-				callback.displayDebugMessage(cobj.cityRef.id + ": initial price for " + sort.name + " set to " + newPrice);
-			}
-		}
-		else {
-			float dir;
-			String act = "";
-			if (coming <= sold){
-				dir = 1;
-				act = "increasing";
-			} else {
-				dir = -1;
-				act = "decreasing";						
-			}
-				
-			float nps = (pps * dir > 0 ? pps * 1.5f : -pps / 3);
-			if (nps >= 0 && nps < 0.01f) 
-				nps = 0.01f;
-			if (nps <= 0 && nps > -0.01f) 
-				nps = -0.01f;
-			
-			// make smooth decrease near the minimum economic valuable price
-			float newPrice = pr + nps;
-			if (pr > refPr && newPrice < refPr) {
-				newPrice = refPr;
-				nps = -0.01f;
-			}
-			if (pr > eqPr && newPrice < eqPr) {
-				newPrice = eqPr;
-				nps = -0.01f;
-			}
-			if (newPrice < sort.selfprice) {
-				newPrice = sort.selfprice;
-				nps = -0.01f;
-			}
-			storePreviousPriceStep(cobj.cityRef.id, sort.id, nps);
-			newPrice = helper.roundPrice( newPrice );
-			
-			result = new BeerPriceMove(newPrice, coming <= sold, newPrice / eqPr);
-			
-			callback.displayDebugMessage(cobj.cityRef.id + ": " + act + " price for " + sort.name + " to " + newPrice);
+		if (result.newPriceStep < 10000){
+			storePreviousPriceStep(cobj.cityRef.id, sort.id, result.newPriceStep);
 		}
 		
 		return result;
@@ -199,13 +133,5 @@ public class NormalPlayer implements IPlayer
 			state.priceSteps.put(cityId, new HashMap<Integer, Float>());
 			
 		state.priceSteps.get(cityId).put(beerId, price);
-	}
-	
-	public void setState(String stateStr){
-		state.deserialize(stateStr);
-	}
-	
-	public String getState(){
-		return state.serialize();
 	}
 }

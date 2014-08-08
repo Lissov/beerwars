@@ -82,8 +82,9 @@ public class Storage extends SQLiteOpenHelper
 		"playerId INTEGER," +
 		"fromCity TEXT," +
 		"toCity TEXT," + 
-		"isRecurring INTEGER," +
-		"quantity INTEGER)",
+		"sortId INTEGER," +
+		"quantity INTEGER," +
+		"isRecurring INTEGER)",
 		//4
 		"CREATE TABLE cityObject (" +
 		"id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -162,15 +163,15 @@ public class Storage extends SQLiteOpenHelper
 			}
 			for (TransportOrder order : pl.oneTimeOrders){
 				db.execSQL(String.format(
-							   "INSERT into transportOrder (playerId, fromCity, toCity, isRecurring, quantity) " +
-							   "values (%1$s, '%2$s', '%3$s', %4$s, %5$s)",
-							   playerId, order.fromCity, order.toCity, 0, order.packageQuantity));
+							   "INSERT into transportOrder (playerId, fromCity, toCity, sortId, quantity, isRecurring) " +
+							   "values (%1$s, '%2$s', '%3$s', %4$s, %5$s, %6$s)",
+							   playerId, order.fromCity, order.toCity, order.sort.id, order.packageQuantity, 0));
 			}
 			for (TransportOrder order : pl.recurringOrders){
 				db.execSQL(String.format(
-							   "INSERT into transportOrder (playerId, fromCity, toCity, isRecurring, quantity) " +
-							   "values (%1$s, '%2$s', '%3$s', %4$s, %5$s)",
-							   playerId, order.fromCity, order.toCity, 1, order.packageQuantity));
+							   "INSERT into transportOrder (playerId, fromCity, toCity, sortId, quantity, isRecurring) " +
+							   "values (%1$s, '%2$s', '%3$s', %4$s, %5$s, %6$s)",
+							   playerId, order.fromCity, order.toCity, order.sort.id, order.packageQuantity, 1));
 			}
 			
 			for (CityObjects co : pl.cityObjects){
@@ -271,14 +272,15 @@ public class Storage extends SQLiteOpenHelper
 				} while (cursorInner.moveToNext());
 				cursorInner.close();
 				
-				cursorInner = db.rawQuery("Select fromCity, toCity, quantity, isRecurring from transportOrder where playerId = " + playerId, null);
+				cursorInner = db.rawQuery("Select fromCity, toCity, sortId, quantity, isRecurring from transportOrder where playerId = " + playerId, null);
 				if (cursorInner.moveToFirst()){
 					do {
 						TransportOrder tro = new TransportOrder();
 						tro.fromCity = game.map.getCityById(cursorInner.getString(0));
 						tro.toCity = game.map.getCityById(cursorInner.getString(1));
-						tro.packageQuantity = cursorInner.getInt(2);
-						boolean isRecurring = cursorInner.getInt(3) == 1;
+						tro.sort = p.getSort(cursorInner.getInt(2));
+						tro.packageQuantity = cursorInner.getInt(3);
+						boolean isRecurring = cursorInner.getInt(4) == 1;
 						if (isRecurring)
 							p.recurringOrders.add(tro);
 						else

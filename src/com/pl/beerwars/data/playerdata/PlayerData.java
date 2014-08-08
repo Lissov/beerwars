@@ -97,6 +97,23 @@ public class PlayerData {
 		return true;
 	}
 	
+	public boolean createTransportOrder(String from, String to, BeerSort sort, int packCount, boolean permanent){
+		CityObjects cf = cityObjects[game.getCityIndex(from)];
+		CityObjects cto = cityObjects[game.getCityIndex(to)];
+		
+		TransportOrder order = new TransportOrder();
+		order.fromCity = cf.cityRef;
+		order.toCity = cto.cityRef;
+		order.sort = sort;
+		order.packageQuantity = packCount;
+		if (permanent)
+			recurringOrders.add(order);
+		else
+			oneTimeOrders.add(order);
+			
+		return true;
+	}
+	
 	public int calculateTotalSold(){
 		
 		int total = 0;
