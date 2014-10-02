@@ -56,13 +56,13 @@ public class Constants
 		public final static int packSize = 1000;
 		
 		public final static int startMoney = 1000;
-		public final static int startUnits = 2;
+		public final static int startUnits = 1;
 		public final static int startBeer = startUnits * unitSize;
 				
 		public final static int unitBuildCost = 5000;
 		public final static int unitBuildTime = 4;
 		public final static int unitIdleCost = 100;
-		public final static float unitsPerCitizenWeek = 1;
+		public final static float bottlesPerCitizenWeek = 0.2f;
 	}
 	
 	public static enum StorageSize{
@@ -75,9 +75,9 @@ public class Constants
 
 	public static int FactoryVolume(FactorySize size){
 		switch (size){
-			case Small: return 5;
-			case Medium: return 50;
-			case Big: return 500;
+			case Small: return 3;
+			case Medium: return 10;
+			case Big: return 30;
 			case None:
 			default: return 0;
 		}
@@ -86,8 +86,8 @@ public class Constants
 	public static int FactoryBuildPrice(FactorySize size){
 		switch (size){
 			case Small: return 50000;
-			case Medium: return 300000;
-			case Big: return 1000000;
+			case Medium: return 100000;
+			case Big: return 700000;
 			case None:
 			default: return 0;
 		}
@@ -99,9 +99,9 @@ public class Constants
 	
 	public static int FactorySupportCost(FactorySize size){
 		switch (size){
-			case Small: return 2000;
-			case Medium: return 15000;
-			case Big: return 60000;
+			case Small: return 4000;
+			case Medium: return 9000;
+			case Big: return 17000;
 			case None:
 			default: return 0;
 		}
@@ -119,9 +119,9 @@ public class Constants
 
 	public static int StorageVolume(StorageSize size){
 		switch (size){
-			case Small: return 200000;
-			case Medium: return 2000000;
-			case Big: return 10000000;
+			case Small: return 100000;
+			case Medium: return 400000;
+			case Big: return 2000000;
 			case None:
 			default: return 0;
 		}
@@ -130,7 +130,7 @@ public class Constants
 	public static int StorageBuildPrice(StorageSize size){
 		switch (size){
 			case Small: return 50000;
-			case Medium: return 300000;
+			case Medium: return 150000;
 			case Big: return 1000000;
 			case None:
 			default: return 0;
@@ -144,8 +144,8 @@ public class Constants
 	public static int StorageSupportCost(StorageSize size){
 		switch (size){
 			case Small: return 1000;
-			case Medium: return 7500;
-			case Big: return 35000;
+			case Medium: return 5000;
+			case Big: return 20000;
 			case None:
 			default: return 0;
 		}
@@ -186,7 +186,7 @@ public class Constants
 	public static class startBeerParameters{
 		public final static float selfprice = 0.7f;
 		public final static float quality = 0.7f;		
-		public final static float deviation = 0.3f;		
+		public final static float deviation = 0.2f;		
 	}
 	
 	public enum ScreenButton {

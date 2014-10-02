@@ -180,8 +180,8 @@ public class GameHolder {
 		// total population 5 025 000
 
 		for (City c : map.cities){
-			c.PriceDemand = new Beta(5, 2, 0.2f, 2f);
-			((Beta)c.PriceDemand).scale = c.population / Constants.Economics.unitsPerCitizenWeek;
+			c.PriceDemand = new Beta(5, 2, 0.4f, 2.5f);
+			((Beta)c.PriceDemand).scale = c.population * Constants.Economics.bottlesPerCitizenWeek;
 			c.PriceAdjuster = new PriceAdjust(0.2f, 4, 4, 4);
 			c.QualityDemand = new QualityDemand();
 		}
