@@ -62,7 +62,10 @@ public class GameView extends View implements IOverlayView
 		
 		PlayerData data = _game.getViewForPlayerId(Constants.Players.MainHuman);
 		for (int i = 0; i < _game.map.cities.length; i++){
-			cityPainter.draw(canvas, _game.map.cities[i], data.cityObjects[i]);
+			cityPainter.draw(
+				canvas, _game.map.cities[i], data.cityObjects[i],
+				Constants.Players.MainHuman,
+				data.game.cities[i]);
 		}
 		
 		drawControls(canvas);
